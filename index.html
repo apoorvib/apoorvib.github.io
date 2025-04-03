@@ -3,308 +3,469 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apoorv Indrajit Belgundi - Personal Website</title>
+    <title>Apoorv Belgundi | Mathematics & Computer Science</title>
     <style>
-        /* Base styles */
+        /* Color Scheme */
         :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #166088;
-            --accent-color: #03a9f4;
-            --text-color: #333;
-            --light-text: #666;
-            --background: #f9f9f9;
-            --section-bg: #fff;
+            --primary: #1a237e;      /* Deep indigo - representing mathematics */
+            --secondary: #0d47a1;    /* Blue - representing computer science */
+            --accent: #00bcd4;       /* Cyan - for highlights */
+            --light: #f5f5f5;        /* Light background */
+            --dark: #212121;         /* Dark text */
+            --mid: #757575;          /* Mid-tone text */
         }
-
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--background);
+            color: var(--dark);
+            background-color: var(--light);
         }
-
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 1rem;
+            padding: 0 2rem;
         }
 
-        section {
-            padding: 4rem 0;
-        }
-
-        h1, h2, h3 {
-            margin-bottom: 1rem;
-            color: var(--secondary-color);
-        }
-
-        p {
-            margin-bottom: 1rem;
-        }
-
-        a {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            color: var(--primary-color);
-        }
-
-        /* Header styles */
+        /* Header & Navigation */
         header {
-            background-color: var(--section-bg);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
+        
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
         }
-
-        .logo {
+        
+        .name {
             font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
+            font-weight: 700;
         }
-
+        
         .nav-links {
             display: flex;
             list-style: none;
         }
-
+        
         .nav-links li {
-            margin-left: 2rem;
+            margin-left: 1.5rem;
         }
-
+        
         .nav-links a {
-            color: var(--text-color);
+            color: white;
+            text-decoration: none;
             font-weight: 500;
+            transition: all 0.3s ease;
         }
-
+        
         .nav-links a:hover {
-            color: var(--accent-color);
+            color: var(--accent);
         }
-
-        /* Hero section */
+        
+        /* Hero Section */
         .hero {
+            height: 100vh;
             display: flex;
             align-items: center;
-            background-color: var(--section-bg);
-            min-height: 80vh;
+            background: linear-gradient(rgba(26, 35, 126, 0.8), rgba(13, 71, 161, 0.8)), url('/api/placeholder/1200/800') center/cover;
+            color: white;
+            text-align: center;
+            padding-top: 80px; /* For fixed header */
         }
-
+        
         .hero-content {
-            max-width: 600px;
+            max-width: 800px;
+            margin: 0 auto;
         }
-
+        
         .hero h1 {
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--light-text);
+        
+        .hero h2 {
+            font-size: 1.8rem;
+            font-weight: 400;
             margin-bottom: 2rem;
         }
-
-        .hero-image {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-left: 3rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
         }
-
+        
         .btn {
             display: inline-block;
-            background-color: var(--accent-color);
-            color: white;
             padding: 0.8rem 1.5rem;
             border-radius: 5px;
             font-weight: 500;
-            transition: background-color 0.3s;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
-
-        .btn:hover {
-            background-color: var(--primary-color);
+        
+        .btn-primary {
+            background-color: var(--accent);
             color: white;
         }
-
-        /* About section */
-        .about {
-            background-color: var(--section-bg);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        
+        .btn-primary:hover {
+            background-color: #00acc1;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-
-        /* Skills section */
-        .skills-container {
+        
+        .btn-outline {
+            border: 2px solid var(--accent);
+            color: white;
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+        
+        section h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--mid);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* About Section */
+        .about-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 2rem;
+            align-items: center;
         }
-
-        .skill-card {
-            background-color: var(--section-bg);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .skill-card h3 {
-            margin-bottom: 1rem;
-        }
-
-        .skill-level {
+        
+        .about-image {
             width: 100%;
-            height: 10px;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            margin-top: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-
-        .skill-level-fill {
-            height: 100%;
-            border-radius: 5px;
-            background-color: var(--accent-color);
+        
+        .about-content h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
         }
-
-        /* Projects section */
-        .projects-container {
+        
+        .education {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .education h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Research Section */
+        #research {
+            background-color: #f9f9ff;
+        }
+        
+        .research-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
-
-        .project-card {
-            background-color: var(--section-bg);
+        
+        .research-card {
+            background-color: white;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
-
+        
+        .research-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0,0,0,0.1);
+        }
+        
+        .research-content {
+            padding: 1.5rem;
+        }
+        
+        .research-content h3 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .research-content .place {
+            color: var(--mid);
+            font-style: italic;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .research-content .date {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        /* Skills Section */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .skill-category {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            flex: 1 1 300px;
+            max-width: 400px;
+        }
+        
+        .skill-category h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+        
+        .skill-tag {
+            background-color: rgba(13, 71, 161, 0.1);
+            color: var(--secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        /* Projects Section */
+        #projects {
+            background-color: #f9f9ff;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .project-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
         .project-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0,0,0,0.1);
         }
-
+        
         .project-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
-
+        
         .project-content {
             padding: 1.5rem;
         }
-
+        
+        .project-content h3 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-content .award {
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
         .project-tags {
             display: flex;
             flex-wrap: wrap;
+            gap: 0.5rem;
             margin-top: 1rem;
         }
-
+        
         .project-tag {
-            background-color: rgba(3, 169, 244, 0.1);
-            color: var(--accent-color);
+            background-color: rgba(0, 188, 212, 0.1);
+            color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
             font-size: 0.8rem;
-            padding: 0.3rem 0.6rem;
-            border-radius: 3px;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
         }
-
-        /* Contact section */
-        .contact {
-            background-color: var(--section-bg);
+        
+        /* Awards Section */
+        .awards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .award-card {
+            background-color: white;
+            padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
         }
-
-        .contact-form {
-            margin-top: 2rem;
+        
+        .award-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 20px rgba(0,0,0,0.1);
         }
-
-        .form-group {
-            margin-bottom: 1.5rem;
+        
+        .award-card h3 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
         }
-
-        .form-control {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: inherit;
-            font-size: 1rem;
+        
+        .award-card .organization {
+            color: var(--mid);
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            display: block;
         }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent-color);
+        
+        .award-card .date {
+            font-size: 0.9rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: block;
         }
-
-        /* Footer styles */
-        footer {
-            background-color: var(--primary-color);
+        
+        /* Contact Section */
+        #contact {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 2rem 0;
             text-align: center;
         }
-
+        
+        #contact h2 {
+            color: white;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .contact-item i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
         .social-links {
             display: flex;
             justify-content: center;
-            list-style: none;
-            margin-bottom: 1rem;
+            gap: 1.5rem;
+            margin-top: 2rem;
         }
-
-        .social-links li {
-            margin: 0 1rem;
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
-
-        .social-links a {
+        
+        .social-link:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
             color: white;
-            font-size: 1.5rem;
-        }
-
-        .footer-text {
+            text-align: center;
+            padding: 2rem 0;
             font-size: 0.9rem;
-            opacity: 0.8;
         }
-
-        /* Responsive styles */
+        
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
+            .about-grid {
+                grid-template-columns: 1fr;
             }
-
-            .hero-image {
-                margin: 2rem 0 0 0;
+            
+            .name {
+                font-size: 1.2rem;
             }
-
-            .nav-links {
-                display: none;
+            
+            .nav-links li {
+                margin-left: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero h2 {
+                font-size: 1.4rem;
             }
         }
     </style>
@@ -314,12 +475,13 @@
     <header>
         <div class="container">
             <nav>
-                <div class="logo">Apoorv Indrajit Belgundi</div>
+                <div class="name">Apoorv Belgundi</div>
                 <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
                     <li><a href="#about">About</a></li>
+                    <li><a href="#research">Research</a></li>
                     <li><a href="#skills">Skills</a></li>
                     <li><a href="#projects">Projects</a></li>
+                    <li><a href="#awards">Awards</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
@@ -327,14 +489,16 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="hero" id="home">
+    <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Hi, I'm Apoorv</h1>
-                <p>A passionate Math/CS student with experience in Data Science, Quantitative Finance, and Scientific Computing. <\p>
-                <a href="#contact" class="btn">Get In Touch</a>
+                <h1>Apoorv Belgundi</h1>
+                <h2>Mathematics & Computer Science | Data Science | Research</h2>
+                <div class="hero-btns">
+                    <a href="#research" class="btn btn-primary">View Research</a>
+                    <a href="#contact" class="btn btn-outline">Contact Me</a>
+                </div>
             </div>
-            <img src="/api/placeholder/400/400" alt="Your Photo" class="hero-image">
         </div>
     </section>
 
@@ -342,17 +506,86 @@
     <section id="about">
         <div class="container">
             <h2>About Me</h2>
-            <div class="about">
-                <div class="container">
-                    <p>
-                        Welcome to my website! I'm a student at NYU, double majoring in Mathematics and Computer Science. I'm passionate about Data Science, AI/ML, Finance, and Physics.
-                    </p>
-                    <p>
-                        My journey in Data Science began in sophomore year of highschool, when I took a few courses in Coursera. I've been hooked ever since!
-                    </p>
-                    <p>
-                        When I'm not working, you can find me playing monopoly or reading a book.
-                    </p>
+            <p class="subtitle">A motivated and enthusiastic undergraduate student at New York University with a strong academic foundation in mathematics, computer science, and data science.</p>
+            
+            <div class="about-grid">
+                <img src="/api/placeholder/600/600" alt="Apoorv Belgundi" class="about-image">
+                <div class="about-content">
+                    <h3>Who I Am</h3>
+                    <p>I'm a double major in Mathematics and Computer Science at New York University with hands-on experience in scientific computing and multi-objective optimization. I'm highly skilled in Python and Java, with a demonstrated ability to adapt quickly, collaborate in team environments, and contribute innovative ideas.</p>
+                    
+                    <p>I'm passionate about applying academic knowledge to solve real-world problems, particularly in the areas of AI, data science, and optimization algorithms.</p>
+                    
+                    <div class="education">
+                        <h4>New York University (NYU)</h4>
+                        <p>Mathematics and Computer Science (double major)</p>
+                        <p>Fall 2023 - Spring 2026</p>
+                        <p>SAT: 1560/1600</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research">
+        <div class="container">
+            <h2>Research Experience</h2>
+            <p class="subtitle">My academic journey has led me to explore various research areas, from AI in software development to advanced mathematical modeling.</p>
+            
+            <div class="research-grid">
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Future of Software Development with AI</h3>
+                        <span class="place">New York University x DTCC</span>
+                        <span class="date">September 2024 - Present</span>
+                        <p>Leading a team that researches how LLMs can help automate tasks in software development. Developed a tool using ChatGPT to automate the process of adding comments and renaming labels in compiler-generated assembly code.</p>
+                    </div>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Data Science Intern</h3>
+                        <span class="place">NYU Center for Urban Science and Progress (CUSP)</span>
+                        <span class="date">August 2024 - Present</span>
+                        <p>Developed advanced geospatial data analysis pipelines using Python and GeoPandas. Utilized custom clustering algorithms and spatial correlation techniques to identify urban patterns and optimize resource allocation.</p>
+                    </div>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Undergraduate Summer Research Program</h3>
+                        <span class="place">New York University</span>
+                        <span class="date">May 2024 - August 2024</span>
+                        <p>Formulated a multi-objective optimization model to determine optimal EV charging station locations. Developed and implemented a novel capacitated probabilistic greedy clustering algorithm for optimizing vehicle routing.</p>
+                    </div>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Mathematical Modeling</h3>
+                        <span class="place">New York Academy of Sciences</span>
+                        <span class="date">March 2021 - May 2023</span>
+                        <p>Developed mathematical models to optimize electricity production across multiple sources for a Smart City, ensuring minimal cost and environmental pollution while meeting electricity needs.</p>
+                    </div>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Astronomy Research</h3>
+                        <span class="place">Greenwood High International School</span>
+                        <span class="date">July 2022 - March 2023</span>
+                        <p>Explored the conditions required for an exosubmoon to survive for at least 100 million years in a planetary system. Researched the effect of tidal forces on three body dynamics.</p>
+                    </div>
+                </div>
+                
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Particle Physics Research</h3>
+                        <span class="place">Duke University</span>
+                        <span class="date">November 2020 - January 2022</span>
+                        <p>Discussed Deep Inelastic Scattering experiments such as the Drell-Yan process. Proposed a novel extraction method of sea quark distributions in the proton with respect to the Bjorken variable.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -361,27 +594,61 @@
     <!-- Skills Section -->
     <section id="skills">
         <div class="container">
-            <h2>My Skills</h2>
+            <h2>Skills & Expertise</h2>
+            <p class="subtitle">A combination of technical proficiency and analytical thinking enables me to approach complex problems with confidence.</p>
+            
             <div class="skills-container">
-                <div class="skill-card">
-                    <h3>Front-end Development</h3>
-                    <p>Experience with HTML, CSS, JavaScript, and modern frameworks like React.</p>
-                    <div class="skill-level">
-                        <div class="skill-level-fill" style="width: 90%;"></div>
+                <div class="skill-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">R</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">C</span>
+                        <span class="skill-tag">C#</span>
+                        <span class="skill-tag">Matlab</span>
+                        <span class="skill-tag">Javascript</span>
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">LaTeX</span>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <h3>Back-end Development</h3>
-                    <p>Proficient in Node.js, Express, and database management with MongoDB and SQL.</p>
-                    <div class="skill-level">
-                        <div class="skill-level-fill" style="width: 85%;"></div>
+                
+                <div class="skill-category">
+                    <h3>Technical Skills</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Scientific Computing</span>
+                        <span class="skill-tag">Simulation</span>
+                        <span class="skill-tag">Optimization Algorithms</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Data Engineering</span>
                     </div>
                 </div>
-                <div class="skill-card">
-                    <h3>UI/UX Design</h3>
-                    <p>Skilled in creating user-friendly interfaces and experiences using Figma and Adobe XD.</p>
-                    <div class="skill-level">
-                        <div class="skill-level-fill" style="width: 75%;"></div>
+                
+                <div class="skill-category">
+                    <h3>Software Tools</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Jupyter</span>
+                        <span class="skill-tag">Spyder</span>
+                        <span class="skill-tag">RStudio</span>
+                        <span class="skill-tag">OpenRocket</span>
+                        <span class="skill-tag">Anaconda</span>
+                        <span class="skill-tag">Miniforge</span>
+                        <span class="skill-tag">Github</span>
+                        <span class="skill-tag">VertexAI</span>
+                        <span class="skill-tag">ArcGIS</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3>Python Libraries</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Numpy</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">Scipy</span>
+                        <span class="skill-tag">Sklearn</span>
+                        <span class="skill-tag">Pytorch</span>
+                        <span class="skill-tag">GeoPandas</span>
                     </div>
                 </div>
             </div>
@@ -391,43 +658,110 @@
     <!-- Projects Section -->
     <section id="projects">
         <div class="container">
-            <h2>My Projects</h2>
-            <div class="projects-container">
+            <h2>Notable Projects</h2>
+            <p class="subtitle">A selection of significant projects that demonstrate my skills and problem-solving abilities.</p>
+            
+            <div class="projects-grid">
                 <div class="project-card">
-                    <img src="/api/placeholder/400/200" alt="Project 1" class="project-image">
+                    <img src="/api/placeholder/400/200" alt="Tutoring Platform" class="project-image">
                     <div class="project-content">
-                        <h3>Project Name 1</h3>
-                        <p>A brief description of the project, what it does, and the technologies used.</p>
+                        <h3>Tutoring Platform</h3>
+                        <span class="award">2nd Place @ RUHacks 2023</span>
+                        <p>Built a tutoring platform that connects underclassmen to upperclassmen. Employed MongoDB to store and retrieve user profiles, tutoring schedules, and payment data.</p>
                         <div class="project-tags">
-                            <span class="project-tag">HTML</span>
-                            <span class="project-tag">CSS</span>
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">MongoDB</span>
+                            <span class="project-tag">HTML/CSS</span>
                             <span class="project-tag">JavaScript</span>
                         </div>
                     </div>
                 </div>
+                
                 <div class="project-card">
-                    <img src="/api/placeholder/400/200" alt="Project 2" class="project-image">
+                    <img src="/api/placeholder/400/200" alt="Investment Portfolio" class="project-image">
                     <div class="project-content">
-                        <h3>Project Name 2</h3>
-                        <p>A brief description of the project, what it does, and the technologies used.</p>
+                        <h3>Investment Portfolio Strategy</h3>
+                        <span class="award">2nd Place @ Roundpier Investment Competition</span>
+                        <p>Developed a portfolio of stocks and leveraged ETFs. Adequately hedged using the CPPI strategy. Performed technical analysis and carried out swing trades on leveraged commodity ETFs.</p>
                         <div class="project-tags">
-                            <span class="project-tag">React</span>
-                            <span class="project-tag">Node.js</span>
-                            <span class="project-tag">MongoDB</span>
+                            <span class="project-tag">Financial Analysis</span>
+                            <span class="project-tag">Technical Analysis</span>
+                            <span class="project-tag">Portfolio Management</span>
                         </div>
                     </div>
                 </div>
+                
                 <div class="project-card">
-                    <img src="/api/placeholder/400/200" alt="Project 3" class="project-image">
+                    <img src="/api/placeholder/400/200" alt="Time Series Correlation" class="project-image">
                     <div class="project-content">
-                        <h3>Project Name 3</h3>
-                        <p>A brief description of the project, what it does, and the technologies used.</p>
+                        <h3>Time Series Cross-Correlation Formula</h3>
+                        <span class="award">Provisional Patent</span>
+                        <p>Developed a time series cross-correlation formula using discrete calculus. This correlation metric can measure both linear and non-linear relationships, unlike existing techniques.</p>
                         <div class="project-tags">
-                            <span class="project-tag">Python</span>
-                            <span class="project-tag">Django</span>
-                            <span class="project-tag">PostgreSQL</span>
+                            <span class="project-tag">Mathematical Analysis</span>
+                            <span class="project-tag">Time Series</span>
+                            <span class="project-tag">Machine Learning</span>
                         </div>
                     </div>
+                </div>
+                
+                <div class="project-card">
+                    <img src="/api/placeholder/400/200" alt="AI Stock Prediction" class="project-image">
+                    <div class="project-content">
+                        <h3>AI Stock Price Forecasting</h3>
+                        <span class="award">Passion Project</span>
+                        <p>Developed an AI model to accurately forecast the next day's closing price for any stock based on a combination of technical indicators, macroeconomic factors, and inter-index correlation.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI/ML</span>
+                            <span class="project-tag">Financial Analysis</span>
+                            <span class="project-tag">Predictive Modeling</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Section -->
+    <section id="awards">
+        <div class="container">
+            <h2>Awards & Achievements</h2>
+            <p class="subtitle">Recognition for excellence in various academic and competitive pursuits.</p>
+            
+            <div class="awards-grid">
+                <div class="award-card">
+                    <h3>2nd Place @ RUHacks 2023</h3>
+                    <span class="organization">Rutgers University</span>
+                    <span class="date">October 2023</span>
+                    <p>Awarded second place for developing an innovative tutoring platform that connects underclassmen to upperclassmen.</p>
+                </div>
+                
+                <div class="award-card">
+                    <h3>2nd Place @ Roundpier Investment Competition</h3>
+                    <span class="organization">Roundpier</span>
+                    <span class="date">Jan-April 2022</span>
+                    <p>Achieved a +18.72% portfolio performance (vs -8.50% S&P 500) through strategic investments and technical analysis.</p>
+                </div>
+                
+                <div class="award-card">
+                    <h3>FIDE Rating</h3>
+                    <span class="organization">The International Chess Federation</span>
+                    <span class="date">November 2014</span>
+                    <p>Attained an international rating at the age of 9. FIDE Rating of 1474 in Classical, 1434 in Rapid and 1482 in Blitz.</p>
+                </div>
+                
+                <div class="award-card">
+                    <h3>AP Scholar with Distinction</h3>
+                    <span class="organization">College Board</span>
+                    <span class="date">May 2022</span>
+                    <p>Recognized for exceptional achievement on AP exams.</p>
+                </div>
+                
+                <div class="award-card">
+                    <h3>Provisional Patent</h3>
+                    <span class="organization">Time Series Cross-Correlation Formula</span>
+                    <span class="date">October 2022</span>
+                    <p>Developed a time series correlation method that reduced training time by up to 70% and increased model accuracy by up to 45%.</p>
                 </div>
             </div>
         </div>
@@ -437,22 +771,32 @@
     <section id="contact">
         <div class="container">
             <h2>Get In Touch</h2>
-            <div class="contact">
-                <div class="container">
-                    <p>I'm always open to new opportunities and collaborations. Feel free to reach out if you have any questions or would like to work together.</p>
-                    <div class="contact-form">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Your Name">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" placeholder="Your Email">
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" rows="5" placeholder="Your Message"></textarea>
-                        </div>
-                        <button type="submit" class="btn">Send Message</button>
-                    </div>
+            <p class="subtitle">I'm always interested in new research opportunities, collaborations, or discussions about mathematics, computer science, and data science.</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i>📧</i>
+                    <h3>Email</h3>
+                    <p>aib6932@nyu.edu</p>
                 </div>
+                
+                <div class="contact-item">
+                    <i>📱</i>
+                    <h3>Phone</h3>
+                    <p>+1 (646) 309-1715</p>
+                </div>
+                
+                <div class="contact-item">
+                    <i>📍</i>
+                    <h3>Location</h3>
+                    <p>New York City, NY</p>
+                </div>
+            </div>
+            
+            <div class="social-links">
+                <a href="#" class="social-link">GitHub</a>
+                <a href="#" class="social-link">LinkedIn</a>
+                <a href="#" class="social-link">Twitter</a>
             </div>
         </div>
     </section>
@@ -460,12 +804,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <ul class="social-links">
-                <li><a href="#">GitHub</a></li>
-                <li><a href="#">LinkedIn</a></li>
-                <li><a href="#">Twitter</a></li>
-            </ul>
-            <p class="footer-text">&copy; 2025 Your Name. All rights reserved.</p>
+            <p>&copy; 2025 Apoorv Belgundi. All rights reserved.</p>
         </div>
     </footer>
 </body>
