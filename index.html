@@ -1499,23 +1499,7 @@
                     <button class="btn btn-accent" id="open-research-modal">View Detailed Findings</button>
                 </div>
                 
-                <div class="astronomy-visualization">
-                    <div id="simulation-container"></div>
-                    <div class="simulation-controls">
-                        <div class="control-group">
-                            <label for="planet-mass">Planet Mass:</label>
-                            <input type="range" id="planet-mass" min="1" max="100" value="28">
-                        </div>
-                        <div class="control-group">
-                            <label for="moon-mass">Moon Mass:</label>
-                            <input type="range" id="moon-mass" min="0.1" max="10" value="0.5">
-                        </div>
-                        <div class="control-group">
-                            <label for="submoon-mass">Submoon Mass:</label>
-                            <input type="range" id="submoon-mass" min="0.01" max="1" value="0.05">
-                        </div>
-                    </div>
-                </div>
+                <div class="astronomy-visualization" id="react-exosubmoon-visualization"></div>
             </div>
             
             <div class="astronomy-dashboard">
@@ -2696,6 +2680,12 @@
             // Initialize charts
             initCharts();
         });
+    </script>
+    <script type="text/babel">
+        ReactDOM.render(
+            <ExoSubmoonVisualization />,
+            document.getElementById('react-exosubmoon-visualization')
+        );
     </script>
 </body>
 </html>
