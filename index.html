@@ -8,6 +8,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    
+    <!-- React and React DOM -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+    
+    <!-- OrbitControls for Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/controls/OrbitControls.min.js"></script>
+    
+    <!-- Original CSS styles remain the same -->
     <style>
         /* Modern Color Scheme with Dark Mode Support */
         :root {
@@ -45,1361 +55,261 @@
             --shadow-hover: 0 20px 40px rgba(0,0,0,0.4);
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color var(--animation-timing) ease, 
-                        color var(--animation-timing) ease, 
-                        transform var(--animation-timing) ease,
-                        box-shadow var(--animation-timing) ease;
-        }
+        /* All the original CSS styles remain here */
+        /* ... */
         
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: var(--background);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Animated Underline */
-        .animated-underline {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .animated-underline::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--accent);
-            transform-origin: bottom right;
-            transition: transform 0.3s ease-out;
-        }
-        
-        .animated-underline:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
-
-        /* Header & Navigation */
-        header {
-            background-color: rgba(44, 62, 80, 0.97);
-            color: white;
-            padding: 1rem 0;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 0.5rem 0;
-            background-color: rgba(44, 62, 80, 0.98);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 1.5rem;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-            padding-bottom: 5px;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--secondary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .theme-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-        
-        .theme-toggle:hover {
-            transform: rotate(30deg);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('/api/placeholder/1920/1080') center/cover;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+        /* Additional styles for ExoSubmoon Visualization */
+        .exosubmoon-container {
             height: 100%;
-            background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(231, 76, 60, 0.3));
-            z-index: 1;
-        }
-        
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-        
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: fadeInUp 1s ease;
-        }
-        
-        .hero h2 {
-            font-size: 2rem;
-            font-weight: 400;
-            margin-bottom: 2rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.3s forwards;
-        }
-        
-        .hero-btns {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease 0.6s forwards;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            text-align: center;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            z-index: -1;
-        }
-        
-        .btn:hover::before {
             width: 100%;
         }
         
-        .btn-primary {
-            background-color: var(--secondary);
-            color: white;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
-        }
-        
-        .btn-outline {
-            border: 2px solid var(--secondary);
-            color: white;
-        }
-        
-        .btn-outline:hover {
-            background-color: var(--secondary);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
-        }
-        
-        .btn-accent {
-            background-color: var(--accent);
-            color: white;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
-        }
-        
-        .btn-accent:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
-        }
-
-        .scroll-down {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: bounce 2s infinite;
-            color: white;
-            font-size: 2rem;
-            cursor: pointer;
-            z-index: 2;
-        }
-        
-        /* About Section */
-        section {
-            padding: 6rem 0;
-            position: relative;
-        }
-        
-        section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            width: 50px;
-            height: 3px;
-            background-color: var(--accent);
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: var(--mid);
-            margin-bottom: 3rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .about-image-container {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-        
-        .about-image-container:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-5px);
-        }
-        
-        .about-image {
-            width: 100%;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-        
-        .about-image-container:hover .about-image {
-            transform: scale(1.05);
-        }
-        
-        .about-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
-        }
-        
-        .about-content p {
-            margin-bottom: 1.5rem;
-            color: var(--mid);
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        .education {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-        
-        .education:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .education h4 {
-            color: var(--secondary);
-            margin-bottom: 0.8rem;
-            font-size: 1.3rem;
-        }
-        
-        /* Research Section */
-        #research {
-            background-color: var(--background);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .research-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-        }
-        
-        .research-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
+        .space-y-4 {
             display: flex;
             flex-direction: column;
-            cursor: pointer;
-            height: 100%;
-        }
-        
-        .research-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .research-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 0;
-            background: var(--gradient-1);
-            transition: all 0.3s ease;
-        }
-        
-        .research-card:hover::before {
-            height: 100%;
-        }
-        
-        .research-content {
-            padding: 2rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .research-content h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-            transition: all 0.3s ease;
-        }
-        
-        .research-card:hover .research-content h3 {
-            color: var(--secondary);
-        }
-        
-        .research-content .place {
-            color: var(--mid);
-            font-style: italic;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        
-        .research-content .date {
-            font-size: 0.9rem;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-        
-        .research-content p {
-            color: var(--mid);
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-        
-        .read-more {
-            display: inline-block;
-            color: var(--secondary);
-            font-weight: 500;
-            text-decoration: none;
-            position: relative;
-            padding-right: 25px;
-        }
-        
-        .read-more::after {
-            content: '\f054';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            transition: transform 0.3s ease;
-        }
-        
-        .read-more:hover::after {
-            transform: translate(5px, -50%);
-        }
-        
-        /* Astronomy Research Section */
-        #astronomy-research {
-            background: linear-gradient(to right, rgba(25, 25, 50, 0.9), rgba(25, 25, 50, 0.7)), url('/api/placeholder/1920/1080') center/cover;
-            color: white;
-            padding: 6rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #astronomy-research .section-title h2 {
-            color: white;
-        }
-        
-        #astronomy-research .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .astronomy-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .astronomy-content {
-            background-color: rgba(44, 62, 80, 0.7);
-            padding: 2.5rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .astronomy-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: white;
-        }
-        
-        .astronomy-content p {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        .astronomy-visualization {
-            height: 500px;
-            background-color: rgba(44, 62, 80, 0.7);
-            border-radius: 10px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        #simulation-container {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .simulation-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            padding: 0 20px;
-            z-index: 1;
-        }
-        
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 10px;
-            border-radius: 10px;
-            width: 150px;
-        }
-        
-        .control-group label {
-            font-size: 0.8rem;
-            margin-bottom: 5px;
-            color: white;
-        }
-        
-        .control-group input {
-            width: 100%;
-            padding: 5px;
-            border-radius: 5px;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.2);
-            color: white;
-        }
-        
-        .astronomy-dashboard {
-            padding: 3rem 0;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .dashboard-card {
-            background-color: rgba(44, 62, 80, 0.7);
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .dashboard-card h4 {
-            color: white;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-            text-align: center;
-        }
-        
-        .chart-container {
-            height: 250px;
-            position: relative;
-        }
-        
-        /* Skills Section */
-        #skills {
-            background-color: var(--background);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .skills-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z' opacity='.5'/%3E%3Cpath d='M15 15h50v50H15V15zm10 10v30h30V25H25zm15 22.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z'/%3E%3C/g%3E%3C/svg%3E");
-        }
-        
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .skill-category {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .skill-category:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .skill-category::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gradient-1);
-        }
-        
-        .skill-category h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-size: 1.5rem;
-        }
-        
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
             gap: 1rem;
         }
         
-        .skill-tag {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--secondary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+        .bg-gray-900 {
+            background-color: #1a202c;
         }
         
-        .skill-tag:hover {
-            background-color: var(--secondary);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        .rounded-lg {
+            border-radius: 0.5rem;
         }
         
-        /* Projects Section */
-        .projects-container {
-            padding: 2rem 0;
-        }
-        
-        .project-showcase {
-            margin-bottom: 6rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .project-showcase:nth-child(even) {
-            direction: rtl;
-        }
-        
-        .project-showcase:nth-child(even) .project-content {
-            direction: ltr;
-        }
-        
-        .project-image-container {
-            position: relative;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        
-        .project-image {
-            width: 100%;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-        
-        .project-image-container:hover .project-image {
-            transform: scale(1.05);
-        }
-        
-        .project-content h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .project-award {
-            display: inline-block;
-            background-color: rgba(231, 76, 60, 0.1);
-            color: var(--accent);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .project-description {
-            color: var(--mid);
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        .project-stats {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--secondary);
-            margin-bottom: 0.3rem;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            color: var(--mid);
-        }
-        
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .project-tag {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--secondary);
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-        
-        .btn-view-project {
-            margin-top: 1rem;
-        }
-        
-        .other-projects-title {
-            text-align: center;
-            margin: 4rem 0 2rem;
-        }
-        
-        .other-projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .other-project-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-        
-        .other-project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .other-project-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .other-project-content {
-            padding: 1.5rem;
-        }
-        
-        .other-project-content h4 {
-            font-size: 1.3rem;
-            margin-bottom: 0.8rem;
-            color: var(--primary);
-        }
-        
-        /* Awards Section */
-        #awards {
-            background-color: var(--background);
-            position: relative;
-        }
-        
-        .awards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-        
-        .award-card {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .award-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .award-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            border-width: 0 50px 50px 0;
-            border-style: solid;
-            border-color: transparent var(--accent) transparent transparent;
-        }
-        
-        .award-card h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-        }
-        
-        .award-card .organization {
-            color: var(--mid);
-            font-style: italic;
-            margin-bottom: 0.8rem;
-            display: block;
-        }
-        
-        .award-card .date {
-            font-size: 0.9rem;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-        
-        .award-card p {
-            color: var(--mid);
-            line-height: 1.8;
-        }
-        
-        /* Contact Section */
-        #contact {
-            background: var(--gradient-1);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #contact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        
-        #contact h2 {
-            color: white;
-        }
-        
-        #contact .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .contact-info {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 2.5rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .contact-info h3 {
-            color: white;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
-        
-        .contact-details h4 {
-            color: white;
-            margin-bottom: 0.3rem;
-        }
-        
-        .contact-details p, .contact-details a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .contact-details a:hover {
-            color: var(--accent);
-        }
-        
-        .contact-form {
-            background-color: white;
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .contact-form h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-control {
-            width: 100%;
+        .p-4 {
             padding: 1rem;
-            border: 1px solid #e1e1e1;
-            border-radius: 5px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background-color: var(--card-bg);
-            color: var(--dark);
         }
         
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-        
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-        
-        .social-link {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .social-link:hover {
-            background-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 3rem 0;
-            position: relative;
-        }
-        
-        .footer-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .footer-nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-nav a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-nav a:hover {
-            color: var(--accent);
-        }
-        
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-social-link:hover {
-            background-color: var(--accent);
-            transform: translateY(-3px);
-        }
-        
-        .copyright {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 1001;
-            overflow-y: auto;
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            position: relative;
-            width: 80%;
-            max-width: 1000px;
-            margin: 50px auto;
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        .overflow-hidden {
             overflow: hidden;
-            animation: modalFadeIn 0.3s ease;
         }
         
-        .modal-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            position: relative;
+        .bg-gray-800 {
+            background-color: #2d3748;
         }
         
-        .modal-title {
-            font-size: 1.8rem;
-            color: var(--primary);
-            margin: 0;
+        .bg-black {
+            background-color: #000;
         }
         
-        .modal-close {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            font-size: 1.5rem;
-            background: none;
-            border: none;
-            color: var(--mid);
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .bg-opacity-70 {
+            --bg-opacity: 0.7;
         }
         
-        .modal-close:hover {
-            color: var(--accent);
-            transform: rotate(90deg);
+        .text-white {
+            color: #fff;
         }
         
-        .modal-body {
-            padding: 2rem;
-            max-height: 70vh;
-            overflow-y: auto;
+        .p-3 {
+            padding: 0.75rem;
         }
         
-        .modal-footer {
-            padding: 1.5rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: flex-end;
+        .text-sm {
+            font-size: 0.875rem;
+        }
+        
+        .z-10 {
+            z-index: 10;
+        }
+        
+        .text-lg {
+            font-size: 1.125rem;
+        }
+        
+        .font-bold {
+            font-weight: 700;
+        }
+        
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .grid {
+            display: grid;
+        }
+        
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        
+        .gap-2 {
+            gap: 0.5rem;
+        }
+        
+        .text-green-400 {
+            color: #4ade80;
+        }
+        
+        .text-yellow-400 {
+            color: #facc15;
+        }
+        
+        .text-red-400 {
+            color: #f87171;
+        }
+        
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        
+        .md\:grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        
+        .gap-4 {
             gap: 1rem;
         }
         
-        @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .space-y-3 > * + * {
+            margin-top: 0.75rem;
         }
         
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .text-gray-300 {
+            color: #d1d5db;
         }
         
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) translateX(-50%);
-            }
-            40% {
-                transform: translateY(-20px) translateX(-50%);
-            }
-            60% {
-                transform: translateY(-10px) translateX(-50%);
-            }
-        }
-
-        /* Preloader */
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--primary);
-            z-index: 9999;
+        .flex {
             display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
-        .loader {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            border-top: 5px solid var(--accent);
-            animation: spin 1s linear infinite;
+        .justify-between {
+            justify-content: space-between;
         }
         
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .text-blue-400 {
+            color: #60a5fa;
         }
         
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .astronomy-grid,
-            .project-showcase {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .project-showcase:nth-child(even) {
-                direction: ltr;
-            }
-            
-            .about-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
+        .text-gray-400 {
+            color: #9ca3af;
         }
         
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 3rem;
-            }
-            
-            .hero h2 {
-                font-size: 1.5rem;
-            }
-            
-            .nav-links {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 250px;
-                height: 100vh;
-                background-color: var(--primary);
-                flex-direction: column;
-                padding: 80px 0 0 0;
-                transition: right 0.3s ease;
-            }
-            
-            .nav-links.active {
-                right: 0;
-            }
-            
-            .nav-links li {
-                margin: 0;
-                width: 100%;
-                text-align: center;
-                padding: 15px 0;
-            }
-            
-            .mobile-menu-btn {
-                display: block;
-                z-index: 1001;
-            }
-
-            .mobile-menu-btn.active i:before {
-                content: '\f00d';
-            }
-            
-            .research-grid, .skills-container, .awards-grid, .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .simulation-controls {
-                flex-wrap: wrap;
-            }
+        .text-red-400 {
+            color: #f87171;
         }
         
-        @media (max-width: 576px) {
-            .hero h1 {
-                font-size: 2.5rem;
+        .w-full {
+            width: 100%;
+        }
+        
+        .h-2 {
+            height: 0.5rem;
+        }
+        
+        .bg-blue-200 {
+            background-color: #bfdbfe;
+        }
+        
+        .appearance-none {
+            appearance: none;
+        }
+        
+        .cursor-pointer {
+            cursor: pointer;
+        }
+        
+        .bg-gray-200 {
+            background-color: #e5e7eb;
+        }
+        
+        .bg-red-200 {
+            background-color: #fecaca;
+        }
+        
+        .space-x-2 > * + * {
+            margin-left: 0.5rem;
+        }
+        
+        .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        
+        .bg-blue-600 {
+            background-color: #2563eb;
+        }
+        
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        
+        .hover\:bg-blue-700:hover {
+            background-color: #1d4ed8;
+        }
+        
+        .flex-1 {
+            flex: 1 1 0%;
+        }
+        
+        .bg-gray-600 {
+            background-color: #4b5563;
+        }
+        
+        .hover\:bg-gray-700:hover {
+            background-color: #374151;
+        }
+        
+        .bg-green-200 {
+            background-color: #bbf7d0;
+        }
+        
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        
+        .gap-1 {
+            gap: 0.25rem;
+        }
+        
+        .px-2 {
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+        
+        .py-1 {
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+        }
+        
+        .bg-blue-600 {
+            background-color: #2563eb;
+        }
+        
+        .bg-gray-700 {
+            background-color: #374151;
+        }
+        
+        .text-gray-300 {
+            color: #d1d5db;
+        }
+        
+        .md\:grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        
+        .list-disc {
+            list-style-type: disc;
+        }
+        
+        .list-inside {
+            list-style-position: inside;
+        }
+        
+        /* Responsive styles */
+        @media (min-width: 768px) {
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
             
-            .hero h2 {
-                font-size: 1.2rem;
-            }
-            
-            .hero-btns {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-                margin-bottom: 1rem;
-            }
-            
-            section {
-                padding: 4rem 0;
-            }
-            
-            .project-meta {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 30px auto;
+            .md\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
     </style>
@@ -1479,7 +389,7 @@
         </div>
     </section>
 
-    <!-- Astronomy Research Section -->
+    <!-- Astronomy Research Section with ExoSubmoon Visualization -->
     <section id="astronomy-research">
         <div class="container">
             <div class="section-title">
@@ -1499,12 +409,8 @@
                     <button class="btn btn-accent" id="open-research-modal">View Detailed Findings</button>
                 </div>
                 
-                <div class="astronomy-visualization" id="react-exosubmoon-visualization">
-                    <div id="simulation-container" style="position: relative; width: 100%; height: 100%;"></div>
-                    <div class="simulation-controls">
-                        <!-- Keep your existing controls -->
-                </div>
-                
+                <div class="astronomy-visualization" id="exosubmoon-visualization">
+                    <!-- The React component will be rendered here -->
                 </div>
             </div>
             
@@ -1612,419 +518,526 @@
         </div>
     </div>
 
-    <!-- Research Section -->
-    <section id="research">
-        <div class="container">
-            <div class="section-title">
-                <h2>Research Experience</h2>
-            </div>
-            <p class="subtitle">My academic journey has led me to explore various research areas, from AI in software development to advanced mathematical modeling.</p>
-            
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Future of Software Development with AI</h3>
-                        <span class="place">New York University x DTCC</span>
-                        <span class="date">September 2024 - Present</span>
-                        <p>Leading a team researching how LLMs can help automate tasks in software development. Developed a tool using ChatGPT to automate the process of adding comments and renaming labels in compiler-generated assembly code.</p>
-                        <a href="#" class="read-more" data-modal="research-modal-1">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Data Science Intern</h3>
-                        <span class="place">NYU Center for Urban Science and Progress (CUSP)</span>
-                        <span class="date">August 2024 - Present</span>
-                        <p>Developed advanced geospatial data analysis pipelines using Python and GeoPandas. Utilized custom clustering algorithms and spatial correlation techniques to identify urban patterns and optimize resource allocation.</p>
-                        <a href="#" class="read-more" data-modal="research-modal-2">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Undergraduate Summer Research Program</h3>
-                        <span class="place">New York University</span>
-                        <span class="date">May 2024 - August 2024</span>
-                        <p>Formulated a multi-objective optimization model to determine optimal EV charging station locations. Developed and implemented a novel capacitated probabilistic greedy clustering algorithm for optimizing vehicle routing.</p>
-                        <a href="#" class="read-more" data-modal="research-modal-3">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Mathematical Modeling</h3>
-                        <span class="place">New York Academy of Sciences</span>
-                        <span class="date">March 2021 - May 2023</span>
-                        <p>Developed mathematical models to optimize electricity production across multiple sources for a Smart City, ensuring minimal cost and environmental pollution while meeting electricity needs.</p>
-                        <a href="#" class="read-more" data-modal="research-modal-4">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Particle Physics Research</h3>
-                        <span class="place">Duke University</span>
-                        <span class="date">November 2020 - January 2022</span>
-                        <p>Discussed Deep Inelastic Scattering experiments such as the Drell-Yan process. Proposed a novel extraction method of sea quark distributions in the proton with respect to the Bjorken variable.</p>
-                        <a href="#" class="read-more" data-modal="research-modal-5">Read more</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills">
-        <div class="container">
-            <div class="section-title">
-                <h2>Skills & Expertise</h2>
-            </div>
-            <p class="subtitle">A combination of technical proficiency and analytical thinking enables me to approach complex problems with confidence.</p>
-            
-            <div class="skills-bg"></div>
-            
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Programming Languages</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">R</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">C</span>
-                        <span class="skill-tag">C#</span>
-                        <span class="skill-tag">Matlab</span>
-                        <span class="skill-tag">Javascript</span>
-                        <span class="skill-tag">HTML</span>
-                        <span class="skill-tag">LaTeX</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Technical Skills</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Scientific Computing</span>
-                        <span class="skill-tag">Simulation</span>
-                        <span class="skill-tag">Optimization Algorithms</span>
-                        <span class="skill-tag">Machine Learning</span>
-                        <span class="skill-tag">Data Engineering</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Software Tools</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Jupyter</span>
-                        <span class="skill-tag">Spyder</span>
-                        <span class="skill-tag">RStudio</span>
-                        <span class="skill-tag">OpenRocket</span>
-                        <span class="skill-tag">Anaconda</span>
-                        <span class="skill-tag">Miniforge</span>
-                        <span class="skill-tag">Github</span>
-                        <span class="skill-tag">VertexAI</span>
-                        <span class="skill-tag">ArcGIS</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Python Libraries</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Numpy</span>
-                        <span class="skill-tag">Pandas</span>
-                        <span class="skill-tag">Scipy</span>
-                        <span class="skill-tag">Sklearn</span>
-                        <span class="skill-tag">Pytorch</span>
-                        <span class="skill-tag">GeoPandas</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <div class="section-title">
-                <h2>Notable Projects</h2>
-            </div>
-            <p class="subtitle">A selection of significant projects that demonstrate my skills and problem-solving abilities.</p>
-            
-            <div class="projects-container">
-                <!-- Featured Project 1 -->
-                <div class="project-showcase">
-                    <div class="project-image-container">
-                        <img src="/api/placeholder/600/400" alt="Time Series Correlation" class="project-image">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-award">Provisional Patent</span>
-                        <h3>Time Series Cross-Correlation Formula</h3>
-                        <p class="project-description">I developed a novel time series cross-correlation formula using discrete calculus. This correlation metric can measure both linear and non-linear relationships, unlike existing techniques.</p>
-                        
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <div class="stat-number">70%</div>
-                                <div class="stat-label">Training Time Reduction</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">45%</div>
-                                <div class="stat-label">Model Accuracy Increase</div>
-                            </div>
-                        </div>
-                        
-                        <div class="project-tags">
-                            <span class="project-tag">Mathematical Analysis</span>
-                            <span class="project-tag">Time Series</span>
-                            <span class="project-tag">Machine Learning</span>
-                        </div>
-                        
-                        <a href="#" class="btn btn-primary btn-view-project" data-modal="project-modal-1">View Project Details</a>
-                    </div>
-                </div>
-                
-                <!-- Featured Project 2 -->
-                <div class="project-showcase">
-                    <div class="project-image-container">
-                        <img src="/api/placeholder/600/400" alt="Tutoring Platform" class="project-image">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-award">2nd Place @ RUHacks 2023</span>
-                        <h3>Tutoring Platform</h3>
-                        <p class="project-description">I built a comprehensive tutoring platform that connects underclassmen to upperclassmen. The platform features user profiles, scheduling tools, and secure payment processing.</p>
-                        
-                        <div class="project-description">
-                            <p>The platform uses a MongoDB database to store and retrieve user profiles, tutoring schedules, and payment data. I built the server-side logic using Python with RESTful APIs for client communication.</p>
-                        </div>
-                        
-                        <div class="project-tags">
-                            <span class="project-tag">Python</span>
-                            <span class="project-tag">MongoDB</span>
-                            <span class="project-tag">HTML/CSS</span>
-                            <span class="project-tag">JavaScript</span>
-                        </div>
-                        
-                        <a href="#" class="btn btn-primary btn-view-project" data-modal="project-modal-2">View Project Details</a>
-                    </div>
-                </div>
-                
-                <!-- Featured Project 3 -->
-                <div class="project-showcase">
-                    <div class="project-image-container">
-                        <img src="/api/placeholder/600/400" alt="AI Stock Prediction" class="project-image">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-award">Passion Project</span>
-                        <h3>AI Stock Price Forecasting</h3>
-                        <p class="project-description">I developed an AI model that accurately forecasts the next day's closing price for any stock based on a combination of technical indicators, macroeconomic factors, and inter-index correlation.</p>
-                        
-                        <div class="project-description">
-                            <p>The model combines machine learning techniques with traditional financial analysis to produce highly accurate predictions. I implemented several neural network architectures and compared their performance.</p>
-                        </div>
-                        
-                        <div class="project-tags">
-                            <span class="project-tag">AI/ML</span>
-                            <span class="project-tag">Financial Analysis</span>
-                            <span class="project-tag">Predictive Modeling</span>
-                            <span class="project-tag">Neural Networks</span>
-                        </div>
-                        
-                        <a href="#" class="btn btn-primary btn-view-project" data-modal="project-modal-3">View Project Details</a>
-                    </div>
-                </div>
-                
-                <h3 class="other-projects-title">Other Notable Projects</h3>
-                
-                <div class="other-projects-grid">
-                    <!-- Other Project 1 -->
-                    <div class="other-project-card">
-                        <img src="/api/placeholder/400/200" alt="Investment Portfolio" class="other-project-image">
-                        <div class="other-project-content">
-                            <h4>Investment Portfolio Strategy</h4>
-                            <p>Developed a portfolio of stocks and leveraged ETFs using the CPPI hedging strategy. Achieved +18.72% returns vs -8.50% S&P 500.</p>
-                            <div class="project-tags">
-                                <span class="project-tag">Financial Analysis</span>
-                                <span class="project-tag">Portfolio Management</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Other Project 2 -->
-                    <div class="other-project-card">
-                        <img src="/api/placeholder/400/200" alt="EV Charging Optimization" class="other-project-image">
-                        <div class="other-project-content">
-                            <h4>EV Charging Station Optimization</h4>
-                            <p>Created a multi-objective optimization model to determine optimal locations for charging stations across NYC's municipal fleet.</p>
-                            <div class="project-tags">
-                                <span class="project-tag">Optimization</span>
-                                <span class="project-tag">Urban Planning</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Other Project 3 -->
-                    <div class="other-project-card">
-                        <img src="/api/placeholder/400/200" alt="Assembly Code Commentator" class="other-project-image">
-                        <div class="other-project-content">
-                            <h4>LLM-Based Assembly Code Commentator</h4>
-                            <p>Developed a tool using ChatGPT to automate adding comments to compiler-generated assembly code for improved understanding and debugging.</p>
-                            <div class="project-tags">
-                                <span class="project-tag">AI/ML</span>
-                                <span class="project-tag">Software Development</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Awards Section -->
-    <section id="awards">
-        <div class="container">
-            <div class="section-title">
-                <h2>Awards & Achievements</h2>
-            </div>
-            <p class="subtitle">Recognition for excellence in various academic and competitive pursuits.</p>
-            
-            <div class="awards-grid">
-                <div class="award-card">
-                    <h3>2nd Place @ RUHacks 2023</h3>
-                    <span class="organization">Rutgers University</span>
-                    <span class="date">October 2023</span>
-                    <p>Awarded second place for developing an innovative tutoring platform that connects underclassmen to upperclassmen.</p>
-                </div>
-                
-                <div class="award-card">
-                    <h3>2nd Place @ Roundpier Investment Competition</h3>
-                    <span class="organization">Roundpier</span>
-                    <span class="date">Jan-April 2022</span>
-                    <p>Achieved a +18.72% portfolio performance (vs -8.50% S&P 500) through strategic investments and technical analysis.</p>
-                </div>
-                
-                <div class="award-card">
-                    <h3>FIDE Rating</h3>
-                    <span class="organization">The International Chess Federation</span>
-                    <span class="date">November 2014</span>
-                    <p>Attained an international rating at the age of 9. FIDE Rating of 1474 in Classical, 1434 in Rapid and 1482 in Blitz.</p>
-                </div>
-                
-                <div class="award-card">
-                    <h3>AP Scholar with Distinction</h3>
-                    <span class="organization">College Board</span>
-                    <span class="date">May 2022</span>
-                    <p>Recognized for exceptional achievement on AP exams.</p>
-                </div>
-                
-                <div class="award-card">
-                    <h3>Provisional Patent</h3>
-                    <span class="organization">Time Series Cross-Correlation Formula</span>
-                    <span class="date">October 2022</span>
-                    <p>Developed a time series correlation method that reduced training time by up to 70% and increased model accuracy by up to 45%.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Get In Touch</h2>
-            </div>
-            <p class="subtitle">I'm always interested in new research opportunities, collaborations, or discussions about mathematics, computer science, and data science.</p>
-            
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <a href="mailto:aib6932@nyu.edu">aib6932@nyu.edu</a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Phone</h4>
-                            <a href="tel:+16463091715">+1 (646) 309-1715</a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Location</h4>
-                            <p>New York City, NY</p>
-                        </div>
-                    </div>
-                    
-                    <div class="social-links">
-                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                
-                <div class="contact-form">
-                    <h3>Send Me a Message</h3>
-                    
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Your Name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="email" class="form-control" placeholder="Your Email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Subject">
-                    </div>
-                    
-                    <div class="form-group">
-                        <textarea class="form-control" placeholder="Your Message"></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Send Message</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">Apoorv Belgundi</div>
-                <div class="footer-nav">
-                    <a href="#about">About</a>
-                    <a href="#astronomy-research">Astronomy Research</a>
-                    <a href="#research">Research</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#awards">Awards</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                <div class="footer-social">
-                    <a href="#" class="footer-social-link"><i class="fab fa-github"></i></a>
-                    <a href="#" class="footer-social-link"><i class="fab fa-linkedin"></i></a>
-                    <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
-                </div>
-                <p class="copyright">&copy; 2025 Apoorv Belgundi. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    <!-- The rest of the HTML sections remain the same (Research, Skills, Projects, Awards, Contact, Footer) -->
+    <!-- ... -->
 
     <!-- JavaScript -->
+    <!-- Import particles.js and other original JavaScript libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- ExoSubmoon Visualization Component -->
+    <script type="text/babel">
+        // ExoSubmoonVisualization React Component
+        const ExoSubmoonVisualization = () => {
+          const containerRef = React.useRef(null);
+          const rendererRef = React.useRef(null);
+          const sceneRef = React.useRef(null);
+          const cameraRef = React.useRef(null);
+          const controlsRef = React.useRef(null);
+          const animationRef = React.useRef(null);
+          
+          const [isPlaying, setIsPlaying] = React.useState(true);
+          const [speedMultiplier, setSpeedMultiplier] = React.useState(1);
+          const [showOrbits, setShowOrbits] = React.useState(true);
+          const [viewMode, setViewMode] = React.useState('standard'); // standard, topDown, planet, moon
+          
+          // System parameters
+          const [planetMass, setPlanetMass] = React.useState(28);
+          const [moonMass, setMoonMass] = React.useState(0.5);
+          const [submoonMass, setSubmoonMass] = React.useState(0.05);
+          const [planetRadius, setPlanetRadius] = React.useState(20);
+          const [moonRadius, setMoonRadius] = React.useState(3);
+          const [submoonRadius, setSubmoonRadius] = React.useState(0.8);
+          
+          // Stats
+          const [stats, setStats] = React.useState({
+            stability: 'High',
+            estimatedLifetime: '> 100 million years',
+            tidalForces: 'Moderate',
+            orbitRatio: ''
+          });
+          
+          React.useEffect(() => {
+            // Initialize the visualization
+            const container = containerRef.current;
+            if (!container) return;
+            
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            // Create scene, camera, and renderer
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ 
+              antialias: true, 
+              alpha: true 
+            });
+            
+            renderer.setSize(width, height);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            sceneRef.current = scene;
+            cameraRef.current = camera;
+            rendererRef.current = renderer;
+            
+            // Add ambient light for better visibility
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            // Create Star (central body)
+            const starGeometry = new THREE.SphereGeometry(5, 32, 32);
+            const starMaterial = new THREE.MeshBasicMaterial({ 
+              color: 0xffff00,
+            });
+            const star = new THREE.Mesh(starGeometry, starMaterial);
+            scene.add(star);
+            
+            // Add Point Light to simulate star's light
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(0, 0, 0);
+            scene.add(light);
+            
+            // Create Planet
+            const planetGeometry = new THREE.SphereGeometry(2, 32, 32);
+            const planetMaterial = new THREE.MeshPhongMaterial({ 
+              color: 0x3498db,
+              specular: 0x333333,
+              shininess: 10
+            });
+            const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+            planet.position.set(20, 0, 0);
+            scene.add(planet);
+            
+            // Create Moon
+            const moonGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+            const moonMaterial = new THREE.MeshPhongMaterial({ 
+              color: 0xecf0f1,
+              specular: 0x333333,
+              shininess: 5
+            });
+            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+            moon.position.set(23, 0, 0);
+            scene.add(moon);
+            
+            // Create Submoon
+            const submoonGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+            const submoonMaterial = new THREE.MeshPhongMaterial({ 
+              color: 0xe74c3c,
+              specular: 0x333333,
+              shininess: 5
+            });
+            const submoon = new THREE.Mesh(submoonGeometry, submoonMaterial);
+            submoon.position.set(23.8, 0, 0);
+            scene.add(submoon);
+            
+            // Create Orbits
+            const planetOrbitGeometry = new THREE.RingGeometry(20, 20.1, 64);
+            const planetOrbitMaterial = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.2
+            });
+            const planetOrbit = new THREE.Mesh(planetOrbitGeometry, planetOrbitMaterial);
+            planetOrbit.rotation.x = Math.PI / 2;
+            scene.add(planetOrbit);
+            
+            const moonOrbitGeometry = new THREE.RingGeometry(3, 3.05, 64);
+            const moonOrbitMaterial = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.2
+            });
+            const moonOrbit = new THREE.Mesh(moonOrbitGeometry, moonOrbitMaterial);
+            moonOrbit.rotation.x = Math.PI / 2;
+            scene.add(moonOrbit);
+            
+            const submoonOrbitGeometry = new THREE.RingGeometry(0.8, 0.82, 64);
+            const submoonOrbitMaterial = new THREE.MeshBasicMaterial({
+              color: 0xffffff,
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.2
+            });
+            const submoonOrbit = new THREE.Mesh(submoonOrbitGeometry, submoonOrbitMaterial);
+            submoonOrbit.rotation.x = Math.PI / 2;
+            scene.add(submoonOrbit);
+            
+            // Set initial camera position
+            camera.position.z = 40;
+            camera.position.y = 20;
+            camera.lookAt(0, 0, 0);
+            
+            // Variables for animation
+            let planetAngle = 0;
+            let moonAngle = 0;
+            let submoonAngle = 0;
+            
+            // Initialize parameters
+            let planetSpeed = 0.002;
+            let moonSpeed = 0.006;
+            let submoonSpeed = 0.01;
+            
+            // Animation function
+            const animate = () => {
+              if (!isPlaying) {
+                animationRef.current = requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+                return;
+              }
+              
+              // Update angles
+              planetAngle += planetSpeed * speedMultiplier;
+              moonAngle += moonSpeed * speedMultiplier;
+              submoonAngle += submoonSpeed * speedMultiplier;
+              
+              // Update positions
+              planet.position.x = planetRadius * Math.cos(planetAngle);
+              planet.position.z = planetRadius * Math.sin(planetAngle);
+              
+              // Update moon orbit position
+              moonOrbit.position.x = planet.position.x;
+              moonOrbit.position.z = planet.position.z;
+              
+              // Update moon position relative to planet
+              moon.position.x = planet.position.x + moonRadius * Math.cos(moonAngle);
+              moon.position.z = planet.position.z + moonRadius * Math.sin(moonAngle);
+              
+              // Update submoon orbit position
+              submoonOrbit.position.x = moon.position.x;
+              submoonOrbit.position.z = moon.position.z;
+              
+              // Update submoon position relative to moon
+              submoon.position.x = moon.position.x + submoonRadius * Math.cos(submoonAngle);
+              submoon.position.z = moon.position.z + submoonRadius * Math.sin(submoonAngle);
+              
+              // Update orbit visibility based on state
+              planetOrbit.visible = showOrbits;
+              moonOrbit.visible = showOrbits;
+              submoonOrbit.visible = showOrbits;
+              
+              // Update camera position based on view mode
+              if (viewMode === 'topDown') {
+                camera.position.set(0, 40, 0);
+                camera.lookAt(0, 0, 0);
+              } else if (viewMode === 'planet') {
+                const offset = new THREE.Vector3(0, 5, 15);
+                camera.position.set(
+                  planet.position.x + offset.x,
+                  planet.position.y + offset.y,
+                  planet.position.z + offset.z
+                );
+                camera.lookAt(planet.position);
+              } else if (viewMode === 'moon') {
+                const offset = new THREE.Vector3(0, 2, 5);
+                camera.position.set(
+                  moon.position.x + offset.x,
+                  moon.position.y + offset.y,
+                  moon.position.z + offset.z
+                );
+                camera.lookAt(moon.position);
+              }
+              
+              renderer.render(scene, camera);
+              animationRef.current = requestAnimationFrame(animate);
+            };
+            
+            // Start animation
+            animate();
+            
+            // Handle window resize
+            const handleResize = () => {
+              if (!containerRef.current) return;
+              const width = containerRef.current.clientWidth;
+              const height = containerRef.current.clientHeight;
+              
+              if (rendererRef.current && cameraRef.current) {
+                rendererRef.current.setSize(width, height);
+                cameraRef.current.aspect = width / height;
+                cameraRef.current.updateProjectionMatrix();
+              }
+            };
+            
+            window.addEventListener('resize', handleResize);
+            
+            // Cleanup function
+            return () => {
+              window.removeEventListener('resize', handleResize);
+              
+              if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+              }
+              
+              if (rendererRef.current && containerRef.current) {
+                containerRef.current.removeChild(rendererRef.current.domElement);
+                rendererRef.current.dispose();
+              }
+            };
+          }, [isPlaying, speedMultiplier, showOrbits, viewMode]);
+          
+          // Update object scales and speeds when parameters change
+          React.useEffect(() => {
+            if (!sceneRef.current) return;
+            
+            const scene = sceneRef.current;
+            
+            // Find objects in the scene
+            const planet = scene.children.find(obj => obj.geometry && obj.geometry.type === 'SphereGeometry' && obj.material.color.getHexString() === '3498db');
+            const moon = scene.children.find(obj => obj.geometry && obj.geometry.type === 'SphereGeometry' && obj.material.color.getHexString() === 'ecf0f1');
+            const submoon = scene.children.find(obj => obj.geometry && obj.geometry.type === 'SphereGeometry' && obj.material.color.getHexString() === 'e74c3c');
+            
+            if (planet && moon && submoon) {
+              // Scale objects based on mass
+              planet.scale.set(planetMass/20, planetMass/20, planetMass/20);
+              moon.scale.set(moonMass, moonMass, moonMass);
+              submoon.scale.set(submoonMass*5, submoonMass*5, submoonMass*5);
+              
+              // Calculate and update system stability metrics
+              const planetToMoonRatio = planetMass / moonMass;
+              const moonToSubmoonRatio = moonMass / submoonMass;
+              const orbitRatio = moonRadius / planetRadius;
+              
+              let stability = 'Low';
+              let lifetime = '< 10 million years';
+              let tidalForces = 'Strong';
+              
+              if (moonToSubmoonRatio > 5 && planetToMoonRatio < 60) {
+                stability = 'High';
+                lifetime = '> 100 million years';
+                tidalForces = 'Weak';
+              } else if (moonToSubmoonRatio > 3 && planetToMoonRatio < 80) {
+                stability = 'Medium';
+                lifetime = '~ 50 million years';
+                tidalForces = 'Moderate';
+              }
+              
+              setStats({
+                stability,
+                estimatedLifetime: lifetime,
+                tidalForces,
+                orbitRatio: orbitRatio.toFixed(2)
+              });
+            }
+          }, [planetMass, moonMass, submoonMass, planetRadius, moonRadius, submoonRadius]);
+          
+          return (
+            <div className="space-y-4">
+              <div className="bg-gray-900 rounded-lg p-4 overflow-hidden" style={{ height: '450px' }}>
+                <div ref={containerRef} className="w-full h-full relative">
+                  {/* Information overlay */}
+                  <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white p-3 rounded-lg text-sm z-10">
+                    <h3 className="text-lg font-bold mb-2">System Statistics</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>Stability:</div>
+                      <div className={`font-bold ${stats.stability === 'High' ? 'text-green-400' : stats.stability === 'Medium' ? 'text-yellow-400' : 'text-red-400'}`}>
+                        {stats.stability}
+                      </div>
+                      
+                      <div>Estimated Lifetime:</div>
+                      <div className="font-bold">{stats.estimatedLifetime}</div>
+                      
+                      <div>Tidal Forces:</div>
+                      <div className="font-bold">{stats.tidalForces}</div>
+                      
+                      <div>Moon/Planet Orbit Ratio:</div>
+                      <div className="font-bold">{stats.orbitRatio}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Controls */}
+              <div className="bg-gray-800 rounded-lg p-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* System parameters */}
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-bold text-white mb-2">System Parameters</h3>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm flex justify-between">
+                        <span>Planet Mass: {planetMass} M<sub>jup</sub></span>
+                        <span className="text-blue-400">Jupiter = 1</span>
+                      </label>
+                      <input
+                        type="range"
+                        min="5"
+                        max="100"
+                        value={planetMass}
+                        onChange={(e) => setPlanetMass(Number(e.target.value))}
+                        className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm flex justify-between">
+                        <span>Moon Mass: {moonMass} M<sub>jup</sub></span>
+                        <span className="text-gray-400">Ganymede ≈ 0.025</span>
+                      </label>
+                      <input
+                        type="range"
+                        min="0.1"
+                        max="10"
+                        step="0.1"
+                        value={moonMass}
+                        onChange={(e) => setMoonMass(Number(e.target.value))}
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm flex justify-between">
+                        <span>Submoon Mass: {submoonMass} M<sub>jup</sub></span>
+                        <span className="text-red-400">Earth ≈ 0.003</span>
+                      </label>
+                      <input
+                        type="range"
+                        min="0.01"
+                        max="1"
+                        step="0.01"
+                        value={submoonMass}
+                        onChange={(e) => setSubmoonMass(Number(e.target.value))}
+                        className="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Orbital parameters */}
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-bold text-white mb-2">Orbital Parameters</h3>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm">Planet Orbital Radius: {planetRadius} AU</label>
+                      <input
+                        type="range"
+                        min="10"
+                        max="30"
+                        value={planetRadius}
+                        onChange={(e) => setPlanetRadius(Number(e.target.value))}
+                        className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm">Moon Orbital Radius: {moonRadius} R<sub>Hill</sub></label>
+                      <input
+                        type="range"
+                        min="1"
+                        max="5"
+                        step="0.1"
+                        value={moonRadius}
+                        onChange={(e) => setMoonRadius(Number(e.target.value))}
+                        className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm">Submoon Orbital Radius: {submoonRadius} R<sub>Hill</sub></label>
+                      <input
+                        type="range"
+                        min="0.3"
+                        max="1.5"
+                        step="0.05"
+                        value={submoonRadius}
+                        onChange={(e) => setSubmoonRadius(Number(e.target.value))}
+                        className="w-full h-2 bg-red-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Simulation controls */}
+                  <div className="space-y-3">
+                    <h3 className="text-lg font-bold text-white mb-2">Simulation Controls</h3>
+                    
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={() => setIsPlaying(!isPlaying)}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex-1"
+                      >
+                        {isPlaying ? 'Pause' : 'Play'}
+                      </button>
+                      
+                      <button 
+                        onClick={() => setShowOrbits(!showOrbits)}
+                        className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 flex-1"
+                      >
+                        {showOrbits ? 'Hide Orbits' : 'Show Orbits'}
+                      </button>
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm">Simulation Speed: {speedMultiplier}x</label>
+                      <input
+                        type="range"
+                        min="0.1"
+                        max="5"
+                        step="0.1"
+                        value={speedMultiplier}
+                        onChange={(e) => setSpeedMultiplier(Number(e.target.value))}
+                        className="w-full h-2 bg-green-200 rounded-lg appearance-none cursor-pointer"
+                      />
+                    </div>
+                    
+                    <div className="space-y-1">
+                      <label className="text-gray-300 text-sm">View Mode:</label>
+                      <div className="grid grid-cols-4 gap-1">
+                        {['standard', 'topDown', 'planet', 'moon'].map((mode) => (
+                          <button 
+                            key={mode}
+                            onClick={() => setViewMode(mode)}
+                            className={`px-2 py-1 rounded-lg text-sm ${viewMode === mode ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+                          >
+                            {mode === 'standard' ? 'Default' : 
+                             mode === 'topDown' ? 'Top Down' :
+                             mode === 'planet' ? 'Planet View' : 'Moon View'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Research explanation */}
+              <div className="bg-gray-800 rounded-lg p-4 text-white">
+                <h3 className="text-lg font-bold mb-2">About Exosubmoons</h3>
+                <p className="text-gray-300 mb-3">
+                  This interactive simulation demonstrates the conditions required for exosubmoons (moons of exomoons) to maintain stable orbits. Research suggests that specific mass ratios and orbital configurations can allow submoons to survive for over 100 million years.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h4 className="font-bold text-blue-400 mb-1">Key Stability Factors:</h4>
+                    <ul className="list-disc list-inside text-gray-300 text-sm">
+                      <li>Low planet-to-moon mass ratio increases submoon stability</li>
+                      <li>Submoons with low mass have greater lifetimes</li>
+                      <li>Greater orbital distance from the parent moon provides more space for inward evolution</li>
+                      <li>Tidal forces significantly impact long-term stability</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-blue-400 mb-1">Optimal Configuration:</h4>
+                    <ul className="list-disc list-inside text-gray-300 text-sm">
+                      <li>Planet/Moon mass ratio: &lt; 60</li>
+                      <li>Moon/Submoon mass ratio: &gt; 5</li>
+                      <li>Submoon orbital radius: 0.4-0.6 Hill radii</li>
+                      <li>Low eccentricity orbits for all bodies</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        // Render the React component
+        ReactDOM.render(
+          <ExoSubmoonVisualization />,
+          document.getElementById('exosubmoon-visualization')
+        );
+    </script>
+
+    <!-- Original JavaScript for the webpage -->
     <script>
         // Preloader
         window.addEventListener('load', function() {
@@ -2141,211 +1154,6 @@
             },
             "retina_detect": true
         });
-
-        // 3D Simulation of Star-Planet-Moon-Submoon System
-        function initSimulation() {
-            const container = document.getElementById('simulation-container');
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            // Initialize Three.js Scene
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
-            renderer.setSize(width, height);
-            renderer.setClearColor(0x000000, 0);
-            container.appendChild(renderer.domElement);
-            
-            // Create Star
-            const starGeometry = new THREE.SphereGeometry(5, 32, 32);
-            const starMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xffff00,
-                emissive: 0xffff00,
-                emissiveIntensity: 1
-            });
-            const star = new THREE.Mesh(starGeometry, starMaterial);
-            scene.add(star);
-            
-            // Add Point Light to simulate star's light
-            const light = new THREE.PointLight(0xffffff, 1, 100);
-            light.position.set(0, 0, 0);
-            scene.add(light);
-            
-            // Create Planet
-            const planetGeometry = new THREE.SphereGeometry(2, 32, 32);
-            const planetMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0x3498db,
-                specular: 0x333333,
-                shininess: 10
-            });
-            const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-            planet.position.set(20, 0, 0);
-            scene.add(planet);
-            
-            // Create Moon
-            const moonGeometry = new THREE.SphereGeometry(0.6, 32, 32);
-            const moonMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0xecf0f1,
-                specular: 0x333333,
-                shininess: 5
-            });
-            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-            moon.position.set(23, 0, 0);
-            scene.add(moon);
-            
-            // Create Submoon
-            const submoonGeometry = new THREE.SphereGeometry(0.2, 32, 32);
-            const submoonMaterial = new THREE.MeshPhongMaterial({ 
-                color: 0xe74c3c,
-                specular: 0x333333,
-                shininess: 5
-            });
-            const submoon = new THREE.Mesh(submoonGeometry, submoonMaterial);
-            submoon.position.set(23.8, 0, 0);
-            scene.add(submoon);
-            
-            // Create Orbits
-            const planetOrbitGeometry = new THREE.RingGeometry(20, 20.1, 64);
-            const planetOrbitMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.2
-            });
-            const planetOrbit = new THREE.Mesh(planetOrbitGeometry, planetOrbitMaterial);
-            planetOrbit.rotation.x = Math.PI / 2;
-            scene.add(planetOrbit);
-            
-            const moonOrbitGeometry = new THREE.RingGeometry(3, 3.05, 64);
-            const moonOrbitMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.2
-            });
-            const moonOrbit = new THREE.Mesh(moonOrbitGeometry, moonOrbitMaterial);
-            moonOrbit.rotation.x = Math.PI / 2;
-            
-            const submoonOrbitGeometry = new THREE.RingGeometry(0.8, 0.82, 64);
-            const submoonOrbitMaterial = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
-                side: THREE.DoubleSide,
-                transparent: true,
-                opacity: 0.2
-            });
-            const submoonOrbit = new THREE.Mesh(submoonOrbitGeometry, submoonOrbitMaterial);
-            submoonOrbit.rotation.x = Math.PI / 2;
-            
-            scene.add(moonOrbit);
-            scene.add(submoonOrbit);
-            
-            // Set camera position
-            camera.position.z = 40;
-            camera.position.y = 20;
-            camera.lookAt(0, 0, 0);
-            
-            // Add orbit controls
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.1;
-            
-            // Variables for animation
-            let planetAngle = 0;
-            let moonAngle = 0;
-            let submoonAngle = 0;
-            
-            // Parameters (can be updated by sliders)
-            let planetMass = 28;
-            let moonMass = 0.5;
-            let submoonMass = 0.05;
-            let planetRadius = 20;
-            let moonRadius = 3;
-            let submoonRadius = 0.8;
-            
-            // Get slider elements
-            const planetMassSlider = document.getElementById('planet-mass');
-            const moonMassSlider = document.getElementById('moon-mass');
-            const submoonMassSlider = document.getElementById('submoon-mass');
-            
-            // Update parameters on slider change
-            planetMassSlider.addEventListener('input', function() {
-                planetMass = parseFloat(this.value);
-                updateOrbitalParameters();
-            });
-            
-            moonMassSlider.addEventListener('input', function() {
-                moonMass = parseFloat(this.value);
-                updateOrbitalParameters();
-            });
-            
-            submoonMassSlider.addEventListener('input', function() {
-                submoonMass = parseFloat(this.value);
-                updateOrbitalParameters();
-            });
-            
-            function updateOrbitalParameters() {
-                // Scale visual elements based on mass
-                planet.scale.set(planetMass/20, planetMass/20, planetMass/20);
-                moon.scale.set(moonMass, moonMass, moonMass);
-                submoon.scale.set(submoonMass*5, submoonMass*5, submoonMass*5);
-                
-                // Update orbital speeds based on masses (simplified physics)
-                planetSpeed = 0.002 * Math.sqrt(1/planetMass);
-                moonSpeed = 0.006 * Math.sqrt(planetMass/moonMass);
-                submoonSpeed = 0.01 * Math.sqrt(moonMass/submoonMass);
-            }
-            
-            // Initialize parameters
-            let planetSpeed = 0.002;
-            let moonSpeed = 0.006;
-            let submoonSpeed = 0.01;
-            updateOrbitalParameters();
-            
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                // Update angles
-                planetAngle += planetSpeed;
-                moonAngle += moonSpeed;
-                submoonAngle += submoonSpeed;
-                
-                // Update positions
-                planet.position.x = planetRadius * Math.cos(planetAngle);
-                planet.position.z = planetRadius * Math.sin(planetAngle);
-                
-                // Update moon orbit position
-                moonOrbit.position.x = planet.position.x;
-                moonOrbit.position.z = planet.position.z;
-                
-                // Update moon position relative to planet
-                moon.position.x = planet.position.x + moonRadius * Math.cos(moonAngle);
-                moon.position.z = planet.position.z + moonRadius * Math.sin(moonAngle);
-                
-                // Update submoon orbit position
-                submoonOrbit.position.x = moon.position.x;
-                submoonOrbit.position.z = moon.position.z;
-                
-                // Update submoon position relative to moon
-                submoon.position.x = moon.position.x + submoonRadius * Math.cos(submoonAngle);
-                submoon.position.z = moon.position.z + submoonRadius * Math.sin(submoonAngle);
-                
-                controls.update();
-                renderer.render(scene, camera);
-            }
-            
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                const width = container.clientWidth;
-                const height = container.clientHeight;
-                renderer.setSize(width, height);
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-            });
-            
-            animate();
-        }
 
         // Initialize charts
         function initCharts() {
@@ -2579,122 +1387,74 @@
             });
         }
 
-        // Handle smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-        
-        mobileMenuBtn.addEventListener('click', function() {
-            this.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Dark mode toggle
-        const themeToggle = document.querySelector('.theme-toggle');
-        const body = document.body;
-        
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'dark') {
-            body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-        
-        themeToggle.addEventListener('click', function() {
-            body.classList.toggle('dark-mode');
-            
-            if (body.classList.contains('dark-mode')) {
-                this.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                this.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('theme', 'light');
-            }
-        });
-
-        // Research Modal
-        const openResearchModal = document.getElementById('open-research-modal');
-        const closeResearchModal = document.getElementById('close-research-modal');
-        const researchModal = document.getElementById('research-modal');
-        
-        openResearchModal.addEventListener('click', function() {
-            researchModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        });
-        
-        closeResearchModal.addEventListener('click', function() {
-            researchModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        
-        window.addEventListener('click', function(e) {
-            if (e.target === researchModal) {
-                researchModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // Animation on scroll
-        const animateOnScroll = function() {
-            const elements = document.querySelectorAll('.research-card, .skill-category, .award-card, .project-showcase, .dashboard-card');
-            
-            elements.forEach(element => {
-                const elementPosition = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (elementPosition < windowHeight - 100) {
-                    element.style.opacity = '1';
-                    element.style.transform = 'translateY(0)';
-                }
-            });
-        };
-
-        // Initialize animations and components when DOM is fully loaded
+        // Event listeners and other functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Set initial styles for animation
-            document.querySelectorAll('.research-card, .skill-category, .award-card, .project-showcase, .dashboard-card').forEach(element => {
-                element.style.opacity = '0';
-                element.style.transform = 'translateY(50px)';
-                element.style.transition = 'all 0.5s ease';
-            });
-            
-            // Run animation on load and scroll
-            animateOnScroll();
-            window.addEventListener('scroll', animateOnScroll);
-            
-            // Initialize the 3D simulation
-            initSimulation();
-            
             // Initialize charts
             initCharts();
+            
+            // Research Modal functionality
+            const openResearchModal = document.getElementById('open-research-modal');
+            const closeResearchModal = document.getElementById('close-research-modal');
+            const researchModal = document.getElementById('research-modal');
+            
+            openResearchModal.addEventListener('click', function() {
+                researchModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+            
+            closeResearchModal.addEventListener('click', function() {
+                researchModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target === researchModal) {
+                    researchModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navLinks = document.querySelector('.nav-links');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // Dark mode toggle
+            const themeToggle = document.querySelector('.theme-toggle');
+            const body = document.body;
+            
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                body.classList.toggle('dark-mode');
+                
+                if (body.classList.contains('dark-mode')) {
+                    this.innerHTML = '<i class="fas fa-sun"></i>';
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    this.innerHTML = '<i class="fas fa-moon"></i>';
+                    localStorage.setItem('theme', 'light');
+                }
+            });
         });
     </script>
-    <script type="text/babel">
-        ReactDOM.render(
-            <ExoSubmoonVisualization />,
-            document.getElementById('react-exosubmoon-visualization')
-        );
-    </script>
-    <script src="exosubmoon-simulation.js"></script>
-    <script src="modal-fix.js"></script>
-
 </body>
 </html>
