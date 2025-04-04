@@ -6,32 +6,62 @@
     <title>Apoorv Belgundi | Mathematics & Computer Science</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <style>
-        /* Modern Color Scheme */
+        /* Modern Color Scheme with Dark Mode Support */
         :root {
             --primary: #2c3e50;      /* Dark blue/slate */
             --secondary: #3498db;    /* Bright blue */
             --accent: #e74c3c;       /* Bright red */
+            --accent2: #9b59b6;      /* Purple */
+            --accent3: #2ecc71;      /* Green */
             --light: #ecf0f1;        /* Off-white */
             --dark: #2c3e50;         /* Dark text */
             --mid: #7f8c8d;          /* Mid-tone text */
             --card-bg: #fff;         /* Card background */
+            --background: #f9f9f9;   /* Background */
             --gradient-1: linear-gradient(135deg, #3498db, #2c3e50);
             --gradient-2: linear-gradient(135deg, #e74c3c, #9b59b6);
+            --gradient-3: linear-gradient(135deg, #2ecc71, #3498db);
+            --shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --shadow-hover: 0 20px 40px rgba(0,0,0,0.15);
+            --animation-timing: 0.3s;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            --primary: #1a2530;
+            --secondary: #2980b9;
+            --accent: #c0392b;
+            --accent2: #8e44ad;
+            --accent3: #27ae60;
+            --light: #2c3e50;
+            --dark: #ecf0f1;
+            --mid: #bdc3c7;
+            --card-bg: #34495e;
+            --background: #1a2530;
+            --shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --shadow-hover: 0 20px 40px rgba(0,0,0,0.4);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color var(--animation-timing) ease, 
+                        color var(--animation-timing) ease, 
+                        transform var(--animation-timing) ease,
+                        box-shadow var(--animation-timing) ease;
         }
         
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             line-height: 1.6;
             color: var(--dark);
-            background-color: var(--light);
+            background-color: var(--background);
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
         
         .container {
@@ -131,6 +161,20 @@
             width: 100%;
         }
         
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-left: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+        
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -160,6 +204,13 @@
             height: 100%;
             background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(231, 76, 60, 0.3));
             z-index: 1;
+        }
+        
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
         }
         
         .hero-content {
@@ -207,6 +258,8 @@
             overflow: hidden;
             z-index: 1;
             text-align: center;
+            border: none;
+            cursor: pointer;
         }
         
         .btn::before {
@@ -247,6 +300,17 @@
             box-shadow: 0 8px 25px rgba(52, 152, 219, 0.3);
         }
         
+        .btn-accent {
+            background-color: var(--accent);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-accent:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
         .scroll-down {
             position: absolute;
             bottom: 30px;
@@ -311,7 +375,13 @@
             position: relative;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .about-image-container:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-5px);
         }
         
         .about-image {
@@ -342,13 +412,13 @@
             padding: 1.5rem;
             background-color: var(--card-bg);
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
         }
         
         .education:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-hover);
         }
         
         .education h4 {
@@ -359,7 +429,9 @@
         
         /* Research Section */
         #research {
-            background-color: #f8f9fa;
+            background-color: var(--background);
+            position: relative;
+            overflow: hidden;
         }
         
         .research-grid {
@@ -372,16 +444,18 @@
             background-color: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
             position: relative;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
+            height: 100%;
         }
         
         .research-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-hover);
         }
         
         .research-card::before {
@@ -462,6 +536,210 @@
             transform: translate(5px, -50%);
         }
         
+        /* Astronomy Research Section */
+        #astronomy-research {
+            background: linear-gradient(to right, rgba(25, 25, 50, 0.9), rgba(25, 25, 50, 0.7)), url('/api/placeholder/1920/1080') center/cover;
+            color: white;
+            padding: 6rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #astronomy-research .section-title h2 {
+            color: white;
+        }
+        
+        #astronomy-research .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .astronomy-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .astronomy-content {
+            background-color: rgba(44, 62, 80, 0.7);
+            padding: 2.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .astronomy-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .astronomy-content p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .astronomy-visualization {
+            height: 500px;
+            background-color: rgba(44, 62, 80, 0.7);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        #simulation-container {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .simulation-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            padding: 0 20px;
+            z-index: 1;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px;
+            border-radius: 10px;
+            width: 150px;
+        }
+        
+        .control-group label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .control-group input {
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .astronomy-dashboard {
+            padding: 3rem 0;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .dashboard-card {
+            background-color: rgba(44, 62, 80, 0.7);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .dashboard-card h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+        
+        /* Skills Section */
+        #skills {
+            background-color: var(--background);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skills-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z' opacity='.5'/%3E%3Cpath d='M15 15h50v50H15V15zm10 10v30h30V25H25zm15 22.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .skill-category {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-1);
+        }
+        
+        .skill-category h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .skill-tag {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            background-color: var(--secondary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+        
         /* Projects Section */
         .projects-container {
             padding: 2rem 0;
@@ -487,7 +765,7 @@
             position: relative;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow);
         }
         
         .project-image {
@@ -580,13 +858,13 @@
             background-color: var(--card-bg);
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
         }
         
         .other-project-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 30px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-hover);
         }
         
         .other-project-image {
@@ -605,87 +883,12 @@
             color: var(--primary);
         }
         
-        /* Skills Section */
-        #skills {
-            background-color: #f8f9fa;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .skills-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z' opacity='.5'/%3E%3Cpath d='M15 15h50v50H15V15zm10 10v30h30V25H25zm15 22.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z'/%3E%3C/g%3E%3C/svg%3E");
-        }
-        
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .skill-category {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .skill-category:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .skill-category::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gradient-1);
-        }
-        
-        .skill-category h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-size: 1.5rem;
-        }
-        
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .skill-tag {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--secondary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .skill-tag:hover {
-            background-color: var(--secondary);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-        }
-        
         /* Awards Section */
+        #awards {
+            background-color: var(--background);
+            position: relative;
+        }
+        
         .awards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -696,7 +899,7 @@
             background-color: var(--card-bg);
             padding: 2.5rem;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -704,7 +907,7 @@
         
         .award-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-hover);
         }
         
         .award-card::before {
@@ -850,6 +1053,8 @@
             font-family: inherit;
             font-size: 1rem;
             transition: all 0.3s ease;
+            background-color: var(--card-bg);
+            color: var(--dark);
         }
         
         .form-control:focus {
@@ -887,205 +1092,6 @@
             background-color: var(--accent);
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
-        }
-        
-        /* Project Detail Page Styles */
-        .project-detail-header {
-            height: 60vh;
-            background: linear-gradient(rgba(44, 62, 80, 0.7), rgba(44, 62, 80, 0.7)), url('/api/placeholder/1920/1080') center/cover;
-            color: white;
-            display: flex;
-            align-items: center;
-            position: relative;
-        }
-        
-        .project-detail-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .project-detail-content h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .project-meta {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-        }
-        
-        .meta-item i {
-            margin-right: 0.5rem;
-            color: var(--accent);
-        }
-        
-        .project-body {
-            padding: 5rem 0;
-        }
-        
-        .project-section {
-            margin-bottom: 4rem;
-        }
-        
-        .project-section h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        
-        .project-section h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--secondary);
-        }
-        
-        .project-section p {
-            margin-bottom: 1.5rem;
-            color: var(--mid);
-            font-size: 1.1rem;
-            line-height: 1.8;
-        }
-        
-        .project-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .gallery-item {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .gallery-image {
-            width: 100%;
-            display: block;
-            transition: transform 0.3s ease;
-        }
-        
-        .gallery-item:hover .gallery-image {
-            transform: scale(1.05);
-        }
-        
-        .code-block {
-            background-color: #f5f5f5;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-            font-family: monospace;
-            white-space: pre;
-            overflow-x: auto;
-        }
-        
-        .results-section {
-            background-color: #f8f9fa;
-            padding: 2rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-        
-        .result-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        
-        .result-icon {
-            color: var(--accent);
-            margin-right: 1rem;
-            font-size: 1.5rem;
-        }
-        
-        .project-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 1px solid #e1e1e1;
-        }
-        
-        .nav-project {
-            display: flex;
-            align-items: center;
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-project:hover {
-            color: var(--secondary);
-        }
-        
-        .nav-project i {
-            font-size: 1.5rem;
-        }
-        
-        .prev-project i {
-            margin-right: 1rem;
-        }
-        
-        .next-project i {
-            margin-left: 1rem;
-        }
-        
-        /* Blog Section */
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2.5rem;
-        }
-        
-        .blog-card {
-            background-color: var(--card-bg);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-        }
-        
-        .blog-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .blog-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .blog-content {
-            padding: 2rem;
-        }
-        
-        .blog-date {
-            color: var(--mid);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-        
-        .blog-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-        
-        .blog-excerpt {
-            color: var(--mid);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
         }
         
         /* Footer */
@@ -1160,6 +1166,86 @@
             color: rgba(255, 255, 255, 0.6);
         }
         
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 80%;
+            max-width: 1000px;
+            margin: 50px auto;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--mid);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
         /* Animations */
         @keyframes fadeInUp {
             from {
@@ -1183,9 +1269,38 @@
                 transform: translateY(-10px) translateX(-50%);
             }
         }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top: 5px solid var(--accent);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         
         /* Responsive Design */
         @media (max-width: 992px) {
+            .astronomy-grid,
             .project-showcase {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -1215,15 +1330,43 @@
             }
             
             .nav-links {
-                display: none;
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 250px;
+                height: 100vh;
+                background-color: var(--primary);
+                flex-direction: column;
+                padding: 80px 0 0 0;
+                transition: right 0.3s ease;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 0;
+                width: 100%;
+                text-align: center;
+                padding: 15px 0;
             }
             
             .mobile-menu-btn {
                 display: block;
+                z-index: 1001;
+            }
+
+            .mobile-menu-btn.active i:before {
+                content: '\f00d';
             }
             
-            .research-grid, .skills-container, .awards-grid, .blog-grid {
+            .research-grid, .skills-container, .awards-grid, .dashboard-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .simulation-controls {
+                flex-wrap: wrap;
             }
         }
         
@@ -1253,10 +1396,20 @@
                 flex-direction: column;
                 gap: 1rem;
             }
+
+            .modal-content {
+                width: 95%;
+                margin: 30px auto;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader"></div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container">
@@ -1267,11 +1420,13 @@
                 </button>
                 <ul class="nav-links">
                     <li><a href="#about" class="animated-underline">About</a></li>
+                    <li><a href="#astronomy-research" class="animated-underline">Astronomy Research</a></li>
                     <li><a href="#research" class="animated-underline">Research</a></li>
                     <li><a href="#skills" class="animated-underline">Skills</a></li>
                     <li><a href="#projects" class="animated-underline">Projects</a></li>
                     <li><a href="#awards" class="animated-underline">Awards</a></li>
                     <li><a href="#contact" class="animated-underline">Contact</a></li>
+                    <li><button class="theme-toggle"><i class="fas fa-moon"></i></button></li>
                 </ul>
             </nav>
         </div>
@@ -1279,12 +1434,13 @@
 
     <!-- Hero Section -->
     <section class="hero">
+        <div id="particles-js"></div>
         <div class="container">
             <div class="hero-content">
                 <h1>Apoorv Belgundi</h1>
                 <h2>Mathematics & Computer Science | Data Science | Research</h2>
                 <div class="hero-btns">
-                    <a href="#research" class="btn btn-primary">Explore My Research</a>
+                    <a href="#astronomy-research" class="btn btn-primary">Explore My Astronomy Research</a>
                     <a href="#contact" class="btn btn-outline">Get In Touch</a>
                 </div>
             </div>
@@ -1310,7 +1466,7 @@
                     <h3>Who I Am</h3>
                     <p>I'm a double major in Mathematics and Computer Science at New York University with hands-on experience in scientific computing and multi-objective optimization. I'm highly skilled in Python and Java, with a demonstrated ability to adapt quickly, collaborate in team environments, and contribute innovative ideas.</p>
                     
-                    <p>I'm passionate about applying academic knowledge to solve real-world problems, particularly in the areas of AI, data science, and optimization algorithms. My research interests span from developing novel correlation metrics for time series data to optimizing EV charging station locations.</p>
+                    <p>I'm passionate about applying academic knowledge to solve real-world problems, particularly in the areas of AI, data science, and optimization algorithms. My research interests span from developing novel correlation metrics for time series data to optimizing EV charging station locations and exploring celestial dynamics in exoplanetary systems.</p>
                     
                     <div class="education">
                         <h4>New York University (NYU)</h4>
@@ -1322,6 +1478,149 @@
             </div>
         </div>
     </section>
+
+    <!-- Astronomy Research Section -->
+    <section id="astronomy-research">
+        <div class="container">
+            <div class="section-title">
+                <h2>Astronomy Research</h2>
+            </div>
+            <p class="subtitle">An investigation into the existence and stability of submoons in exoplanetary systems.</p>
+            
+            <div class="astronomy-grid">
+                <div class="astronomy-content">
+                    <h3>Exosubmoon Stability Analysis</h3>
+                    <p>My extended essay in physics explored the fascinating question: "Under what conditions in a star-exoplanet-exomoon-exosubmoon system can an exosubmoon survive for at least 100 million years?"</p>
+                    
+                    <p>Using gravitational N-Body simulations, I modeled the evolution of these complex four-body systems to determine the optimal parameters for exosubmoon stability. My research incorporated tidal forces, torque calculations, and orbital boundary analysis to create a comprehensive model.</p>
+                    
+                    <p>Through simulated annealing optimization, I discovered that exosubmoons with low mass and larger semimajor axes tend to have much greater lifetimes, particularly when the planet-to-moon mass ratio is low, allowing them to avoid being "snatched" away from their host moon.</p>
+                    
+                    <button class="btn btn-accent" id="open-research-modal">View Detailed Findings</button>
+                </div>
+                
+                <div class="astronomy-visualization">
+                    <div id="simulation-container"></div>
+                    <div class="simulation-controls">
+                        <div class="control-group">
+                            <label for="planet-mass">Planet Mass:</label>
+                            <input type="range" id="planet-mass" min="1" max="100" value="28">
+                        </div>
+                        <div class="control-group">
+                            <label for="moon-mass">Moon Mass:</label>
+                            <input type="range" id="moon-mass" min="0.1" max="10" value="0.5">
+                        </div>
+                        <div class="control-group">
+                            <label for="submoon-mass">Submoon Mass:</label>
+                            <input type="range" id="submoon-mass" min="0.01" max="1" value="0.05">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="astronomy-dashboard">
+                <h3 class="text-center mb-5" style="color: white; text-align: center; margin-bottom: 2rem;">Research Findings Dashboard</h3>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h4>Mass Ratio & Stability Relationship</h4>
+                        <div class="chart-container">
+                            <canvas id="massRatioChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h4>Orbital Parameters & Lifetime</h4>
+                        <div class="chart-container">
+                            <canvas id="orbitalParamsChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h4>Submoon Stability by Composition</h4>
+                        <div class="chart-container">
+                            <canvas id="compositionChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h4>Key Findings Summary</h4>
+                        <ul style="color: white; padding-left: 20px; line-height: 1.8;">
+                            <li>Low planet-to-moon mass ratio increases submoon stability</li>
+                            <li>Submoons with low mass have greater lifetimes</li>
+                            <li>Greater orbital distance provides more space for inward evolution</li>
+                            <li>Jovian moons hosting Jovian submoons show optimal stability</li>
+                            <li>Rocky submoons around Neptunian moons can survive >100M years</li>
+                            <li>Tidal forces significantly impact long-term stability</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Modal -->
+    <div class="modal" id="research-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Detailed Research Findings: Exosubmoon Stability</h2>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <h3>Research Methodology</h3>
+                <p>This study employed a rigorous methodology based on the three-body problem and gravitational N-Body simulations to model the evolution of star-exoplanet-exomoon-exosubmoon systems over extended time periods.</p>
+                
+                <h4>Key Equations & Calculations</h4>
+                <p>The simulation was built on several fundamental equations describing tidal forces and torque:</p>
+                
+                <ul>
+                    <li>Tidal torque on planet due to moon: τ<sub>p-m</sub> = -3/2 (k<sub>2p</sub>G M<sub>m</sub><sup>2</sup> R<sub>p</sub><sup>5</sup>)/(Q<sub>p</sub>a<sub>m</sub><sup>6</sup>) sgn(Ω<sub>p</sub> - n<sub>m</sub>)</li>
+                    <li>Rate of change of planet's rotation rate: dΩ<sub>p</sub>/dt = (τ<sub>p-m</sub> + τ<sub>p-*</sub>)/I<sub>p</sub></li>
+                    <li>Rate of change of moon's orbital motion: dn<sub>m</sub>/dt = (3τ<sub>p-m</sub>n<sub>m</sub><sup>4/3</sup>)/(M<sub>m</sub>(GM<sub>p</sub>)<sup>2/3</sup>)</li>
+                </ul>
+                
+                <h3>Key Findings</h3>
+                
+                <h4>1. Mass Relationships</h4>
+                <p>Systems with a low Planet Mass/Moon Mass Ratio and a low Stellar Mass/Planet Mass Ratio demonstrated significantly higher submoon stability. This configuration prevents the gravitational "snatching" effect where the planet pulls the submoon away from its host moon.</p>
+                
+                <h4>2. Orbital Parameters</h4>
+                <p>Submoons with larger semimajor axes have greater space to evolve inwards before migrating inside the Roche Limit. Additionally, submoons with low mass evolve slower than those with higher masses, leading to longer lifetimes.</p>
+                
+                <h4>3. Composition Effects</h4>
+                <p>Analysis across different moon-submoon type pairs revealed that:</p>
+                <ul>
+                    <li>Jovian moons hosting Jovian submoons showed optimal stability with high Moon Mass/Submoon Mass ratios</li>
+                    <li>Jovian moons with Neptunian or Rocky submoons achieved better stability with low Moon Mass/Submoon Mass ratios</li>
+                    <li>Neptunian moons with Neptunian submoons required high mass ratios for stability</li>
+                    <li>Rocky submoons generally demonstrated good stability across various host moon types</li>
+                </ul>
+                
+                <h3>Simulation Details</h3>
+                <p>The simulation incorporated the following components:</p>
+                <ul>
+                    <li>Planetary parameters from NASA's Exoplanet Archive</li>
+                    <li>Tidal Love numbers and dissipation factors based on solar system bodies</li>
+                    <li>Hill Radius and Roche Limit calculations for orbital boundaries</li>
+                    <li>Simulated Annealing optimization to find optimal parameter combinations</li>
+                </ul>
+                
+                <h3>Implications</h3>
+                <p>This research adds to the evidence that exosubmoons can theoretically exist in exoplanetary systems, with some configurations allowing stability for at least 100 million years. The findings suggest that future exomoon detection efforts might also reveal submoons in systems with favorable mass ratios and orbital configurations.</p>
+                
+                <h3>Future Research</h3>
+                <p>Extensions of this work could include:</p>
+                <ul>
+                    <li>Increasing simulation duration to 10<sup>9</sup> years for better accuracy</li>
+                    <li>Incorporating stellar evolution models</li>
+                    <li>Refining the simulation with reduced timesteps and higher floating-point accuracy</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="close-research-modal">Close</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Research Section -->
     <section id="research">
@@ -1337,8 +1636,8 @@
                         <h3>Future of Software Development with AI</h3>
                         <span class="place">New York University x DTCC</span>
                         <span class="date">September 2024 - Present</span>
-                        <p>Leading a team that researches how LLMs can help automate tasks in software development. Developed a tool using ChatGPT to automate the process of adding comments and renaming labels in compiler-generated assembly code.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
+                        <p>Leading a team researching how LLMs can help automate tasks in software development. Developed a tool using ChatGPT to automate the process of adding comments and renaming labels in compiler-generated assembly code.</p>
+                        <a href="#" class="read-more" data-modal="research-modal-1">Read more</a>
                     </div>
                 </div>
                 
@@ -1348,7 +1647,7 @@
                         <span class="place">NYU Center for Urban Science and Progress (CUSP)</span>
                         <span class="date">August 2024 - Present</span>
                         <p>Developed advanced geospatial data analysis pipelines using Python and GeoPandas. Utilized custom clustering algorithms and spatial correlation techniques to identify urban patterns and optimize resource allocation.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
+                        <a href="#" class="read-more" data-modal="research-modal-2">Read more</a>
                     </div>
                 </div>
                 
@@ -1358,7 +1657,7 @@
                         <span class="place">New York University</span>
                         <span class="date">May 2024 - August 2024</span>
                         <p>Formulated a multi-objective optimization model to determine optimal EV charging station locations. Developed and implemented a novel capacitated probabilistic greedy clustering algorithm for optimizing vehicle routing.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
+                        <a href="#" class="read-more" data-modal="research-modal-3">Read more</a>
                     </div>
                 </div>
                 
@@ -1368,17 +1667,7 @@
                         <span class="place">New York Academy of Sciences</span>
                         <span class="date">March 2021 - May 2023</span>
                         <p>Developed mathematical models to optimize electricity production across multiple sources for a Smart City, ensuring minimal cost and environmental pollution while meeting electricity needs.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Astronomy Research</h3>
-                        <span class="place">Greenwood High International School</span>
-                        <span class="date">July 2022 - March 2023</span>
-                        <p>Explored the conditions required for an exosubmoon to survive for at least 100 million years in a planetary system. Researched the effect of tidal forces on three body dynamics.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
+                        <a href="#" class="read-more" data-modal="research-modal-4">Read more</a>
                     </div>
                 </div>
                 
@@ -1388,7 +1677,7 @@
                         <span class="place">Duke University</span>
                         <span class="date">November 2020 - January 2022</span>
                         <p>Discussed Deep Inelastic Scattering experiments such as the Drell-Yan process. Proposed a novel extraction method of sea quark distributions in the proton with respect to the Bjorken variable.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
+                        <a href="#" class="read-more" data-modal="research-modal-5">Read more</a>
                     </div>
                 </div>
             </div>
@@ -1499,7 +1788,7 @@
                             <span class="project-tag">Machine Learning</span>
                         </div>
                         
-                        <a href="project-detail.html" class="btn btn-primary btn-view-project">View Project Details</a>
+                        <a href="#" class="btn btn-primary btn-view-project" data-modal="project-modal-1">View Project Details</a>
                     </div>
                 </div>
                 
@@ -1524,7 +1813,7 @@
                             <span class="project-tag">JavaScript</span>
                         </div>
                         
-                        <a href="project-detail.html" class="btn btn-primary btn-view-project">View Project Details</a>
+                        <a href="#" class="btn btn-primary btn-view-project" data-modal="project-modal-2">View Project Details</a>
                     </div>
                 </div>
                 
@@ -1549,7 +1838,7 @@
                             <span class="project-tag">Neural Networks</span>
                         </div>
                         
-                        <a href="project-detail.html" class="btn btn-primary btn-view-project">View Project Details</a>
+                        <a href="#" class="btn btn-primary btn-view-project" data-modal="project-modal-3">View Project Details</a>
                     </div>
                 </div>
                 
@@ -1727,6 +2016,7 @@
                 <div class="footer-logo">Apoorv Belgundi</div>
                 <div class="footer-nav">
                     <a href="#about">About</a>
+                    <a href="#astronomy-research">Astronomy Research</a>
                     <a href="#research">Research</a>
                     <a href="#skills">Skills</a>
                     <a href="#projects">Projects</a>
@@ -1743,8 +2033,563 @@
         </div>
     </footer>
 
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Smooth scrolling for navigation links
+        // Preloader
+        window.addEventListener('load', function() {
+            const preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 500);
+        });
+
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+        // 3D Simulation of Star-Planet-Moon-Submoon System
+        function initSimulation() {
+            const container = document.getElementById('simulation-container');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            
+            // Initialize Three.js Scene
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setSize(width, height);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            // Create Star
+            const starGeometry = new THREE.SphereGeometry(5, 32, 32);
+            const starMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0xffff00,
+                emissive: 0xffff00,
+                emissiveIntensity: 1
+            });
+            const star = new THREE.Mesh(starGeometry, starMaterial);
+            scene.add(star);
+            
+            // Add Point Light to simulate star's light
+            const light = new THREE.PointLight(0xffffff, 1, 100);
+            light.position.set(0, 0, 0);
+            scene.add(light);
+            
+            // Create Planet
+            const planetGeometry = new THREE.SphereGeometry(2, 32, 32);
+            const planetMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x3498db,
+                specular: 0x333333,
+                shininess: 10
+            });
+            const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+            planet.position.set(20, 0, 0);
+            scene.add(planet);
+            
+            // Create Moon
+            const moonGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+            const moonMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xecf0f1,
+                specular: 0x333333,
+                shininess: 5
+            });
+            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+            moon.position.set(23, 0, 0);
+            scene.add(moon);
+            
+            // Create Submoon
+            const submoonGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+            const submoonMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xe74c3c,
+                specular: 0x333333,
+                shininess: 5
+            });
+            const submoon = new THREE.Mesh(submoonGeometry, submoonMaterial);
+            submoon.position.set(23.8, 0, 0);
+            scene.add(submoon);
+            
+            // Create Orbits
+            const planetOrbitGeometry = new THREE.RingGeometry(20, 20.1, 64);
+            const planetOrbitMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            });
+            const planetOrbit = new THREE.Mesh(planetOrbitGeometry, planetOrbitMaterial);
+            planetOrbit.rotation.x = Math.PI / 2;
+            scene.add(planetOrbit);
+            
+            const moonOrbitGeometry = new THREE.RingGeometry(3, 3.05, 64);
+            const moonOrbitMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            });
+            const moonOrbit = new THREE.Mesh(moonOrbitGeometry, moonOrbitMaterial);
+            moonOrbit.rotation.x = Math.PI / 2;
+            
+            const submoonOrbitGeometry = new THREE.RingGeometry(0.8, 0.82, 64);
+            const submoonOrbitMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffffff,
+                side: THREE.DoubleSide,
+                transparent: true,
+                opacity: 0.2
+            });
+            const submoonOrbit = new THREE.Mesh(submoonOrbitGeometry, submoonOrbitMaterial);
+            submoonOrbit.rotation.x = Math.PI / 2;
+            
+            scene.add(moonOrbit);
+            scene.add(submoonOrbit);
+            
+            // Set camera position
+            camera.position.z = 40;
+            camera.position.y = 20;
+            camera.lookAt(0, 0, 0);
+            
+            // Add orbit controls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.1;
+            
+            // Variables for animation
+            let planetAngle = 0;
+            let moonAngle = 0;
+            let submoonAngle = 0;
+            
+            // Parameters (can be updated by sliders)
+            let planetMass = 28;
+            let moonMass = 0.5;
+            let submoonMass = 0.05;
+            let planetRadius = 20;
+            let moonRadius = 3;
+            let submoonRadius = 0.8;
+            
+            // Get slider elements
+            const planetMassSlider = document.getElementById('planet-mass');
+            const moonMassSlider = document.getElementById('moon-mass');
+            const submoonMassSlider = document.getElementById('submoon-mass');
+            
+            // Update parameters on slider change
+            planetMassSlider.addEventListener('input', function() {
+                planetMass = parseFloat(this.value);
+                updateOrbitalParameters();
+            });
+            
+            moonMassSlider.addEventListener('input', function() {
+                moonMass = parseFloat(this.value);
+                updateOrbitalParameters();
+            });
+            
+            submoonMassSlider.addEventListener('input', function() {
+                submoonMass = parseFloat(this.value);
+                updateOrbitalParameters();
+            });
+            
+            function updateOrbitalParameters() {
+                // Scale visual elements based on mass
+                planet.scale.set(planetMass/20, planetMass/20, planetMass/20);
+                moon.scale.set(moonMass, moonMass, moonMass);
+                submoon.scale.set(submoonMass*5, submoonMass*5, submoonMass*5);
+                
+                // Update orbital speeds based on masses (simplified physics)
+                planetSpeed = 0.002 * Math.sqrt(1/planetMass);
+                moonSpeed = 0.006 * Math.sqrt(planetMass/moonMass);
+                submoonSpeed = 0.01 * Math.sqrt(moonMass/submoonMass);
+            }
+            
+            // Initialize parameters
+            let planetSpeed = 0.002;
+            let moonSpeed = 0.006;
+            let submoonSpeed = 0.01;
+            updateOrbitalParameters();
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Update angles
+                planetAngle += planetSpeed;
+                moonAngle += moonSpeed;
+                submoonAngle += submoonSpeed;
+                
+                // Update positions
+                planet.position.x = planetRadius * Math.cos(planetAngle);
+                planet.position.z = planetRadius * Math.sin(planetAngle);
+                
+                // Update moon orbit position
+                moonOrbit.position.x = planet.position.x;
+                moonOrbit.position.z = planet.position.z;
+                
+                // Update moon position relative to planet
+                moon.position.x = planet.position.x + moonRadius * Math.cos(moonAngle);
+                moon.position.z = planet.position.z + moonRadius * Math.sin(moonAngle);
+                
+                // Update submoon orbit position
+                submoonOrbit.position.x = moon.position.x;
+                submoonOrbit.position.z = moon.position.z;
+                
+                // Update submoon position relative to moon
+                submoon.position.x = moon.position.x + submoonRadius * Math.cos(submoonAngle);
+                submoon.position.z = moon.position.z + submoonRadius * Math.sin(submoonAngle);
+                
+                controls.update();
+                renderer.render(scene, camera);
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                renderer.setSize(width, height);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+            });
+            
+            animate();
+        }
+
+        // Initialize charts
+        function initCharts() {
+            // Mass Ratio & Stability Chart
+            const massRatioCtx = document.getElementById('massRatioChart').getContext('2d');
+            const massRatioChart = new Chart(massRatioCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Jovian Moons with Jovian Submoons',
+                        data: [
+                            {x: 5.0, y: 20.0, r: 10},
+                            {x: 7.2, y: 25.5, r: 8},
+                            {x: 9.1, y: 15.3, r: 6},
+                            {x: 4.3, y: 17.8, r: 9},
+                            {x: 6.7, y: 22.1, r: 7}
+                        ],
+                        backgroundColor: 'rgba(52, 152, 219, 0.6)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    }, {
+                        label: 'Jovian Moons with Neptunian Submoons',
+                        data: [
+                            {x: 3.2, y: 12.5, r: 9},
+                            {x: 4.7, y: 10.2, r: 7},
+                            {x: 2.9, y: 13.8, r: 8},
+                            {x: 5.3, y: 8.7, r: 6},
+                            {x: 3.8, y: 11.4, r: 7}
+                        ],
+                        backgroundColor: 'rgba(46, 204, 113, 0.6)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    }, {
+                        label: 'Neptunian Moons with Rocky Submoons',
+                        data: [
+                            {x: 2.1, y: 8.3, r: 8},
+                            {x: 3.4, y: 7.1, r: 6},
+                            {x: 1.8, y: 9.5, r: 7},
+                            {x: 2.7, y: 6.2, r: 5},
+                            {x: 3.0, y: 7.9, r: 7}
+                        ],
+                        backgroundColor: 'rgba(231, 76, 60, 0.6)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Stability: ${context.raw.r}/10, Mass Ratio: ${context.raw.x}`;
+                                }
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Moon/Submoon Mass Ratio',
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Planet/Moon Mass Ratio',
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Orbital Parameters Chart
+            const orbitalParamsCtx = document.getElementById('orbitalParamsChart').getContext('2d');
+            const orbitalParamsChart = new Chart(orbitalParamsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['0.01', '0.02', '0.03', '0.04', '0.05', '0.06', '0.07', '0.08', '0.09', '0.10'],
+                    datasets: [{
+                        label: 'Jovian Submoons',
+                        data: [2, 3.5, 4.8, 5.6, 6.2, 6.6, 6.8, 6.9, 7.0, 7.0],
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Neptunian Submoons',
+                        data: [1.5, 2.8, 3.9, 4.7, 5.2, 5.5, 5.7, 5.8, 5.9, 6.0],
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Rocky Submoons',
+                        data: [1.0, 2.2, 3.1, 3.8, 4.3, 4.6, 4.8, 4.9, 5.0, 5.0],
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Submoon Mass (MJup)',
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'System Lifetime (10^7 years)',
+                                color: 'white'
+                            },
+                            ticks: {
+                                color: 'white'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Composition Chart
+            const compositionCtx = document.getElementById('compositionChart').getContext('2d');
+            const compositionChart = new Chart(compositionCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['Stability', 'Gravitational Resilience', 'Tidal Force Resistance', 'Orbital Sustainability', 'Lifetime Expectancy'],
+                    datasets: [{
+                        label: 'Jovian-Jovian',
+                        data: [9, 7, 8, 8, 9],
+                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        pointBackgroundColor: 'rgba(52, 152, 219, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(52, 152, 219, 1)'
+                    }, {
+                        label: 'Neptunian-Neptunian',
+                        data: [7, 8, 7, 6, 7],
+                        backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: 'rgba(46, 204, 113, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(46, 204, 113, 1)'
+                    }, {
+                        label: 'Rocky-Rocky',
+                        data: [5, 6, 9, 7, 6],
+                        backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                        borderColor: 'rgba(231, 76, 60, 1)',
+                        pointBackgroundColor: 'rgba(231, 76, 60, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(231, 76, 60, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.2)'
+                            },
+                            pointLabels: {
+                                color: 'white'
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: 'white'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Handle smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -1764,9 +2609,62 @@
             }
         });
 
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Dark mode toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+        
+        themeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                this.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                this.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Research Modal
+        const openResearchModal = document.getElementById('open-research-modal');
+        const closeResearchModal = document.getElementById('close-research-modal');
+        const researchModal = document.getElementById('research-modal');
+        
+        openResearchModal.addEventListener('click', function() {
+            researchModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeResearchModal.addEventListener('click', function() {
+            researchModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        window.addEventListener('click', function(e) {
+            if (e.target === researchModal) {
+                researchModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
         // Animation on scroll
         const animateOnScroll = function() {
-            const elements = document.querySelectorAll('.research-card, .skill-category, .award-card, .project-showcase');
+            const elements = document.querySelectorAll('.research-card, .skill-category, .award-card, .project-showcase, .dashboard-card');
             
             elements.forEach(element => {
                 const elementPosition = element.getBoundingClientRect().top;
@@ -1779,16 +2677,25 @@
             });
         };
 
-        // Set initial styles for animation
-        document.querySelectorAll('.research-card, .skill-category, .award-card, .project-showcase').forEach(element => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(50px)';
-            element.style.transition = 'all 0.5s ease';
+        // Initialize animations and components when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial styles for animation
+            document.querySelectorAll('.research-card, .skill-category, .award-card, .project-showcase, .dashboard-card').forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(50px)';
+                element.style.transition = 'all 0.5s ease';
+            });
+            
+            // Run animation on load and scroll
+            animateOnScroll();
+            window.addEventListener('scroll', animateOnScroll);
+            
+            // Initialize the 3D simulation
+            initSimulation();
+            
+            // Initialize charts
+            initCharts();
         });
-
-        // Run animation on load and scroll
-        window.addEventListener('load', animateOnScroll);
-        window.addEventListener('scroll', animateOnScroll);
     </script>
 </body>
 </html>
