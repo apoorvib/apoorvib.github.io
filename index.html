@@ -1499,7 +1499,13 @@
                     <button class="btn btn-accent" id="open-research-modal">View Detailed Findings</button>
                 </div>
                 
-                <div class="astronomy-visualization" id="react-exosubmoon-visualization"></div>
+                <div class="astronomy-visualization" id="react-exosubmoon-visualization">
+                    <div id="simulation-container" style="position: relative; width: 100%; height: 100%;"></div>
+                    <div class="simulation-controls">
+                        <!-- Keep your existing controls -->
+                </div>
+                
+                </div>
             </div>
             
             <div class="astronomy-dashboard">
@@ -2687,5 +2693,8 @@
             document.getElementById('react-exosubmoon-visualization')
         );
     </script>
+    <script src="exosubmoon-simulation.js"></script>
+    <script src="modal-fix.js"></script>
+
 </body>
 </html>
