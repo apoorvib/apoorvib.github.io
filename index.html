@@ -367,104 +367,335 @@
                 border-right-color: transparent;
             }
         }        
-        /* About Section */
-        section {
-            padding: 6rem 0;
+        
+        /* Enhanced About Section */
+        #about {
+            padding: 7rem 0;
             position: relative;
+            background: linear-gradient(to bottom, var(--light) 0%, #f8f9fa 100%);
         }
-        
-        section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        .section-title h2::after {
+
+        #about::before {
             content: '';
             position: absolute;
-            width: 50px;
-            height: 3px;
-            background-color: var(--accent);
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233498db' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
         }
-        
-        .subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: var(--mid);
-            margin-bottom: 3rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
+
         .about-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: start;
+            position: relative;
+            z-index: 2;
         }
-        
+
+        .about-image-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
         .about-image-container {
             position: relative;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
         }
-        
+
+        .about-image-container.primary {
+            margin-top: -2rem;
+        }
+
+        .about-image-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
         .about-image {
             width: 100%;
             display: block;
             transition: transform 0.5s ease;
         }
-        
+
         .about-image-container:hover .about-image {
             transform: scale(1.05);
         }
-        
-        .about-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--primary);
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(44, 62, 80, 0.9), transparent);
+            padding: 2rem 1.5rem 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
         }
-        
-        .about-content p {
+
+        .about-image-container:hover .image-overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .overlay-content span {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .stat-box {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--mid);
+            font-weight: 500;
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .about-heading {
+            margin-bottom: 1rem;
+        }
+
+        .about-heading h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .about-heading h3::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: -10px;
+            left: 0;
+        }
+
+        .about-tagline {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            font-weight: 500;
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .about-bio p {
             margin-bottom: 1.5rem;
             color: var(--mid);
             font-size: 1.1rem;
             line-height: 1.8;
         }
-        
-        .education {
-            margin-top: 2rem;
+
+        .key-interests {
+            background-color: rgba(52, 152, 219, 0.05);
             padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .key-interests h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .interests-list {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .interests-list li {
+            display: flex;
+            align-items: center;
+            color: var(--mid);
+            font-weight: 500;
+        }
+
+        .interest-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            margin-right: 0.8rem;
+            color: var(--secondary);
+        }
+
+        .education-card {
+            display: flex;
+            align-items: flex-start;
             background-color: var(--card-bg);
+            padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .education:hover {
+
+        .education-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-1);
+        }
+
+        .education-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
-        
-        .education h4 {
+
+        .education-icon {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1.5rem;
             color: var(--secondary);
-            margin-bottom: 0.8rem;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .education-details {
+            flex-grow: 1;
+        }
+
+        .education-details h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
             font-size: 1.3rem;
         }
-        
+
+        .education-program {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .education-period {
+            color: var(--mid);
+            font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .education-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.8rem;
+        }
+
+        .edu-stat {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .about-cta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .about-cta .btn {
+            flex: 1;
+        }
+
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .about-image-column {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .about-image-container.primary {
+                margin-top: 0;
+            }
+            
+            .interests-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .about-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .education-stats {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .about-cta {
+                flex-direction: column;
+            }
+        }
+
         /* Research Section */
         #research {
             background-color: #f8f9fa;
