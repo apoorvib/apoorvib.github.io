@@ -975,8 +975,12 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            height: 500px;
+            height: 350px;  /* Reduced height */
+            width: 100%;    /* Ensure full width */
             position: relative;
+            aspect-ratio: 16/9; /* Maintain a consistent aspect ratio */
+            max-width: 600px; /* Limit maximum width */
+            margin: 0 auto;  /* Center the container */
         }
         
         .visualization-container iframe {
