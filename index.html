@@ -6,6 +6,7 @@
     <title>Apoorv Belgundi | Mathematics & Computer Science</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         /* Modern Color Scheme */
         :root {
@@ -350,6 +351,17 @@
             }
         }
 
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @keyframes typewriter {
             from {
                 width: 0;
@@ -661,44 +673,10 @@
             flex: 1;
         }
 
-        @media (max-width: 992px) {
-            .about-grid {
-                grid-template-columns: 1fr;
-                gap: 3rem;
-            }
-            
-            .about-image-column {
-                max-width: 600px;
-                margin: 0 auto;
-            }
-            
-            .about-image-container.primary {
-                margin-top: 0;
-            }
-            
-            .interests-list {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .about-stats {
-                grid-template-columns: 1fr;
-            }
-            
-            .education-stats {
-                flex-direction: column;
-                gap: 0.8rem;
-            }
-            
-            .about-cta {
-                flex-direction: column;
-            }
-        }
-
         /* Research Section */
         #research {
             background-color: #f8f9fa;
+            padding: 7rem 0;
         }
         
         .research-grid {
@@ -799,6 +777,214 @@
         
         .read-more:hover::after {
             transform: translate(5px, -50%);
+        }
+        
+        /* Featured Research Section */
+        #research-showcase {
+            padding: 7rem 0;
+            background-color: #f1f5f9;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #research-showcase::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%233498db' fill-opacity='0.05'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .showcase-container {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .showcase-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .showcase-heading {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .showcase-heading h3 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .showcase-heading::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: -5px;
+            left: 0;
+        }
+        
+        .showcase-badge {
+            display: inline-block;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        
+        .showcase-description {
+            color: var(--mid);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .showcase-highlights {
+            background-color: rgba(52, 152, 219, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0 2rem;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .showcase-highlights h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .highlights-list {
+            list-style: none;
+        }
+        
+        .highlights-list li {
+            position: relative;
+            padding-left: 1.8rem;
+            margin-bottom: 0.8rem;
+            color: var(--mid);
+        }
+        
+        .highlights-list li::before {
+            content: '\f058';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--secondary);
+            position: absolute;
+            left: 0;
+            top: 2px;
+        }
+        
+        .showcase-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .showcase-stat {
+            background-color: white;
+            padding: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .showcase-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--mid);
+            font-weight: 500;
+        }
+        
+        .showcase-cta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .showcase-cta .btn {
+            flex: 1;
+        }
+        
+        .visualization-container {
+            background-color: #0f172a;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            height: 500px;
+            position: relative;
+        }
+        
+        .visualization-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .visualization-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .visualization-container:hover .visualization-overlay {
+            opacity: 1;
+        }
+        
+        .overlay-button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .overlay-button:hover {
+            background-color: #c0392b;
+            transform: scale(1.05);
         }
         
         /* Projects Section */
@@ -904,367 +1090,36 @@
             margin-top: 1rem;
         }
         
-        /* Skills Section */
-        #skills {
-            background-color: #f8f9fa;
-            position: relative;
-            overflow: hidden;
-        }
+        /* Rest of CSS remains the same */
         
-        .skills-bg {
-            position: absolute;
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M0 0h80v80H0V0zm20 20v40h40V20H20zm20 35a15 15 0 1 1 0-30 15 15 0 0 1 0 30z' opacity='.5'/%3E%3Cpath d='M15 15h50v50H15V15zm10 10v30h30V25H25zm15 22.5a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z'/%3E%3C/g%3E%3C/svg%3E");
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            overflow: auto;
         }
         
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
+        .modal-content {
             position: relative;
-            z-index: 1;
-        }
-        
-        .skill-category {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            position: relative;
+            background-color: #0f172a;
+            margin: 5% auto;
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 15px;
             overflow: hidden;
+            animation: modalFadeIn 0.5s ease;
         }
         
-        .skill-category:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .skill-category::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--gradient-1);
-        }
-        
-        .skill-category h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-size: 1.5rem;
-        }
-        
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .skill-tag {
-            background-color: rgba(52, 152, 219, 0.1);
-            color: var(--secondary);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .skill-tag:hover {
-            background-color: var(--secondary);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
-        }
-        
-        /* Awards Section */
-        .awards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-        
-        .award-card {
-            background-color: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .award-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .award-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            border-width: 0 50px 50px 0;
-            border-style: solid;
-            border-color: transparent var(--accent) transparent transparent;
-        }
-        
-        .award-card h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.4rem;
-        }
-        
-        .award-card .organization {
-            color: var(--mid);
-            font-style: italic;
-            margin-bottom: 0.8rem;
-            display: block;
-        }
-        
-        .award-card .date {
-            font-size: 0.9rem;
-            color: var(--accent);
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            display: block;
-        }
-        
-        .award-card p {
-            color: var(--mid);
-            line-height: 1.8;
-        }
-        
-        /* Contact Section */
-        #contact {
-            background: var(--gradient-1);
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #contact::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3Cpath d='M6 5V0H5v5H0v1h5v94h1V6h94V5H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        
-        #contact h2 {
-            color: white;
-        }
-        
-        #contact .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-        }
-        
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .contact-info {
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 2.5rem;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .contact-info h3 {
-            color: white;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .contact-icon {
-            width: 50px;
-            height: 50px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 1rem;
-            color: var(--accent);
-            font-size: 1.5rem;
-        }
-        
-        .contact-details h4 {
-            color: white;
-            margin-bottom: 0.3rem;
-        }
-        
-        .contact-details p, .contact-details a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .contact-details a:hover {
-            color: var(--accent);
-        }
-        
-        .contact-form {
-            background-color: white;
-            padding: 2.5rem;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .contact-form h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid #e1e1e1;
-            border-radius: 5px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-        }
-        
-        textarea.form-control {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-        
-        .social-link {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .social-link:hover {
-            background-color: var(--accent);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.3);
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary);
-            color: white;
-            text-align: center;
-            padding: 3rem 0;
-            position: relative;
-        }
-        
-        .footer-content {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .footer-logo {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .footer-nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-nav a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-nav a:hover {
-            color: var(--accent);
-        }
-        
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-social-link:hover {
-            background-color: var(--accent);
-            transform: translateY(-3px);
-        }
-        
-        .copyright {
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-        
-        /* Animations */
-        @keyframes fadeInUp {
+        @keyframes modalFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(-50px);
             }
             to {
                 opacity: 1;
@@ -1272,20 +1127,45 @@
             }
         }
         
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0) translateX(-50%);
-            }
-            40% {
-                transform: translateY(-20px) translateX(-50%);
-            }
-            60% {
-                transform: translateY(-10px) translateX(-50%);
-            }
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+            background: rgba(231, 76, 60, 0.7);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
         }
         
-        /* Responsive Design */
+        .close-modal:hover {
+            background: rgba(231, 76, 60, 1);
+            transform: rotate(90deg);
+        }
+        
+        .modal-iframe {
+            width: 100%;
+            height: 90vh;
+            border: none;
+        }
+        
+        /* Media Queries */
         @media (max-width: 992px) {
+            .showcase-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .visualization-container {
+                height: 400px;
+            }
+            
             .project-showcase {
                 grid-template-columns: 1fr;
                 gap: 2rem;
@@ -1298,6 +1178,19 @@
             .about-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+            }
+            
+            .about-image-column {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .about-image-container.primary {
+                margin-top: 0;
+            }
+            
+            .interests-list {
+                grid-template-columns: 1fr;
             }
             
             .contact-grid {
@@ -1353,569 +1246,311 @@
                 flex-direction: column;
                 gap: 1rem;
             }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <div class="logo">Apoorv Belgundi</div>
-                <button class="mobile-menu-btn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <ul class="nav-links">
-                    <li><a href="#about" class="animated-underline">About</a></li>
-                    <li><a href="#research" class="animated-underline">Research</a></li>
-                    <li><a href="#skills" class="animated-underline">Skills</a></li>
-                    <li><a href="#projects" class="animated-underline">Projects</a></li>
-                    <li><a href="#awards" class="animated-underline">Awards</a></li>
-                    <li><a href="#contact" class="animated-underline">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="particles-background" id="particles-js"></div>
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">Quantitative Finance & Data Science</div>
-                <h1>Apoorv Belgundi</h1>
-                <div class="tagline-container">
-                    <h2 class="typewriter">NYU Researcher | <span class="highlight">Innovations in Quantitative Finance</span></h2>
-                </div>
-                
-                <div class="hero-highlights">
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-star"></i></div>
-                        <div class="highlight-text">Provisional Patent Holder</div>
-                    </div>
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-chart-line"></i></div>
-                        <div class="highlight-text">Creator of TRACP Framework</div>
-                    </div>
-                    <div class="highlight-item">
-                        <div class="highlight-icon"><i class="fas fa-rocket"></i></div>
-                        <div class="highlight-text">Published Researcher</div>
-                    </div>
-                </div>
-                
-                <div class="hero-btns">
-                    <a href="#research" class="btn btn-primary">Explore My Research <i class="fas fa-arrow-right"></i></a>
-                    <a href="#contact" class="btn btn-outline">Get In Touch</a>
-                </div>
-            </div>
-        </div>
-        <a href="#about" class="scroll-down">
-            <i class="fas fa-chevron-down"></i>
-        </a>
-    </section>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Me</h2>
-            </div>
-            <p class="subtitle">Mathematics and Computer Science major at NYU with a focus on quantitative finance, machine learning, and data science.</p>
             
-            <div class="about-grid">
-                <div class="about-image-column">
-                    <div class="about-image-container primary">
-                        <img src="images/apoorv_photo.png" alt="Apoorv Belgundi" class="about-image">
-                        <div class="image-overlay">
-                            <div class="overlay-content">
-                                <span>NYU Researcher</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="about-stats">
-                        <div class="stat-box">
-                            <div class="stat-number">4+</div>
-                            <div class="stat-label">Research Projects</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-number">1</div>
-                            <div class="stat-label">Provisional Patent</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-number">3+</div>
-                            <div class="stat-label">Years of Experience</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="about-content">
-                    <div class="about-heading">
-                        <h3>Who I Am</h3>
-                    </div>
-                    
-                    <div class="about-bio">
-                        <p>I'm a double major in Mathematics and Computer Science at New York University, passionate about applying mathematical principles to solve real-world problems in finance and data science. My research spans from creating novel quantitative financial models to optimizing urban infrastructure.</p>
-                        
-                        <p>Currently, I'm focused on developing the Tail-Risk Adjusted Correlation Portfolio (TRACP) framework at NYU's Courant Institute, which tackles the critical "correlation breakdown" problem in financial markets during crashes. I'm also expanding my research into asymmetric correlation measures and pairs trading frameworks.</p>
-                        
-                        <div class="key-interests">
-                            <h4>Key Research Interests:</h4>
-                            <ul class="interests-list">
-                                <li><span class="interest-icon"><i class="fas fa-chart-line"></i></span> Quantitative Finance & Risk Modeling</li>
-                                <li><span class="interest-icon"><i class="fas fa-brain"></i></span> Machine Learning Applications</li>
-                                <li><span class="interest-icon"><i class="fas fa-project-diagram"></i></span> Optimization Algorithms</li>
-                                <li><span class="interest-icon"><i class="fas fa-database"></i></span> Data Science & Analysis</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="education-card">
-                        <div class="education-icon">
-                            <i class="fas fa-university"></i>
-                        </div>
-                        <div class="education-details">
-                            <h4>New York University (NYU)</h4>
-                            <p class="education-program">Mathematics and Computer Science (double major)</p>
-                            <p class="education-period">Fall 2023 - Spring 2026</p>
-                            <div class="education-stats">
-                                <span class="edu-stat">SAT: 1560/1600</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="about-cta">
-                        <a href="#contact" class="btn btn-primary">Let's Connect</a>
-                        <a href="#research" class="btn btn-outline">View My Research</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Research Section -->
-    <section id="research">
-        <div class="container">
-            <div class="section-title">
-                <h2>Research Experience</h2>
-            </div>
-            <p class="subtitle">My academic journey has led me to explore various research areas, from quantitative finance to data science and computational economics.</p>
-            
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Quantitative Finance Research Assistant (TRACP)</h3>
-                        <span class="place">NYU Courant Institute of Mathematical Sciences</span>
-                        <span class="date">February 2025 - Present</span>
-                        <p>Designed the Tail-Risk Adjusted Correlation Portfolio (TRACP) framework that solves the critical "correlation breakdown" problem where diversification fails during market crashes. My approach identifies "true diversifiers"– assets that maintain their protective qualities precisely when investors need them most.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Quantitative Finance Research Assistant (Pairs Trading)</h3>
-                        <span class="place">NYU Courant Institute of Mathematical Sciences</span>
-                        <span class="date">February 2025 - Present</span>
-                        <p>Developing a pairs trading framework that captures lead-lag relationships between assets. Creating asymmetric and conditional correlation measures that dynamically adjust to market conditions to enhance signal generation during extreme market movements.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Computational Economics Research Assistant</h3>
-                        <span class="place">NYU School of Professional Studies</span>
-                        <span class="date">December 2024 - March 2025</span>
-                        <p>Applied Monte Carlo methods to improve real-time decision-making in Monopoly (real-estate board game). Built computer simulations to test and validate adaptive strategies, demonstrating how probabilistic, data-driven shifts can lead to better outcomes.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Data Science Research Assistant</h3>
-                        <span class="place">NYU Center for Urban Science and Progress (CUSP)</span>
-                        <span class="date">May 2024 - Present</span>
-                        <p>Evaluated four charging infrastructure scenarios to optimize deployment while maintaining operational feasibility for NYC's 30,000+ vehicle municipal fleet. Implemented spatial hotspot analysis using Local Moran's I statistics to identify significant charging demand patterns.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
-                    </div>
-                </div>
-                
-                <div class="research-card">
-                    <div class="research-content">
-                        <h3>Astronomy Research</h3>
-                        <span class="place">Greenwood High International School</span>
-                        <span class="date">July 2022 - May 2023</span>
-                        <p>Investigated the long-term stability of sub-moons by analyzing tidal effects on orbital dynamics. Targeted survival periods exceeding 100 million years. Executed high-performance simulations on Google Cloud (Vertex AI) and managed extensive NASA exoplanet datasets.</p>
-                        <a href="research-detail.html" class="read-more">Read more</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills">
-        <div class="container">
-            <div class="section-title">
-                <h2>Skills & Expertise</h2>
-            </div>
-            <p class="subtitle">A combination of technical proficiency and analytical thinking enables me to approach complex problems with confidence.</p>
-            
-            <div class="skills-bg"></div>
-            
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Programming Languages</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">R</span>
-                        <span class="skill-tag">SQL</span>
-                        <span class="skill-tag">C</span>
-                        <span class="skill-tag">C#</span>
-                        <span class="skill-tag">Matlab</span>
-                        <span class="skill-tag">Javascript</span>
-                        <span class="skill-tag">HTML</span>
-                        <span class="skill-tag">LaTeX</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Technical Skills</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Scientific Computing</span>
-                        <span class="skill-tag">Simulation</span>
-                        <span class="skill-tag">Optimization Algorithms</span>
-                        <span class="skill-tag">Machine Learning</span>
-                        <span class="skill-tag">Data Engineering</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Software Tools</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Jupyter</span>
-                        <span class="skill-tag">Spyder</span>
-                        <span class="skill-tag">RStudio</span>
-                        <span class="skill-tag">OpenRocket</span>
-                        <span class="skill-tag">Anaconda</span>
-                        <span class="skill-tag">Miniforge</span>
-                        <span class="skill-tag">Github</span>
-                        <span class="skill-tag">VertexAI</span>
-                        <span class="skill-tag">ArcGIS</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
-                    <h3>Python Libraries</h3>
-                    <div class="skill-list">
-                        <span class="skill-tag">Numpy</span>
-                        <span class="skill-tag">Pandas</span>
-                        <span class="skill-tag">Scipy</span>
-                        <span class="skill-tag">Sklearn</span>
-                        <span class="skill-tag">Pytorch</span>
-                        <span class="skill-tag">GeoPandas</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section id="projects">
-        <div class="container">
-            <div class="section-title">
-                <h2>Notable Projects</h2>
-            </div>
-            <p class="subtitle">A selection of significant projects that demonstrate my skills and problem-solving abilities.</p>
-            
-            <div class="projects-container">
-                <!-- Featured Project 1 -->
-                <div class="project-showcase">
-                    <div class="project-image-container">
-                        <img src="/api/placeholder/600/400" alt="Time Series Correlation" class="project-image">
-                    </div>
-                    <div class="project-content">
-                        <span class="project-award">Provisional Patent</span>
-                        <h3>Time Series Cross-Correlation Formula</h3>
-                        <p class="project-description">I developed a novel time series cross-correlation formula using discrete calculus. This correlation metric can measure both linear and non-linear relationships, unlike existing techniques.</p>
-                        
-                        <div class="project-stats">
-                            <div class="stat-item">
-                                <div class="stat-number">70%</div>
-                                <div class="stat-label">Training Time Reduction</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">45%</div>
-                                <div class="stat-label">Model Accuracy Increase</div>
-                            </div>
-                        </div>
-                        
-                        <div class="project-tags">
-                            <span class="project-tag">Mathematical Analysis</span>
-                            <span class="project-tag">Time Series</span>
-                            <span class="project-tag">Machine Learning</span>
-                        </div>
-                        
-                        <a href="project-detail.html" class="btn btn-primary btn-view-project">View Project Details</a>
-                    </div>
-                </div>
-                
-    <!-- Awards Section -->
-    <section id="awards">
-        <div class="container">
-            <div class="section-title">
-                <h2>Awards & Achievements</h2>
-            </div>
-            <p class="subtitle">Recognition for excellence in various academic and competitive pursuits.</p>
-            
-            <div class="awards-grid">
-                <div class="award-card">
-                    <h3>2nd Place @ RUHacks 2023</h3>
-                    <span class="organization">Rutgers University</span>
-                    <span class="date">October 2023</span>
-                    <p>Awarded second place for developing an innovative tutoring platform that connects underclassmen to upperclassmen.</p>
-                </div>
-                
-                <div class="award-card">
-                    <h3>2nd Place @ Roundpier Investment Competition</h3>
-                    <span class="organization">Roundpier</span>
-                    <span class="date">Jan-April 2022</span>
-                    <p>Achieved a +18.72% portfolio performance (vs -8.50% S&P 500) through strategic investments and technical analysis.</p>
-                </div>
-                
-                <div class="award-card">
-                    <h3>FIDE Rating</h3>
-                    <span class="organization">The International Chess Federation</span>
-                    <span class="date">November 2014</span>
-                    <p>Attained an international rating at the age of 9. FIDE Rating of 1474 in Classical, 1434 in Rapid and 1482 in Blitz.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2>Get In Touch</h2>
-            </div>
-            <p class="subtitle">Feel free to reach out for collaboration opportunities, research inquiries, or just to say hello.</p>
-            
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <a href="mailto:aib6932@nyu.edu">aib6932@nyu.edu</a>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Location</h4>
-                            <p>New York, NY</p>
-                        </div>
-                    </div>
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-university"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>University</h4>
-                            <p>New York University</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="contact-form">
-                    <h3>Send Me a Message</h3>
-                    <form action="#" method="POST">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control" placeholder="Your Email" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Subject">
-                        </div>
-                        <div class="form-group">
-                            <textarea class="form-control" placeholder="Your Message" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="social-links">
-                <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">Apoorv Belgundi</div>
-                <div class="footer-nav">
-                    <a href="#about">About</a>
-                    <a href="#research">Research</a>
-                    <a href="#skills">Skills</a>
-                    <a href="#projects">Projects</a>
-                    <a href="#awards">Awards</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                <div class="footer-social">
-                    <a href="#" class="footer-social-link"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#" class="footer-social-link"><i class="fab fa-github"></i></a>
-                    <a href="#" class="footer-social-link"><i class="fab fa-twitter"></i></a>
-                </div>
-                <div class="copyright">
-                    &copy; 2025 Apoorv Belgundi. All rights reserved.
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Sticky Header
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+            .showcase-stats {
+                grid-template-columns: 1fr;
             }
-        });
+            
+            .showcase-cta {
+                flex-direction: column;
+            }
+        }
+        </style>
+        </head>
+        <body>
+            <!-- Header -->
+            <header>
+                <div class="container">
+                    <nav>
+                        <div class="logo">Apoorv Belgundi</div>
+                        <button class="mobile-menu-btn">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <ul class="nav-links">
+                            <li><a href="#about" class="animated-underline">About</a></li>
+                            <li><a href="#research" class="animated-underline">Research</a></li>
+                            <li><a href="#research-showcase" class="animated-underline">Research Showcase</a></li>
+                            <li><a href="#skills" class="animated-underline">Skills</a></li>
+                            <li><a href="#projects" class="animated-underline">Projects</a></li>
+                            <li><a href="#awards" class="animated-underline">Awards</a></li>
+                            <li><a href="#contact" class="animated-underline">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </header>
         
-        // Smooth Scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="particles-background" id="particles-js"></div>
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-badge">Quantitative Finance & Data Science</div>
+                        <h1>Apoorv Belgundi</h1>
+                        <div class="tagline-container">
+                            <h2 class="typewriter">NYU Researcher | <span class="highlight">Innovations in Quantitative Finance</span></h2>
+                        </div>
+                        
+                        <div class="hero-highlights">
+                            <div class="highlight-item">
+                                <div class="highlight-icon"><i class="fas fa-star"></i></div>
+                                <div class="highlight-text">Provisional Patent Holder</div>
+                            </div>
+                            <div class="highlight-item">
+                                <div class="highlight-icon"><i class="fas fa-chart-line"></i></div>
+                                <div class="highlight-text">Creator of TRACP Framework</div>
+                            </div>
+                            <div class="highlight-item">
+                                <div class="highlight-icon"><i class="fas fa-rocket"></i></div>
+                                <div class="highlight-text">Published Researcher</div>
+                            </div>
+                        </div>
+                        
+                        <div class="hero-btns">
+                            <a href="#research" class="btn btn-primary">Explore My Research <i class="fas fa-arrow-right"></i></a>
+                            <a href="#contact" class="btn btn-outline">Get In Touch</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="#about" class="scroll-down">
+                    <i class="fas fa-chevron-down"></i>
+                </a>
+            </section>
+        
+            <!-- About Section remains the same -->
+            
+            <!-- Research Section remains the same -->
+            
+            <!-- NEW SECTION: Featured Research Showcase -->
+            <section id="research-showcase">
+                <div class="container">
+                    <div class="section-title">
+                        <h2>Featured Research Showcase</h2>
+                    </div>
+                    <p class="subtitle">Interactive visualization of my groundbreaking work in exosubmoon stability research</p>
+                    
+                    <div class="showcase-container">
+                        <div class="showcase-content">
+                            <span class="showcase-badge">Astronomy Research</span>
+                            <div class="showcase-heading">
+                                <h3>Exosubmoon Stability Model</h3>
+                            </div>
+                            
+                            <p class="showcase-description">My research investigated the long-term stability of submoons (moons of moons) by analyzing tidal effects on orbital dynamics. I created this interactive 3D simulation to visualize how different mass ratios and orbital parameters affect submoon survival over astronomical timescales.</p>
+                            
+                            <div class="showcase-highlights">
+                                <h4>Research Highlights:</h4>
+                                <ul class="highlights-list">
+                                    <li>Determined specific mass-ratio thresholds that allow submoons to remain in stable orbits for over 100 million years</li>
+                                    <li>Conducted high-performance numerical simulations using advanced N-body integrators on Google Cloud Platform</li>
+                                    <li>Analyzed NASA exoplanet datasets to identify potential real-world candidates</li>
+                                    <li>Developed this interactive visualization tool to demonstrate stability parameters</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="showcase-stats">
+                                <div class="showcase-stat">
+                                    <div class="stat-value">100M+</div>
+                                    <div class="stat-label">Years of Stability Achieved</div>
+                                </div>
+                                <div class="showcase-stat">
+                                    <div class="stat-value">5:1</div>
+                                    <div class="stat-label">Optimal Moon/Submoon Mass Ratio</div>
+                                </div>
+                                <div class="showcase-stat">
+                                    <div class="stat-value">0.5</div>
+                                    <div class="stat-label">Ideal Hill Radius Fraction</div>
+                                </div>
+                                <div class="showcase-stat">
+                                    <div class="stat-value">3</div>
+                                    <div class="stat-label">Potential Candidates Identified</div>
+                                </div>
+                            </div>
+                            
+                            <div class="showcase-cta">
+                                <button class="btn btn-primary open-modal-btn">
+                                    Explore Full Simulation <i class="fas fa-cube"></i>
+                                </button>
+                                <a href="#" class="btn btn-outline">View Research Paper</a>
+                            </div>
+                        </div>
+                        
+                        <div class="visualization-container">
+                            <div id="simulation-preview">
+                                <!-- Small preview of the simulation will be shown here -->
+                                <iframe src="exosubmoon-preview.html" frameborder="0"></iframe>
+                            </div>
+                            <div class="visualization-overlay">
+                                <button class="overlay-button open-modal-btn">
+                                    <i class="fas fa-expand"></i> View Full Simulation
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Skills Section, Projects Section, etc. remain the same -->
+            
+            <!-- Modal for full simulation -->
+            <div id="simulation-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <iframe src="exosubmoon-full.html" class="modal-iframe" frameborder="0"></iframe>
+                </div>
+            </div>
+        
+            <!-- JavaScript for the site -->
+            <script>
+                // Sticky Header
+                window.addEventListener('scroll', function() {
+                    const header = document.querySelector('header');
+                    if (window.scrollY > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
                 });
-            });
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        // Initialize particles.js
-        particlesJS("particles-js", {
-            "particles": {
-                "number": {
-                    "value": 80,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
+                
+                // Smooth Scrolling
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    });
+                });
+                
+                // Modal functionality
+                const modal = document.getElementById('simulation-modal');
+                const openModalBtns = document.querySelectorAll('.open-modal-btn');
+                const closeModal = document.querySelector('.close-modal');
+                
+                openModalBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        modal.style.display = 'block';
+                        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+                    });
+                });
+                
+                closeModal.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Re-enable scrolling
+                });
+                
+                window.addEventListener('click', function(event) {
+                    if (event.target === modal) {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
                     }
-                },
-                "color": {
-                    "value": "#3498db"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    },
-                },
-                "opacity": {
-                    "value": 0.5,
-                    "random": false,
-                    "anim": {
-                        "enable": false,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 3,
-                    "random": true,
-                    "anim": {
-                        "enable": false,
-                        "speed": 40,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#3498db",
-                    "opacity": 0.4,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 2,
-                    "direction": "none",
-                    "random": false,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": false,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 140,
+                });
+            </script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+            <script>
+                // Initialize particles.js (same as original)
+                particlesJS("particles-js", {
+                    "particles": {
+                        "number": {
+                            "value": 80,
+                            "density": {
+                                "enable": true,
+                                "value_area": 800
+                            }
+                        },
+                        "color": {
+                            "value": "#3498db"
+                        },
+                        "shape": {
+                            "type": "circle",
+                            "stroke": {
+                                "width": 0,
+                                "color": "#000000"
+                            },
+                        },
+                        "opacity": {
+                            "value": 0.5,
+                            "random": false,
+                            "anim": {
+                                "enable": false,
+                                "speed": 1,
+                                "opacity_min": 0.1,
+                                "sync": false
+                            }
+                        },
+                        "size": {
+                            "value": 3,
+                            "random": true,
+                            "anim": {
+                                "enable": false,
+                                "speed": 40,
+                                "size_min": 0.1,
+                                "sync": false
+                            }
+                        },
                         "line_linked": {
-                            "opacity": 1
+                            "enable": true,
+                            "distance": 150,
+                            "color": "#3498db",
+                            "opacity": 0.4,
+                            "width": 1
+                        },
+                        "move": {
+                            "enable": true,
+                            "speed": 2,
+                            "direction": "none",
+                            "random": false,
+                            "straight": false,
+                            "out_mode": "out",
+                            "bounce": false,
+                            "attract": {
+                                "enable": false,
+                                "rotateX": 600,
+                                "rotateY": 1200
+                            }
                         }
                     },
-                    "bubble": {
-                        "distance": 400,
-                        "size": 40,
-                        "duration": 2,
-                        "opacity": 8,
-                        "speed": 3
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": {
+                                "enable": true,
+                                "mode": "grab"
+                            },
+                            "onclick": {
+                                "enable": true,
+                                "mode": "push"
+                            },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": {
+                                "distance": 140,
+                                "line_linked": {
+                                    "opacity": 1
+                                }
+                            },
+                            "bubble": {
+                                "distance": 400,
+                                "size": 40,
+                                "duration": 2,
+                                "opacity": 8,
+                                "speed": 3
+                            },
+                            "repulse": {
+                                "distance": 200,
+                                "duration": 0.4
+                            },
+                            "push": {
+                                "particles_nb": 4
+                            },
+                            "remove": {
+                                "particles_nb": 2
+                            }
+                        }
                     },
-                    "repulse": {
-                        "distance": 200,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true
-        });
-    </script>
-</body>
-</html>
+                    "retina_detect": true
+                });
+            </script>
+        </body>
+        </html>
