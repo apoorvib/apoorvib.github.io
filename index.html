@@ -679,6 +679,41 @@
             padding: 7rem 0;
         }
         
+        .section-title {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--mid);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
         .research-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -1090,7 +1125,251 @@
             margin-top: 1rem;
         }
         
-        /* Rest of CSS remains the same */
+        /* Skills Section */
+        #skills {
+            padding: 7rem 0;
+            background-color: var(--light);
+        }
+        
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .skill-category {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .skill-category:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .skill-header {
+            background: var(--gradient-1);
+            padding: 1.5rem;
+            color: white;
+        }
+        
+        .skill-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .skill-header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .skill-list {
+            padding: 1.5rem;
+        }
+        
+        .skill-item {
+            margin-bottom: 1.5rem;
+        }
+        
+        .skill-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .skill-name {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .skill-name span {
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .skill-level {
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+        
+        .skill-bar {
+            height: 6px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: var(--gradient-1);
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+        
+        .skill-tags {
+            padding: 1.5rem;
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Patent Section */
+        #patent {
+            padding: 7rem 0;
+            background-color: #f8f9fa;
+            position: relative;
+        }
+        
+        #patent::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%233498db' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        
+        .patent-container {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        
+        .patent-image {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .patent-certificate {
+            width: 200px;
+            height: 200px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .patent-icon {
+            font-size: 5rem;
+            color: var(--secondary);
+        }
+        
+        .patent-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .patent-date {
+            font-size: 0.9rem;
+            color: var(--mid);
+        }
+        
+        .patent-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .patent-badge {
+            display: inline-block;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--accent);
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        
+        .patent-title {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .patent-title::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: -10px;
+            left: 0;
+        }
+        
+        .patent-description {
+            color: var(--mid);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        
+        .patent-highlights {
+            background-color: rgba(52, 152, 219, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .patent-highlights h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .patent-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+        
+        .patent-stat {
+            background-color: var(--card-bg);
+            padding: 1.2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .patent-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
         
         /* Modal Styles */
         .modal {
@@ -1196,6 +1475,15 @@
             .contact-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .patent-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .patent-image {
+                max-width: 500px;
+                margin: 0 auto;
+            }
         }
         
         @media (max-width: 768px) {
@@ -1255,302 +1543,681 @@
                 flex-direction: column;
             }
         }
-        </style>
-        </head>
-        <body>
-            <!-- Header -->
-            <header>
-                <div class="container">
-                    <nav>
-                        <div class="logo">Apoorv Belgundi</div>
-                        <button class="mobile-menu-btn">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                        <ul class="nav-links">
-                            <li><a href="#about" class="animated-underline">About</a></li>
-                            <li><a href="#research" class="animated-underline">Research</a></li>
-                            <li><a href="#research-showcase" class="animated-underline">Research Showcase</a></li>
-                            <li><a href="#skills" class="animated-underline">Skills</a></li>
-                            <li><a href="#projects" class="animated-underline">Projects</a></li>
-                            <li><a href="#awards" class="animated-underline">Awards</a></li>
-                            <li><a href="#contact" class="animated-underline">Contact</a></li>
-                        </ul>
-                    </nav>
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Apoorv Belgundi</div>
+                <button class="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#about" class="animated-underline">About</a></li>
+                    <li><a href="#research" class="animated-underline">Research</a></li>
+                    <li><a href="#research-showcase" class="animated-underline">Research Showcase</a></li>
+                    <li><a href="#skills" class="animated-underline">Skills</a></li>
+                    <li><a href="#patent" class="animated-underline">Patent</a></li>
+                    <li><a href="#contact" class="animated-underline">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="particles-background" id="particles-js"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">Mathematics & Computer Science</div>
+                <h1>Apoorv Indrajit Belgundi</h1>
+                <div class="tagline-container">
+                    <h2 class="typewriter">NYU Student | <span class="highlight">Quantitative Finance Researcher</span></h2>
                 </div>
-            </header>
-        
-            <!-- Hero Section -->
-            <section class="hero">
-                <div class="particles-background" id="particles-js"></div>
-                <div class="container">
-                    <div class="hero-content">
-                        <div class="hero-badge">Quantitative Finance & Data Science</div>
-                        <h1>Apoorv Belgundi</h1>
-                        <div class="tagline-container">
-                            <h2 class="typewriter">NYU Researcher | <span class="highlight">Innovations in Quantitative Finance</span></h2>
-                        </div>
-                        
-                        <div class="hero-highlights">
-                            <div class="highlight-item">
-                                <div class="highlight-icon"><i class="fas fa-star"></i></div>
-                                <div class="highlight-text">Provisional Patent Holder</div>
-                            </div>
-                            <div class="highlight-item">
-                                <div class="highlight-icon"><i class="fas fa-chart-line"></i></div>
-                                <div class="highlight-text">Creator of TRACP Framework</div>
-                            </div>
-                            <div class="highlight-item">
-                                <div class="highlight-icon"><i class="fas fa-rocket"></i></div>
-                                <div class="highlight-text">Published Researcher</div>
-                            </div>
-                        </div>
-                        
-                        <div class="hero-btns">
-                            <a href="#research" class="btn btn-primary">Explore My Research <i class="fas fa-arrow-right"></i></a>
-                            <a href="#contact" class="btn btn-outline">Get In Touch</a>
-                        </div>
+                
+                <div class="hero-highlights">
+                    <div class="highlight-item">
+                        <div class="highlight-icon"><i class="fas fa-graduation-cap"></i></div>
+                        <div class="highlight-text">New York University '26</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon"><i class="fas fa-star"></i></div>
+                        <div class="highlight-text">Provisional Patent Holder</div>
+                    </div>
+                    <div class="highlight-item">
+                        <div class="highlight-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="highlight-text">Creator of TRACP Framework</div>
                     </div>
                 </div>
-                <a href="#about" class="scroll-down">
-                    <i class="fas fa-chevron-down"></i>
-                </a>
-            </section>
-        
-            <!-- About Section remains the same -->
-            
-            <!-- Research Section remains the same -->
-            
-            <!-- NEW SECTION: Featured Research Showcase -->
-            <section id="research-showcase">
-                <div class="container">
-                    <div class="section-title">
-                        <h2>Featured Research Showcase</h2>
-                    </div>
-                    <p class="subtitle">Interactive visualization of my groundbreaking work in exosubmoon stability research</p>
-                    
-                    <div class="showcase-container">
-                        <div class="showcase-content">
-                            <span class="showcase-badge">Astronomy Research</span>
-                            <div class="showcase-heading">
-                                <h3>Exosubmoon Stability Model</h3>
-                            </div>
-                            
-                            <p class="showcase-description">My research investigated the long-term stability of submoons (moons of moons) by analyzing tidal effects on orbital dynamics. I created this interactive 3D simulation to visualize how different mass ratios and orbital parameters affect submoon survival over astronomical timescales.</p>
-                            
-                            <div class="showcase-highlights">
-                                <h4>Research Highlights:</h4>
-                                <ul class="highlights-list">
-                                    <li>Determined specific mass-ratio thresholds that allow submoons to remain in stable orbits for over 100 million years</li>
-                                    <li>Conducted high-performance numerical simulations using advanced N-body integrators on Google Cloud Platform</li>
-                                    <li>Analyzed NASA exoplanet datasets to identify potential real-world candidates</li>
-                                    <li>Developed this interactive visualization tool to demonstrate stability parameters</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="showcase-stats">
-                                <div class="showcase-stat">
-                                    <div class="stat-value">100M+</div>
-                                    <div class="stat-label">Years of Stability Achieved</div>
-                                </div>
-                                <div class="showcase-stat">
-                                    <div class="stat-value">5:1</div>
-                                    <div class="stat-label">Optimal Moon/Submoon Mass Ratio</div>
-                                </div>
-                                <div class="showcase-stat">
-                                    <div class="stat-value">0.5</div>
-                                    <div class="stat-label">Ideal Hill Radius Fraction</div>
-                                </div>
-                                <div class="showcase-stat">
-                                    <div class="stat-value">3</div>
-                                    <div class="stat-label">Potential Candidates Identified</div>
-                                </div>
-                            </div>
-                            
-                            <div class="showcase-cta">
-                                <button class="btn btn-primary open-modal-btn">
-                                    Explore Full Simulation <i class="fas fa-cube"></i>
-                                </button>
-                                <a href="#" class="btn btn-outline">View Research Paper</a>
-                            </div>
-                        </div>
-                        
-                        <div class="visualization-container">
-                            <div id="simulation-preview">
-                                <!-- Small preview of the simulation will be shown here -->
-                                <iframe src="exosubmoon-preview.html" frameborder="0"></iframe>
-                            </div>
-                            <div class="visualization-overlay">
-                                <button class="overlay-button open-modal-btn">
-                                    <i class="fas fa-expand"></i> View Full Simulation
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Skills Section, Projects Section, etc. remain the same -->
-            
-            <!-- Modal for full simulation -->
-            <div id="simulation-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <iframe src="exosubmoon-full.html" class="modal-iframe" frameborder="0"></iframe>
+                
+                <div class="hero-btns">
+                    <a href="#research" class="btn btn-primary">Explore My Research <i class="fas fa-arrow-right"></i></a>
+                    <a href="mailto:mail" class="btn btn-outline">Get In Touch</a>
                 </div>
             </div>
-        
-            <!-- JavaScript for the site -->
-            <script>
-                // Sticky Header
-                window.addEventListener('scroll', function() {
-                    const header = document.querySelector('header');
-                    if (window.scrollY > 50) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
-                });
+        </div>
+        <a href="#about" class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-image-column">
+                    <div class="about-image-container primary">
+                        <img src="/api/placeholder/600/400" alt="Apoorv Belgundi" class="about-image">
+                        <div class="image-overlay">
+                            <div class="overlay-content">
+                                <span>Apoorv Belgundi</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-stats">
+                        <div class="stat-box">
+                            <div class="stat-number">4+</div>
+                            <div class="stat-label">Research Positions</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">1</div>
+                            <div class="stat-label">Provisional Patent</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-number">10+</div>
+                            <div class="stat-label">Technical Skills</div>
+                        </div>
+                    </div>
+                </div>
                 
-                // Smooth Scrolling
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function (e) {
-                        e.preventDefault();
+                <div class="about-content">
+                    <div class="about-heading">
+                        <h3>About Me</h3>
+                        <div class="about-tagline">Mathematics, Computer Science, and Quantitative Finance Researcher</div>
+                    </div>
+                    
+                    <div class="about-bio">
+                        <p>I'm currently pursuing a Bachelor of Arts in Mathematics and Computer Science at New York University (2023-2026), where I'm developing innovative approaches to quantitative finance and data science challenges.</p>
                         
-                        document.querySelector(this.getAttribute('href')).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    });
+                        <p>My research spans multiple domains including quantitative finance, computational economics, and data science. I'm particularly interested in developing frameworks that solve real-world problems, such as my Tail-Risk Adjusted Correlation Portfolio (TRACP) framework that addresses the critical "correlation breakdown" problem in financial markets.</p>
+                        
+                        <p>I'm also the holder of a provisional patent for a novel time series cross-correlation metric that captures both linear and non-linear relationships, with direct applications for feature selection in machine learning and financial pair-trading.</p>
+                    </div>
+                    
+                    <div class="key-interests">
+                        <h4>Key Research Interests</h4>
+                        <ul class="interests-list">
+                            <li>
+                                <div class="interest-icon"><i class="fas fa-chart-line"></i></div>
+                                Quantitative Finance Models
+                            </li>
+                            <li>
+                                <div class="interest-icon"><i class="fas fa-brain"></i></div>
+                                Machine Learning
+                            </li>
+                            <li>
+                                <div class="interest-icon"><i class="fas fa-database"></i></div>
+                                Data Science
+                            </li>
+                            <li>
+                                <div class="interest-icon"><i class="fas fa-calculator"></i></div>
+                                Scientific Computing
+                            </li>
+                            <li>
+                                <div class="interest-icon"><i class="fas fa-rocket"></i></div>
+                                Astronomy Research
+                            </li>
+                            <li>
+                                <div class="interest-icon"><i class="fas fa-city"></i></div>
+                                Urban Science
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="education-card">
+                        <div class="education-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div class="education-details">
+                            <h4>New York University (NYU)</h4>
+                            <div class="education-program">Bachelor of Arts in Mathematics and Computer Science</div>
+                            <div class="education-period">August 2023 - May 2026</div>
+                            <p>Pursuing a comprehensive degree combining mathematical theory with practical computer science applications, with a focus on quantitative finance and data science.</p>
+                            <div class="education-stats">
+                                <span class="edu-stat">Mathematics</span>
+                                <span class="edu-stat">Computer Science</span>
+                                <span class="edu-stat">Data Science</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="about-cta">
+                        <a href="#research" class="btn btn-primary">View My Research <i class="fas fa-arrow-right"></i></a>
+                        <a href="https://linkedin.com" target="_blank" class="btn btn-outline">LinkedIn Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research">
+        <div class="container">
+            <div class="section-title">
+                <h2>Research Experience</h2>
+            </div>
+            <p class="subtitle">Exploring cutting-edge problems across quantitative finance, data science, and computational economics</p>
+            
+            <div class="research-grid">
+                <!-- Research Card 1: TRACP Framework -->
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Tail-Risk Adjusted Correlation Portfolio (TRACP) Framework</h3>
+                        <span class="place">NYU Courant Institute of Mathematical Sciences</span>
+                        <span class="date">February 2025 - Present</span>
+                        <p>Designed an innovative framework that solves the critical "correlation breakdown" problem where diversification fails during market crashes. My approach identifies "true diversifiers" – assets that maintain their protective qualities precisely when investors need them most.</p>
+                        <p>Currently developing a bimodal correlation model with regime-specific optimization that balances normal-market performance with enhanced protection during extreme events.</p>
+                        <a href="#" class="read-more">Learn more</a>
+                    </div>
+                </div>
+                
+                <!-- Research Card 2: Pairs Trading -->
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Advanced Pairs Trading Framework</h3>
+                        <span class="place">NYU Courant Institute of Mathematical Sciences</span>
+                        <span class="date">February 2025 - Present</span>
+                        <p>Developing a sophisticated pairs trading framework that captures lead-lag relationships between assets. Creating asymmetric and conditional correlation measures that dynamically adjust to market conditions.</p>
+                        <p>Establishing a mathematical foundation for identifying and exploiting cross-asset pricing inefficiencies without relying on problematic multi-regime switching models.</p>
+                        <a href="#" class="read-more">Learn more</a>
+                    </div>
+                </div>
+                
+                <!-- Research Card 3: Computational Economics -->
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>Monte Carlo Methods for Decision-Making</h3>
+                        <span class="place">NYU School of Professional Studies</span>
+                        <span class="date">December 2024 - March 2025</span>
+                        <p>Applied Monte Carlo methods to improve real-time decision-making in Monopoly (real-estate board game). Built computer simulations to test and validate adaptive strategies, demonstrating how probabilistic, data-driven shifts can lead to better outcomes.</p>
+                        <p>Translated complex game theory models into clear, practical guidelines that even non-technical players can understand and use.</p>
+                        <a href="#" class="read-more">Learn more</a>
+                    </div>
+                </div>
+                
+                <!-- Research Card 4: Data Science -->
+                <div class="research-card">
+                    <div class="research-content">
+                        <h3>EV Charging Infrastructure Optimization</h3>
+                        <span class="place">NYU Center for Urban Science and Progress (CUSP)</span>
+                        <span class="date">May 2024 - Present</span>
+                        <p>Evaluated four charging infrastructure scenarios to optimize deployment while maintaining operational feasibility for NYC's 30,000+ vehicle municipal fleet. Implemented spatial hotspot analysis using Local Moran's I statistics to identify statistically significant charging demand patterns across Brooklyn neighborhoods.</p>
+                        <p>Demonstrated that shared charging infrastructure between municipal EV fleets with complementary schedules reduces necessary charging stations by 45-65%.</p>
+                        <a href="#" class="read-more">Learn more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Featured Research Showcase -->
+    <section id="research-showcase">
+        <div class="container">
+            <div class="section-title">
+                <h2>Featured Research Showcase</h2>
+            </div>
+            <p class="subtitle">Interactive visualization of my groundbreaking work in exosubmoon stability research</p>
+            
+            <div class="showcase-container">
+                <div class="showcase-content">
+                    <span class="showcase-badge">Astronomy Research</span>
+                    <div class="showcase-heading">
+                        <h3>Exosubmoon Stability Model</h3>
+                    </div>
+                    
+                    <p class="showcase-description">My research investigated the long-term stability of submoons (moons of moons) by analyzing tidal effects on orbital dynamics. I created this interactive 3D simulation to visualize how different mass ratios and orbital parameters affect submoon survival over astronomical timescales.</p>
+                    
+                    <div class="showcase-highlights">
+                        <h4>Research Highlights:</h4>
+                        <ul class="highlights-list">
+                            <li>Investigated the long-term stability of sub-moons targeting survival periods exceeding 100 million years</li>
+                            <li>Executed high-performance simulations on Google Cloud (Vertex AI) and managed extensive NASA exoplanet datasets (30,000+ records, 350+ features)</li>
+                            <li>Analyzed key stability factors including mass ratios, orbital distances, and tidal interactions</li>
+                            <li>Authored a formal research paper documenting findings and methodology</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="showcase-stats">
+                        <div class="showcase-stat">
+                            <div class="stat-value">100M+</div>
+                            <div class="stat-label">Years of Stability Achieved</div>
+                        </div>
+                        <div class="showcase-stat">
+                            <div class="stat-value">30K+</div>
+                            <div class="stat-label">NASA Dataset Records</div>
+                        </div>
+                        <div class="showcase-stat">
+                            <div class="stat-value">350+</div>
+                            <div class="stat-label">Parameters Analyzed</div>
+                        </div>
+                        <div class="showcase-stat">
+                            <div class="stat-value">5:1</div>
+                            <div class="stat-label">Optimal Moon/Submoon Mass Ratio</div>
+                        </div>
+                    </div>
+                    
+                    <div class="showcase-cta">
+                        <button class="btn btn-primary open-modal-btn">
+                            Explore Full Simulation <i class="fas fa-cube"></i>
+                        </button>
+                        <a href="#" class="btn btn-outline">View Research Paper</a>
+                    </div>
+                </div>
+                
+                <div class="visualization-container">
+                    <div id="simulation-preview">
+                        <!-- Small preview of the simulation will be shown here -->
+                        <iframe src="exosubmoon-preview.html" frameborder="0"></iframe>
+                    </div>
+                    <div class="visualization-overlay">
+                        <button class="overlay-button open-modal-btn">
+                            <i class="fas fa-expand"></i> View Full Simulation
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Skills Section -->
+    <section id="skills">
+        <div class="container">
+            <div class="section-title">
+                <h2>Technical Skills</h2>
+            </div>
+            <p class="subtitle">A comprehensive toolkit of programming languages and technical competencies</p>
+            
+            <div class="skills-container">
+                <!-- Programming Languages Skills -->
+                <div class="skill-category">
+                    <div class="skill-header">
+                        <h3>Programming Languages</h3>
+                        <p>Core languages I use for research and development</p>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">R</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">C</span>
+                        <span class="skill-tag">C#</span>
+                        <span class="skill-tag">Matlab</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">HTML</span>
+                        <span class="skill-tag">LaTeX</span>
+                    </div>
+                </div>
+                
+                <!-- Technical Competencies -->
+                <div class="skill-category">
+                    <div class="skill-header">
+                        <h3>Technical Competencies</h3>
+                        <p>Specialized areas of expertise</p>
+                    </div>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>Scientific Computing</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 95%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>Quantitative Finance</span>
+                                <span class="skill-level">Expert</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>Machine Learning</span>
+                                <span class="skill-level">Advanced</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%;"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-name">
+                                <span>Data Engineering</span>
+                                <span class="skill-level">Advanced</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tools & Frameworks -->
+                <div class="skill-category">
+                    <div class="skill-header">
+                        <h3>Tools & Frameworks</h3>
+                        <p>Technologies I use in my development workflow</p>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Google Cloud/Vertex AI</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">NumPy</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">Scikit-learn</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">SQL Databases</span>
+                        <span class="skill-tag">Jupyter</span>
+                        <span class="skill-tag">Monte Carlo Simulation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Patent Section -->
+    <section id="patent">
+        <div class="container">
+            <div class="section-title">
+                <h2>Provisional Patent</h2>
+            </div>
+            <p class="subtitle">A novel time series cross-correlation metric for machine learning feature selection</p>
+            
+            <div class="patent-container">
+                <div class="patent-image">
+                    <div class="patent-certificate">
+                        <i class="fas fa-certificate patent-icon"></i>
+                    </div>
+                    <div class="patent-number">Provisional Patent</div>
+                    <div class="patent-date">Filed October 2022</div>
+                </div>
+                
+                <div class="patent-content">
+                    <span class="patent-badge">ML Feature Selection</span>
+                    <h3 class="patent-title">Novel Time Series Cross-Correlation Metric</h3>
+                    
+                    <p class="patent-description">Developed a groundbreaking algorithm for feature selection in machine learning that can capture both linear and non-linear relationships in time series data. This approach has significant applications in financial pair-trading and other domains requiring advanced correlation analysis.</p>
+                    
+                    <div class="patent-highlights">
+                        <h4>Key Innovations:</h4>
+                        <ul class="highlights-list">
+                            <li>Captures both linear and non-linear relationships in time series data</li>
+                            <li>Reduced machine learning training time by up to 70%</li>
+                            <li>Improved prediction accuracy by up to 25%</li>
+                            <li>Direct applications in financial pair-trading strategies</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="patent-stats">
+                        <div class="patent-stat">
+                            <div class="stat-value">70%</div>
+                            <div class="stat-label">Training Time Reduction</div>
+                        </div>
+                        <div class="patent-stat">
+                            <div class="stat-value">25%</div>
+                            <div class="stat-label">Accuracy Improvement</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Get In Touch</h2>
+            </div>
+            <p class="subtitle">Feel free to reach out for research collaborations, speaking engagements, or just to say hello</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Email</h4>
+                        <a href="mailto:mail">mail</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>Phone</h4>
+                        <a href="tel:646-309-1715">646-309-1715</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>LinkedIn</h4>
+                        <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="contact-details">
+                        <h4>GitHub</h4>
+                        <a href="https://github.com" target="_blank">Github</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modal for full simulation -->
+    <div id="simulation-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <iframe src="exosubmoon-full.html" class="modal-iframe" frameborder="0"></iframe>
+        </div>
+    </div>
+
+    <!-- JavaScript for the site -->
+    <script>
+        // Sticky Header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
                 });
-                
-                // Modal functionality
-                const modal = document.getElementById('simulation-modal');
-                const openModalBtns = document.querySelectorAll('.open-modal-btn');
-                const closeModal = document.querySelector('.close-modal');
-                
-                openModalBtns.forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        modal.style.display = 'block';
-                        document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
-                    });
-                });
-                
-                closeModal.addEventListener('click', function() {
-                    modal.style.display = 'none';
-                    document.body.style.overflow = 'auto'; // Re-enable scrolling
-                });
-                
-                window.addEventListener('click', function(event) {
-                    if (event.target === modal) {
-                        modal.style.display = 'none';
-                        document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // Modal functionality
+        const modal = document.getElementById('simulation-modal');
+        const openModalBtns = document.querySelectorAll('.open-modal-btn');
+        const closeModal = document.querySelector('.close-modal');
+        
+        openModalBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Skill bar animation
+        const skillBars = document.querySelectorAll('.skill-progress');
+        const skillSection = document.querySelector('#skills');
+        
+        const animateSkillBars = () => {
+            skillBars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, 300);
+            });
+        };
+        
+        // Trigger animation when skills section is in view
+        window.addEventListener('scroll', () => {
+            if (skillSection && isInViewport(skillSection)) {
+                animateSkillBars();
+                // Remove event listener after animation
+                window.removeEventListener('scroll', arguments.callee);
+            }
+        });
+        
+        // Helper function to check if element is in viewport
+        function isInViewport(element) {
+            const rect = element.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+                rect.bottom >= 0
+            );
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 80,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
                     }
-                });
-            </script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
-            <script>
-                // Initialize particles.js (same as original)
-                particlesJS("particles-js", {
-                    "particles": {
-                        "number": {
-                            "value": 80,
-                            "density": {
-                                "enable": true,
-                                "value_area": 800
-                            }
-                        },
-                        "color": {
-                            "value": "#3498db"
-                        },
-                        "shape": {
-                            "type": "circle",
-                            "stroke": {
-                                "width": 0,
-                                "color": "#000000"
-                            },
-                        },
-                        "opacity": {
-                            "value": 0.5,
-                            "random": false,
-                            "anim": {
-                                "enable": false,
-                                "speed": 1,
-                                "opacity_min": 0.1,
-                                "sync": false
-                            }
-                        },
-                        "size": {
-                            "value": 3,
-                            "random": true,
-                            "anim": {
-                                "enable": false,
-                                "speed": 40,
-                                "size_min": 0.1,
-                                "sync": false
-                            }
-                        },
+                },
+                "color": {
+                    "value": "#3498db"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#3498db",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
                         "line_linked": {
-                            "enable": true,
-                            "distance": 150,
-                            "color": "#3498db",
-                            "opacity": 0.4,
-                            "width": 1
-                        },
-                        "move": {
-                            "enable": true,
-                            "speed": 2,
-                            "direction": "none",
-                            "random": false,
-                            "straight": false,
-                            "out_mode": "out",
-                            "bounce": false,
-                            "attract": {
-                                "enable": false,
-                                "rotateX": 600,
-                                "rotateY": 1200
-                            }
+                            "opacity": 1
                         }
                     },
-                    "interactivity": {
-                        "detect_on": "canvas",
-                        "events": {
-                            "onhover": {
-                                "enable": true,
-                                "mode": "grab"
-                            },
-                            "onclick": {
-                                "enable": true,
-                                "mode": "push"
-                            },
-                            "resize": true
-                        },
-                        "modes": {
-                            "grab": {
-                                "distance": 140,
-                                "line_linked": {
-                                    "opacity": 1
-                                }
-                            },
-                            "bubble": {
-                                "distance": 400,
-                                "size": 40,
-                                "duration": 2,
-                                "opacity": 8,
-                                "speed": 3
-                            },
-                            "repulse": {
-                                "distance": 200,
-                                "duration": 0.4
-                            },
-                            "push": {
-                                "particles_nb": 4
-                            },
-                            "remove": {
-                                "particles_nb": 2
-                            }
-                        }
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
                     },
-                    "retina_detect": true
-                });
-            </script>
-        </body>
-        </html>
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+</body>
+</html>
