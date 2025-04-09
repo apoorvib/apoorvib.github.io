@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exosubmoon Preview</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            background-color: #0f172a;
+        }
+        #simulation-container {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="simulation-container"></div>
+    
+    <script>
+        // A simplified version of your simulation for preview
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x0f172a);
+        document.getElementById('simulation-container').appendChild(renderer.domElement);
+        
+        // Add ambient light
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+        scene.add(ambientLight);
+        
+        // Create Star
+        const starGeometry = new THREE.SphereGeometry(5, 32, 32);
+        const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+        const star = new THREE.Mesh(starGeometry, starMaterial);
+        scene.add(star);
+        
+        // Add light
+        const light = new THREE.PointLight(0xffffff, 1, 100);
+        light.position.set(0, 0, 0);
+        scene.add(light);
+        
+        // Create Planet
+        const planetGeometry = new THREE.SphereGeometry(2, 32, 32);
+        const planetMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0x3498db,
+            specular: 0x333333,
+            shininess: 10
+        });
+        const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+        planet.position.set(20, 0, 0);
+        scene.add(planet);
+        
+        // Create Moon
+        const moonGeometry = new THREE.SphereGeometry(0.6, 32, 32);
+        const moonMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0xecf0f1,
+            specular: 0x333333,
+            shininess: 5
+        });
+        const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+        moon.position.set(23, 0, 0);
+        scene.add(moon);
+        
+        // Create Submoon
+        const submoonGeometry = new THREE.SphereGeometry(0.2, 32, 32);
+        const submoonMaterial = new THREE.MeshPhongMaterial({ 
+            color: 0xe74c3c,
+            specular: 0x333333,
+            shininess: 5
+        });
+        const submoon = new THREE.Mesh(submoonGeometry, submoonMaterial);
+        submoon.position.set(23.8, 0, 0);
+        scene.add(submoon);
+        
+        // Set camera position
+        camera.position.z = 40;
+        camera.position.y = 20;
+        camera.lookAt(0, 0, 0);
+        
+        // Animation variables
+        let planetAngle = 0;
+        let moonAngle = 0;
+        let submoonAngle = 0;
+        
+        // Animation speeds
+        const planetSpeed = 0.002;
+        const moonSpeed = 0.006;
+        const submoonSpeed = 0.01;
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Update angles
+            planetAngle += planetSpeed;
+            moonAngle += moonSpeed;
+            submoonAngle += submoonSpeed;
+            
+            // Update positions
+            planet.position.x = 20 * Math.cos(planetAngle);
+            planet.position.z = 20 * Math.sin(planetAngle);
+            
+            // Update moon position relative to planet
+            moon.position.x = planet.position.x + 3 * Math.cos(moonAngle);
+            moon.position.z = planet.position.z + 3 * Math.sin(moonAngle);
+            
+            // Update submoon position relative to moon
+            submoon.position.x = moon.position.x + 0.8 * Math.cos(submoonAngle);
+            submoon.position.z = moon.position.z + 0.8 * Math.sin(submoonAngle);
+            
+            // Auto-rotate the camera slowly
+            camera.position.x = 40 * Math.cos(planetAngle * 0.1);
+            camera.position.z = 40 * Math.sin(planetAngle * 0.1);
+            camera.lookAt(0, 0, 0);
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        });
+        
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>
