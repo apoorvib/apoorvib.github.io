@@ -20,6 +20,7 @@
             width: 100%;
             height: 100%;
             position: relative;
+            cursor: pointer;
         }
         
         .preview-overlay {
@@ -48,15 +49,6 @@
             opacity: 0.8;
         }
         
-        .glow-effect {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(52, 152, 219, 0.1), transparent 70%);
-            pointer-events: none;
-            z-index: 5;
-        }
-        
         .badge {
             position: absolute;
             top: 20px;
@@ -72,27 +64,7 @@
             animation: pulse 2s infinite;
         }
         
-        .click-hint {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            animation: bounce 2s ease infinite;
-        }
-        
-        .click-hint i {
-            margin-left: 5px;
-            font-size: 1rem;
-        }
-        
-        .status-indicator {
+        .live-indicator {
             position: absolute;
             top: 20px;
             left: 20px;
@@ -102,6 +74,7 @@
             font-size: 0.8rem;
             z-index: 10;
             text-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+            padding: 5px 10px;
         }
         
         .indicator-dot {
@@ -112,6 +85,33 @@
             margin-right: 8px;
             box-shadow: 0 0 8px rgba(46, 204, 113, 0.8);
             animation: blink 1.5s ease infinite;
+        }
+        
+        .click-hint {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: rgba(52, 152, 219, 0.7);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.3);
+            animation: pulse 2s ease infinite;
+        }
+        
+        .click-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-left: 5px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='white' d='M447.1 84c0-6.6-5.4-12-12-12h-110c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12H335l-41 41c-29.2-25.9-65.3-39-103-39-47.6 0-88.6 22.1-116.2 56.3-3.4 4.1-2.7 10.2 1.4 13.5l21.2 17.5c4.1 3.4 10.1 2.9 13.6-1.1 20.2-24.1 49.3-38.1 80-38.1 29.2 0 57.2 12.8 77.2 35.9l-50.7 50.7c-3 3-4.5 7.1-4.5 11.3v19.9c0 6.6 5.4 12 12 12h124c6.6 0 12-5.4 12-12V87.9c.1-1.3 0-2.6-.4-3.9zM136 296c0-29.2 12.8-57.2 35.9-77.2l10.7 10.7c3 3 7.1 4.5 11.3 4.5h19.9c6.6 0 12-5.4 12-12v-124c0-6.6-5.4-12-12-12H87.9c-6.6 0-12 5.4-12 12v24c0 6.6 5.4 12 12 12H99l10.7 10.7c-24.3 20.2-38.1 49.3-38.1 80 0 29.2 12.8 57.2 35.9 77.2l-50.6 50.6c-3 3-4.6 7.1-4.6 11.3v19.9c0 6.6 5.4 12 12 12h124c6.6 0 12-5.4 12-12v-124c0-6.6-5.4-12-12-12h-19.9c-4.2 0-8.3 1.5-11.3 4.5l-10.7 10.7c-23.1-20-35.9-48-35.9-77.2z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
         }
         
         @keyframes pulse {
@@ -126,15 +126,6 @@
             }
         }
         
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-        
         @keyframes blink {
             0% {
                 opacity: 0.4;
@@ -146,29 +137,11 @@
                 opacity: 0.4;
             }
         }
-        
-        /* Add Font Awesome for icons */
-        .fa {
-            display: inline-block;
-            width: 1em;
-            height: 1em;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-        
-        .fa-expand {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%23ffffff' d='M0 180V56c0-13.3 10.7-24 24-24h124c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12H64v84c0 6.6-5.4 12-12 12H12c-6.6 0-12-5.4-12-12zM288 44v40c0 6.6 5.4 12 12 12h84v84c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12V56c0-13.3-10.7-24-24-24H300c-6.6 0-12 5.4-12 12zm148 276h-40c-6.6 0-12 5.4-12 12v84h-84c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h124c13.3 0 24-10.7 24-24V332c0-6.6-5.4-12-12-12zM160 468v-40c0-6.6-5.4-12-12-12H64v-84c0-6.6-5.4-12-12-12H12c-6.6 0-12 5.4-12 12v124c0 13.3 10.7 24 24 24h124c6.6 0 12-5.4 12-12z'/%3E%3C/svg%3E");
-        }
-        
-        .fa-circle {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%232ecc71' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z'/%3E%3C/svg%3E");
-        }
     </style>
 </head>
 <body>
     <div id="simulation-container">
-        <div class="status-indicator">
+        <div class="live-indicator">
             <div class="indicator-dot"></div>
             <span>Live Preview</span>
         </div>
@@ -181,342 +154,169 @@
         </div>
         
         <div class="click-hint">
-            Click for full simulation <i class="fa fa-expand"></i>
+            Click for full simulation <span class="click-icon"></span>
         </div>
-        
-        <div class="glow-effect"></div>
     </div>
     
     <script>
-        // Enhanced preview simulation
+        // Basic preview simulation with simplified but clear representation
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
         
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0x0a0e17);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         document.getElementById('simulation-container').appendChild(renderer.domElement);
         
         // Create starfield background
-        const createStarField = (count) => {
+        function createStarField(count) {
             const starGeometry = new THREE.BufferGeometry();
-            const starMaterial = new THREE.PointsMaterial({
-                color: 0xffffff,
-                size: 1.5,
-                transparent: true,
-                opacity: 0.8,
-                vertexColors: true
-            });
-            
-            const positions = [];
-            const colors = [];
-            const color = new THREE.Color();
+            const starPositions = [];
+            const starColors = [];
             
             for (let i = 0; i < count; i++) {
-                // Random position in sphere
-                const radius = 500;
-                const theta = 2 * Math.PI * Math.random();
+                // Distribute stars in a sphere around the camera
+                const radius = 200 + Math.random() * 200;
+                const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
                 
                 const x = radius * Math.sin(phi) * Math.cos(theta);
                 const y = radius * Math.sin(phi) * Math.sin(theta);
                 const z = radius * Math.cos(phi);
                 
-                positions.push(x, y, z);
+                starPositions.push(x, y, z);
                 
-                // Random star color (white to blue-ish)
-                const r = 0.7 + 0.3 * Math.random();
-                const g = 0.7 + 0.3 * Math.random();
-                const b = 0.9 + 0.1 * Math.random();
+                // Add slight color variation to stars
+                const intensity = 0.6 + Math.random() * 0.4;
+                const color = new THREE.Color();
                 
-                color.setRGB(r, g, b);
-                colors.push(color.r, color.g, color.b);
+                // Most stars are white/blue, but add some yellow/red for variety
+                if (Math.random() > 0.8) {
+                    color.setRGB(intensity, intensity * 0.8, intensity * 0.6); // Yellowish stars
+                } else if (Math.random() > 0.95) {
+                    color.setRGB(intensity, intensity * 0.5, intensity * 0.5); // Reddish stars
+                } else {
+                    color.setRGB(intensity * 0.8, intensity * 0.9, intensity); // Blueish white stars
+                }
+                
+                starColors.push(color.r, color.g, color.b);
             }
             
-            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-            starGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starPositions, 3));
+            starGeometry.setAttribute('color', new THREE.Float32BufferAttribute(starColors, 3));
+            
+            const starMaterial = new THREE.PointsMaterial({
+                size: 1.5,
+                transparent: true,
+                opacity: 0.8,
+                vertexColors: true,
+                sizeAttenuation: true
+            });
             
             const starField = new THREE.Points(starGeometry, starMaterial);
             scene.add(starField);
-        };
+            
+            return starField;
+        }
         
-        // Create galaxy background effect
-        const createGalaxyBackground = () => {
-            const galaxyGeometry = new THREE.BufferGeometry();
-            const galaxyMaterial = new THREE.PointsMaterial({
-                size: 1.8,
-                color: 0x3498db,
-                transparent: true,
-                opacity: 0.7,
-                blending: THREE.AdditiveBlending
-            });
+        // Create basic solar system
+        function createSolarSystem() {
+            // Add ambient light for overall visibility
+            const ambientLight = new THREE.AmbientLight(0x202020);
+            scene.add(ambientLight);
             
-            const positions = [];
-            
-            const galaxyRadius = 100;
-            const galaxyParticles = 1000;
-            const galaxyArms = 4;
-            const armWidth = 0.5;
-            
-            for (let i = 0; i < galaxyParticles; i++) {
-                const radius = Math.random() * galaxyRadius;
-                const spinFactor = 4 + Math.random();
-                
-                // Get a random angle but make it more likely to follow an arm path
-                const armAngle = (i % galaxyArms) * (2 * Math.PI / galaxyArms);
-                const randomAngle = (Math.random() - 0.5) * armWidth;
-                const angle = armAngle + radius * 0.01 * spinFactor + randomAngle;
-                
-                const x = radius * Math.cos(angle);
-                const z = radius * Math.sin(angle);
-                const y = (Math.random() - 0.5) * 8;
-                
-                positions.push(x, y, z);
-            }
-            
-            galaxyGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-            
-            const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
-            scene.add(galaxy);
-            
-            // Return the galaxy for animation
-            return galaxy;
-        };
-        
-        // Add ambient light for better visibility
-        const ambientLight = new THREE.AmbientLight(0x202020, 1);
-        scene.add(ambientLight);
-        
-        // Create Star (central body)
-        const createStar = () => {
-            // Create star glow
-            const starGlowGeometry = new THREE.SphereGeometry(7, 32, 32);
-            const starGlowMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xffee66,
-                transparent: true,
-                opacity: 0.15,
-            });
-            const starGlow = new THREE.Mesh(starGlowGeometry, starGlowMaterial);
-            scene.add(starGlow);
-            
-            // Create star core
-            const starGeometry = new THREE.SphereGeometry(5, 64, 64);
-            const starMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0xffffaa
-            });
+            // Create and position the star (Sun)
+            const starGeometry = new THREE.SphereGeometry(5, 32, 32);
+            const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffaa });
             const star = new THREE.Mesh(starGeometry, starMaterial);
             scene.add(star);
             
-            // Add flickering light effect
-            const flickerLight = new THREE.PointLight(0xffffaa, 1.5, 200, 2);
-            flickerLight.position.set(0, 0, 0);
-            scene.add(flickerLight);
+            // Add point light from the star
+            const starLight = new THREE.PointLight(0xffffee, 1.5, 200);
+            starLight.position.set(0, 0, 0);
+            scene.add(starLight);
             
-            return [star, starGlow, flickerLight];
-        };
-        
-        // Create texture for gas giant planets
-        const createGasGiantTexture = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
+            // Create planet
+            const planetGeometry = new THREE.SphereGeometry(3, 32, 32);
+            const planetMaterial = new THREE.MeshLambertMaterial({ color: 0x3498db });
+            const planet = new THREE.Mesh(planetGeometry, planetMaterial);
+            scene.add(planet);
             
-            // Create gradient background
-            const grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            // Create moon
+            const moonGeometry = new THREE.SphereGeometry(1, 24, 24);
+            const moonMaterial = new THREE.MeshLambertMaterial({ color: 0xecf0f1 });
+            const moon = new THREE.Mesh(moonGeometry, moonMaterial);
+            scene.add(moon);
             
-            // Jupiter-like
-            grd.addColorStop(0, '#b07f35');
-            grd.addColorStop(0.3, '#c8a458');
-            grd.addColorStop(0.7, '#e5cea2');
-            grd.addColorStop(1, '#b98b45');
+            // Create submoon
+            const submoonGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            const submoonMaterial = new THREE.MeshLambertMaterial({ color: 0xe74c3c });
+            const submoon = new THREE.Mesh(submoonGeometry, submoonMaterial);
+            scene.add(submoon);
             
-            ctx.fillStyle = grd;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw bands
-            const bandCount = 12;
-            for (let i = 0; i < bandCount; i++) {
-                const y = (i / bandCount) * canvas.height;
-                const height = canvas.height / bandCount * (0.5 + Math.random() * 0.5);
+            // Create orbital paths
+            function createOrbit(radius, color, segments = 64) {
+                const orbitGeometry = new THREE.BufferGeometry();
+                const orbitPositions = [];
                 
-                ctx.fillStyle = `rgba(${50 + Math.random() * 100}, ${40 + Math.random() * 60}, ${20 + Math.random() * 40}, ${0.1 + Math.random() * 0.3})`;
-                ctx.fillRect(0, y, canvas.width, height);
+                for (let i = 0; i <= segments; i++) {
+                    const theta = (i / segments) * Math.PI * 2;
+                    orbitPositions.push(
+                        radius * Math.cos(theta),
+                        0,
+                        radius * Math.sin(theta)
+                    );
+                }
+                
+                orbitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(orbitPositions, 3));
+                
+                const orbitMaterial = new THREE.LineBasicMaterial({
+                    color: color,
+                    transparent: true,
+                    opacity: 0.5
+                });
+                
+                return new THREE.Line(orbitGeometry, orbitMaterial);
             }
             
-            // Add some storms/spots
-            const spotCount = 8;
-            for (let i = 0; i < spotCount; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const radius = 5 + Math.random() * 20;
-                
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${180 + Math.random() * 75}, ${160 + Math.random() * 70}, ${100 + Math.random() * 50}, ${0.2 + Math.random() * 0.4})`;
-                ctx.fill();
-            }
+            // Create orbital rings
+            const planetOrbit = createOrbit(25, 0x3498db);
+            scene.add(planetOrbit);
             
-            // Create texture from canvas
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.repeat.x = -1; // Flip texture horizontally
+            const moonOrbit = createOrbit(6, 0xecf0f1);
+            scene.add(moonOrbit);
             
-            return texture;
-        };
-        
-        // Create texture for rocky body
-        const createRockyTexture = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 256;
-            const ctx = canvas.getContext('2d');
+            const submoonOrbit = createOrbit(1.5, 0xe74c3c);
+            scene.add(submoonOrbit);
             
-            // Create base color (Moon-like gray)
-            const baseColor = {r: 180, g: 180, b: 180};
-            
-            ctx.fillStyle = `rgb(${baseColor.r}, ${baseColor.g}, ${baseColor.b})`;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Add noise for texture
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            
-            for (let i = 0; i < data.length; i += 4) {
-                const noise = Math.random() * 30 - 15;
-                
-                data[i] = Math.max(0, Math.min(255, baseColor.r + noise));
-                data[i+1] = Math.max(0, Math.min(255, baseColor.g + noise));
-                data[i+2] = Math.max(0, Math.min(255, baseColor.b + noise));
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
-            
-            // Add craters
-            const craterCount = 30;
-            for (let i = 0; i < craterCount; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
-                const radius = 2 + Math.random() * 15;
-                
-                // Crater rim
-                ctx.beginPath();
-                ctx.arc(x, y, radius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(${baseColor.r + 30}, ${baseColor.g + 30}, ${baseColor.b + 30}, 0.8)`;
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-                
-                // Crater center (shadow)
-                ctx.beginPath();
-                ctx.arc(x, y, radius * 0.8, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${baseColor.r - 40}, ${baseColor.g - 40}, ${baseColor.b - 40}, 0.7)`;
-                ctx.fill();
-            }
-            
-            // Create texture from canvas
-            const texture = new THREE.CanvasTexture(canvas);
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.repeat.x = -1; // Flip texture horizontally
-            
-            return texture;
-        };
-        
-        // Create celestial bodies
-        createStarField(1000);
-        const galaxy = createGalaxyBackground();
-        const [star, starGlow, flickerLight] = createStar();
-        
-        // Create Planet
-        const planetTexture = createGasGiantTexture();
-        const planetGeometry = new THREE.SphereGeometry(3, 64, 64);
-        const planetMaterial = new THREE.MeshPhongMaterial({ 
-            map: planetTexture,
-            specular: 0x333333,
-            shininess: 30,
-            bumpScale: 0.5
-        });
-        const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-        scene.add(planet);
-        
-        // Add subtle glow to planet
-        const planetGlowGeometry = new THREE.SphereGeometry(3.2, 32, 32);
-        const planetGlowMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x3498db,
-            transparent: true,
-            opacity: 0.1
-        });
-        const planetGlow = new THREE.Mesh(planetGlowGeometry, planetGlowMaterial);
-        scene.add(planetGlow);
-        
-        // Create Moon
-        const moonTexture = createRockyTexture();
-        const moonGeometry = new THREE.SphereGeometry(0.8, 32, 32);
-        const moonMaterial = new THREE.MeshPhongMaterial({ 
-            map: moonTexture,
-            specular: 0x333333,
-            shininess: 20
-        });
-        const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-        scene.add(moon);
-        
-        // Create Submoon
-        const submoonGeometry = new THREE.SphereGeometry(0.3, 24, 24);
-        const submoonMaterial = new THREE.MeshPhongMaterial({ 
-            color: 0xe74c3c,
-            specular: 0x222222,
-            shininess: 15
-        });
-        const submoon = new THREE.Mesh(submoonGeometry, submoonMaterial);
-        scene.add(submoon);
-        
-        // Create Orbits with better visuals
-        const createOrbit = (radius, color, segments = 128) => {
-            const orbitCurve = new THREE.EllipseCurve(
-                0, 0,             // Center x, y
-                radius, radius,   // X radius, Y radius
-                0, 2 * Math.PI,   // Start angle, end angle
-                false,            // Clockwise
-                0                 // Rotation
-            );
-            
-            const orbitPoints = orbitCurve.getPoints(segments);
-            const orbitGeometry = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-            
-            const orbitMaterial = new THREE.LineBasicMaterial({ 
-                color: color,
+            // Create a stability zone indicator
+            const stabZoneGeometry = new THREE.RingGeometry(1.3, 1.7, 32);
+            const stabZoneMaterial = new THREE.MeshBasicMaterial({
+                color: 0x2ecc71,
                 transparent: true,
-                opacity: 0.4,
-                linewidth: 1
+                opacity: 0.3,
+                side: THREE.DoubleSide
             });
+            const stabilityZone = new THREE.Mesh(stabZoneGeometry, stabZoneMaterial);
+            stabilityZone.rotation.x = Math.PI / 2;
+            scene.add(stabilityZone);
             
-            return new THREE.Line(orbitGeometry, orbitMaterial);
-        };
+            // Return all created objects for animation
+            return {
+                star,
+                starLight,
+                planet,
+                moon,
+                submoon,
+                moonOrbit,
+                submoonOrbit,
+                stabilityZone
+            };
+        }
         
-        const planetOrbit = createOrbit(25, 0x3498db);
-        planetOrbit.rotation.x = Math.PI / 2;
-        scene.add(planetOrbit);
-        
-        const moonOrbit = createOrbit(6, 0xecf0f1);
-        moonOrbit.rotation.x = Math.PI / 2;
-        scene.add(moonOrbit);
-        
-        const submoonOrbit = createOrbit(1.5, 0xe74c3c);
-        submoonOrbit.rotation.x = Math.PI / 2;
-        scene.add(submoonOrbit);
-        
-        // Add stability indicator ring
-        const stabilityRingGeometry = new THREE.RingGeometry(1.3, 1.7, 64);
-        const stabilityRingMaterial = new THREE.MeshBasicMaterial({
-            color: 0x2ecc71,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.2
-        });
-        const stabilityRing = new THREE.Mesh(stabilityRingGeometry, stabilityRingMaterial);
-        stabilityRing.rotation.x = Math.PI / 2;
-        scene.add(stabilityRing);
+        // Create the components
+        const starField = createStarField(2000);
+        const solarSystem = createSolarSystem();
         
         // Set initial camera position
         camera.position.set(30, 20, 30);
@@ -526,234 +326,129 @@
         let planetAngle = 0;
         let moonAngle = 0;
         let submoonAngle = 0;
+        let cameraAngle = 0;
         
         // Animation speeds
         const planetSpeed = 0.001;
         const moonSpeed = 0.003;
         const submoonSpeed = 0.008;
         
-        // Set initial positions
-        planet.position.set(25, 0, 0);
-        planetGlow.position.copy(planet.position);
-        moon.position.set(25 + 6, 0, 0);
-        moonOrbit.position.copy(planet.position);
-        submoon.position.set(25 + 6 + 1.5, 0, 0);
-        submoonOrbit.position.copy(moon.position);
-        stabilityRing.position.copy(moon.position);
-        
-        // Add flickering effect to star
-        function updateStarFlicker() {
-            const flicker = 0.9 + Math.random() * 0.2;
-            flickerLight.intensity = 1.5 * flicker;
-            
-            // Subtle color variation
-            const hue = 0.12 + Math.random() * 0.02; // Slight variation in yellow/orange
-            const saturation = 0.8 + Math.random() * 0.2;
-            const color = new THREE.Color().setHSL(hue, saturation, 0.6);
-            flickerLight.color = color;
-        }
-        
-        // Camera auto-rotation
-        let cameraAngle = 0;
-        
-        // Create particles for thruster effect
-        function createThrusterParticles() {
-            const particleCount = 20;
-            const particles = [];
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = new THREE.Mesh(
-                    new THREE.SphereGeometry(0.05, 8, 8),
-                    new THREE.MeshBasicMaterial({
-                        color: 0xe74c3c, 
-                        transparent: true, 
-                        opacity: 0.8
-                    })
-                );
-                
-                // Set initial properties
-                particle.userData = {
-                    velocity: new THREE.Vector3(
-                        (Math.random() - 0.5) * 0.05,
-                        (Math.random() - 0.5) * 0.05,
-                        (Math.random() - 0.5) * 0.05
-                    ),
-                    age: 0,
-                    maxAge: 20 + Math.random() * 20
-                };
-                
-                scene.add(particle);
-                particles.push(particle);
-            }
-            
-            return particles;
-        }
-        
-        const thrusterParticles = createThrusterParticles();
-        
-        // Update particles
-        function updateThrusterParticles() {
-            thrusterParticles.forEach(particle => {
-                // Check if the particle needs resetting
-                if (particle.userData.age >= particle.userData.maxAge) {
-                    // Reset position to submoon
-                    particle.position.copy(submoon.position);
-                    
-                    // Reset properties
-                    particle.userData.age = 0;
-                    particle.userData.maxAge = 20 + Math.random() * 20;
-                    particle.material.opacity = 0.8;
-                    particle.scale.set(1, 1, 1);
-                    
-                    // Set new velocity (away from moon)
-                    const direction = new THREE.Vector3().subVectors(submoon.position, moon.position).normalize();
-                    particle.userData.velocity = new THREE.Vector3(
-                        direction.x * 0.05 + (Math.random() - 0.5) * 0.02,
-                        direction.y * 0.05 + (Math.random() - 0.5) * 0.02,
-                        direction.z * 0.05 + (Math.random() - 0.5) * 0.02
-                    );
-                }
-                
-                // Update position
-                particle.position.add(particle.userData.velocity);
-                
-                // Age the particle
-                particle.userData.age++;
-                
-                // Fade out as it ages
-                particle.material.opacity = 0.8 * (1 - particle.userData.age / particle.userData.maxAge);
-                
-                // Shrink as it ages
-                const scale = 1 - 0.8 * (particle.userData.age / particle.userData.maxAge);
-                particle.scale.set(scale, scale, scale);
-            });
-        }
-        
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
             
-            // Rotate the galaxy slowly for dramatic effect
-            galaxy.rotation.y += 0.0002;
-            galaxy.rotation.x = Math.sin(Date.now() * 0.0001) * 0.1;
-            
-            // Update star flicker effect once in a while
-            if (Math.random() > 0.95) {
-                updateStarFlicker();
-            }
-            
-            // Update angles
+            // Update orbital positions
             planetAngle += planetSpeed;
             moonAngle += moonSpeed;
             submoonAngle += submoonSpeed;
             
             // Update planet position
-            planet.position.x = 25 * Math.cos(planetAngle);
-            planet.position.z = 25 * Math.sin(planetAngle);
-            planetGlow.position.copy(planet.position);
-            planet.rotation.y += 0.005;
+            solarSystem.planet.position.x = 25 * Math.cos(planetAngle);
+            solarSystem.planet.position.z = 25 * Math.sin(planetAngle);
             
             // Update moon position and orbit
-            moonOrbit.position.copy(planet.position);
-            moon.position.x = planet.position.x + 6 * Math.cos(moonAngle);
-            moon.position.z = planet.position.z + 6 * Math.sin(moonAngle);
-            moon.rotation.y += 0.01;
+            solarSystem.moonOrbit.position.copy(solarSystem.planet.position);
+            solarSystem.moon.position.x = solarSystem.planet.position.x + 6 * Math.cos(moonAngle);
+            solarSystem.moon.position.z = solarSystem.planet.position.z + 6 * Math.sin(moonAngle);
             
             // Update submoon position and orbit
-            submoonOrbit.position.copy(moon.position);
-            stabilityRing.position.copy(moon.position);
-            submoon.position.x = moon.position.x + 1.5 * Math.cos(submoonAngle);
-            submoon.position.z = moon.position.z + 1.5 * Math.sin(submoonAngle);
-            submoon.rotation.y += 0.015;
+            solarSystem.submoonOrbit.position.copy(solarSystem.moon.position);
+            solarSystem.stabilityZone.position.copy(solarSystem.moon.position);
+            solarSystem.submoon.position.x = solarSystem.moon.position.x + 1.5 * Math.cos(submoonAngle);
+            solarSystem.submoon.position.z = solarSystem.moon.position.z + 1.5 * Math.sin(submoonAngle);
             
-            // Update thruster particles
-            updateThrusterParticles();
+            // Gently rotate the starfield for a dynamic feel
+            starField.rotation.y += 0.0001;
             
-            // Slowly rotate camera for cinematic effect
-            cameraAngle += 0.001;
-            const radius = 50;
-            camera.position.x = radius * Math.cos(cameraAngle);
-            camera.position.z = radius * Math.sin(cameraAngle);
-            camera.position.y = 20 + Math.sin(cameraAngle * 2) * 10;
+            // Slowly orbit camera for a cinematic effect
+            cameraAngle += 0.0005;
+            camera.position.x = 40 * Math.cos(cameraAngle);
+            camera.position.z = 40 * Math.sin(cameraAngle);
+            camera.position.y = 15 + Math.sin(cameraAngle * 2) * 5;
             camera.lookAt(0, 0, 0);
             
+            // Render scene
             renderer.render(scene, camera);
         }
         
         // Handle window resize
-        window.addEventListener('resize', function() {
+        function handleResize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
             
-            renderer.setSize(width, height);
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
-        });
+            
+            renderer.setSize(width, height);
+        }
+        
+        window.addEventListener('resize', handleResize);
         
         // Start animation
         animate();
         
-        // Make the preview clickable to simulate opening the modal
+        // Add click handler to open the full simulation modal
         document.getElementById('simulation-container').addEventListener('click', function() {
-            // This would normally open the modal, but in the preview we'll just
-            // add a visual feedback effect
+            // Add visual feedback that we're opening the simulation
             const overlay = document.createElement('div');
             overlay.style.position = 'absolute';
             overlay.style.top = '0';
             overlay.style.left = '0';
             overlay.style.width = '100%';
             overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
-            overlay.style.display = 'flex';
-            overlay.style.alignItems = 'center';
-            overlay.style.justifyContent = 'center';
-            overlay.style.zIndex = '20';
+            overlay.style.backgroundColor = 'rgba(52, 152, 219, 0.2)';
+            overlay.style.zIndex = '1000';
             overlay.style.transition = 'opacity 0.5s ease';
             overlay.style.opacity = '0';
-            
             document.getElementById('simulation-container').appendChild(overlay);
             
+            // Fade in the effect
             setTimeout(() => {
                 overlay.style.opacity = '1';
             }, 10);
             
-            setTimeout(() => {
-                overlay.style.opacity = '0';
-            }, 300);
+            // Create "Loading" text
+            const loadingText = document.createElement('div');
+            loadingText.textContent = 'Opening Full Simulation...';
+            loadingText.style.position = 'absolute';
+            loadingText.style.top = '50%';
+            loadingText.style.left = '50%';
+            loadingText.style.transform = 'translate(-50%, -50%)';
+            loadingText.style.color = 'white';
+            loadingText.style.fontSize = '18px';
+            loadingText.style.fontWeight = 'bold';
+            loadingText.style.padding = '15px 25px';
+            loadingText.style.backgroundColor = 'rgba(52, 152, 219, 0.8)';
+            loadingText.style.borderRadius = '5px';
+            loadingText.style.zIndex = '1001';
+            loadingText.style.opacity = '0';
+            loadingText.style.transition = 'opacity 0.3s ease';
+            document.getElementById('simulation-container').appendChild(loadingText);
             
             setTimeout(() => {
-                overlay.remove();
-            }, 800);
+                loadingText.style.opacity = '1';
+            }, 200);
             
-            const text = document.createElement('div');
-            text.textContent = 'Opening Full Simulation...';
-            text.style.color = 'white';
-            text.style.fontSize = '1.2rem';
-            text.style.padding = '10px 20px';
-            text.style.background = 'rgba(52, 152, 219, 0.7)';
-            text.style.borderRadius = '5px';
-            text.style.boxShadow = '0 0 20px rgba(52, 152, 219, 0.5)';
-            text.style.position = 'absolute';
-            text.style.top = '50%';
-            text.style.left = '50%';
-            text.style.transform = 'translate(-50%, -50%)';
-            text.style.zIndex = '30';
-            text.style.opacity = '0';
-            text.style.transition = 'opacity 0.3s ease';
-            
-            document.getElementById('simulation-container').appendChild(text);
-            
-            setTimeout(() => {
-                text.style.opacity = '1';
-            }, 300);
-            
-            setTimeout(() => {
-                text.style.opacity = '0';
-            }, 1500);
-            
-            setTimeout(() => {
-                text.remove();
-            }, 2000);
+            // Trigger the modal opening via parent page's JavaScript
+            try {
+                // Try to access the parent window's modal
+                if (window.parent && window.parent.document) {
+                    const modal = window.parent.document.getElementById('simulation-modal');
+                    if (modal) {
+                        modal.style.display = 'block';
+                        
+                        // If there's a body in the parent, disable scrolling
+                        if (window.parent.document.body) {
+                            window.parent.document.body.style.overflow = 'hidden';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Could not access parent frame:", e);
+                
+                // Fallback: open the full simulation in a new tab
+                window.open('exosubmoon-full.html', '_blank');
+            }
         });
     </script>
 </body>
