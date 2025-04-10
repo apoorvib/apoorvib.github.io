@@ -2046,6 +2046,20 @@
                 document.body.style.overflow = 'hidden';
             }
         });
+
+        // Add close functionality for the modal close button
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        });
+
+        // Also add this to close when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
         
         // Skill bar animation
         const skillBars = document.querySelectorAll('.skill-progress');
