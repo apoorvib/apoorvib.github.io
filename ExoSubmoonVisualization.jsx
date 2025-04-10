@@ -292,7 +292,7 @@ const ExoSubmoonVisualization = () => {
 
     // Create Planet
     const calculatedPlanetRadius = calculateRadius(planetMass, true);
-    const planetVisualRadius = calculatedPlanetRadius * 0.2; // Reduce planet size
+    const planetVisualRadius = calculatedPlanetRadius * 0.005; // Reduce planet size
     const planetGeometry = new THREE.SphereGeometry(planetVisualRadius, 64, 64);
     
     // Create planet texture
@@ -311,7 +311,7 @@ const ExoSubmoonVisualization = () => {
     
     // Calculate true planet position in orbit - significantly increase distance
     const planetOrbitAngle = 0; // Initial angle
-    const actualPlanetOrbitRadius = planetRadius * 3; // Triple the orbital distance
+    const actualPlanetOrbitRadius = planetRadius * 20; // Triple the orbital distance
     planet.position.x = actualPlanetOrbitRadius * Math.cos(planetOrbitAngle);
     planet.position.z = actualPlanetOrbitRadius * Math.sin(planetOrbitAngle);
     
@@ -344,7 +344,7 @@ const ExoSubmoonVisualization = () => {
     setRocheLimit(rocheLimitMoon);
     
     // Place moon in its orbit
-    const moonOrbitRadius = moonRadius * hillRadiusPlanet;
+    const moonOrbitRadius = moonRadius * hillRadiusPlanet * 10; // 10x larger distance
     // Ensure moon is outside of planet's visual radius plus some buffer
     if (moonOrbitRadius < planetVisualRadius * 2) {
       console.warn("Moon orbit adjusted to prevent collision with planet");
@@ -382,7 +382,7 @@ const ExoSubmoonVisualization = () => {
     setHillRadiusSubmoon(hillRadiusMoonValue);
     
     // Place submoon in its orbit
-    const submoonOrbitRadius = submoonRadius * hillRadiusMoonValue;
+    const submoonOrbitRadius = submoonRadius * hillRadiusMoonValue * 10;// 10x larger distance
     const submoonOrbitAngle = 0; // Initial angle
     submoon.position.x = moon.position.x + submoonOrbitRadius * Math.cos(submoonOrbitAngle);
     submoon.position.z = moon.position.z + submoonOrbitRadius * Math.sin(submoonOrbitAngle);
@@ -390,7 +390,7 @@ const ExoSubmoonVisualization = () => {
     // Create Orbits as rings
     if (showOrbits) {
       // Planet's orbit around star
-      const actualPlanetOrbitRadius = planetRadius * 3; // Match the same radius used above
+      const actualPlanetOrbitRadius = planetRadius * 20; // Match the same radius used above
       const planetOrbitGeometry = new THREE.RingGeometry(actualPlanetOrbitRadius - 0.1, actualPlanetOrbitRadius + 0.1, 128);
       const planetOrbitMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
