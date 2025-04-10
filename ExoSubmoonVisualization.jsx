@@ -51,17 +51,17 @@ const ExoSubmoonVisualization = () => {
       setPlanetMass(25);
       setMoonMass(0.5);
       setSubmoonMass(0.08);
-      setPlanetRadius(20);
-      setMoonRadius(3.2);
-      setSubmoonRadius(0.5);
+      setPlanetRadius(60); // Increased planet-star distance
+      setMoonRadius(0.4); // Moon orbit as fraction of Hill radius (max 0.5)
+      setSubmoonRadius(0.45); // Submoon orbit as fraction of Hill radius (max 0.5)
     } else if (presetMode === 'unstable') {
       // Unstable configuration: high planet/moon ratio, low moon/submoon ratio
       setPlanetMass(50);
       setMoonMass(0.2);
       setSubmoonMass(0.15);
-      setPlanetRadius(15);
-      setMoonRadius(4.5);
-      setSubmoonRadius(1.2);
+      setPlanetRadius(45); // Increased planet-star distance
+      setMoonRadius(0.5); // At the edge of stability
+      setSubmoonRadius(0.5); // At the edge of stability
     }
   }, [presetMode]);
   
@@ -274,7 +274,7 @@ const ExoSubmoonVisualization = () => {
     };
     
     // Create Star (central body)
-    const starRadius = 15; // Increased star size
+    const starRadius = 30; // Increased star size
     const starGeometry = new THREE.SphereGeometry(starRadius, 64, 64);
     const starMaterial = new THREE.MeshBasicMaterial({ 
       color: 0xffff80,
@@ -292,7 +292,7 @@ const ExoSubmoonVisualization = () => {
 
     // Create Planet
     const calculatedPlanetRadius = calculateRadius(planetMass, true);
-    const planetVisualRadius = calculatedPlanetRadius * 0.4; // Reduce planet size by 60%
+    const planetVisualRadius = calculatedPlanetRadius * 0.2; // Reduce planet size
     const planetGeometry = new THREE.SphereGeometry(planetVisualRadius, 64, 64);
     
     // Create planet texture
@@ -309,10 +309,11 @@ const ExoSubmoonVisualization = () => {
     planet.receiveShadow = true;
     scene.add(planet);
     
-    // Calculate true planet position in orbit
+    // Calculate true planet position in orbit - significantly increase distance
     const planetOrbitAngle = 0; // Initial angle
-    planet.position.x = planetRadius * Math.cos(planetOrbitAngle);
-    planet.position.z = planetRadius * Math.sin(planetOrbitAngle);
+    const actualPlanetOrbitRadius = planetRadius * 3; // Triple the orbital distance
+    planet.position.x = actualPlanetOrbitRadius * Math.cos(planetOrbitAngle);
+    planet.position.z = actualPlanetOrbitRadius * Math.sin(planetOrbitAngle);
     
     // Create Moon
     const calculatedMoonRadius = calculateRadius(moonMass, moonMass > 0.1);
@@ -344,6 +345,16 @@ const ExoSubmoonVisualization = () => {
     
     // Place moon in its orbit
     const moonOrbitRadius = moonRadius * hillRadiusPlanet;
+    // Ensure moon is outside of planet's visual radius plus some buffer
+    if (moonOrbitRadius < planetVisualRadius * 2) {
+      console.warn("Moon orbit adjusted to prevent collision with planet");
+      const adjustedMoonOrbitRadius = planetVisualRadius * 2;
+      moon.position.x = planet.position.x + adjustedMoonOrbitRadius * Math.cos(moonOrbitAngle);
+      moon.position.z = planet.position.z + adjustedMoonOrbitRadius * Math.sin(moonOrbitAngle);
+    } else {
+      moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonOrbitAngle);
+      moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonOrbitAngle);
+    }
     const moonOrbitAngle = 0; // Initial angle
     moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonOrbitAngle);
     moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonOrbitAngle);
@@ -379,7 +390,8 @@ const ExoSubmoonVisualization = () => {
     // Create Orbits as rings
     if (showOrbits) {
       // Planet's orbit around star
-      const planetOrbitGeometry = new THREE.RingGeometry(planetRadius - 0.1, planetRadius + 0.1, 128);
+      const actualPlanetOrbitRadius = planetRadius * 3; // Match the same radius used above
+      const planetOrbitGeometry = new THREE.RingGeometry(actualPlanetOrbitRadius - 0.1, actualPlanetOrbitRadius + 0.1, 128);
       const planetOrbitMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
         side: THREE.DoubleSide,
