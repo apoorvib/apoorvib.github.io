@@ -23,7 +23,7 @@ const ExoSubmoonVisualization = () => {
   const [planetMass, setPlanetMass] = useState(28); // Jupiter masses
   const [moonMass, setMoonMass] = useState(0.5); // Jupiter masses
   const [submoonMass, setSubmoonMass] = useState(0.05); // Jupiter masses
-  const [planetRadius, setPlanetRadius] = useState(20); // Astronomical Units (AU)
+  const [planetRadius, setPlanetRadius] = useState(60); // Increased distance from star (AU)
   const [moonRadius, setMoonRadius] = useState(3); // In Hill radii
   const [submoonRadius, setSubmoonRadius] = useState(0.5); // In Hill radii
   
@@ -220,6 +220,28 @@ const ExoSubmoonVisualization = () => {
     
   }, [planetMass, moonMass, submoonMass, planetRadius, moonRadius, submoonRadius, showOrbits, showStabilityZones]);
   
+  // Helper to create text labels
+  const createTextLabel = (text, x, y, z, color) => {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    canvas.width = 256;
+    canvas.height = 64;
+    
+    context.font = "Bold 24px Arial";
+    context.fillStyle = "rgba(255, 255, 255, 0.8)";
+    context.fillText(text, 10, 40);
+    
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.needsUpdate = true;
+    
+    const material = new THREE.SpriteMaterial({ map: texture });
+    const sprite = new THREE.Sprite(material);
+    sprite.position.set(x, y, z);
+    sprite.scale.set(10, 2.5, 1);
+    
+    return sprite;
+  };
+
   // Create celestial bodies function
   const createCelestialBodies = () => {
     if (!sceneRef.current) return;
@@ -252,7 +274,7 @@ const ExoSubmoonVisualization = () => {
     };
     
     // Create Star (central body)
-    const starRadius = 5;
+    const starRadius = 15; // Increased star size
     const starGeometry = new THREE.SphereGeometry(starRadius, 64, 64);
     const starMaterial = new THREE.MeshBasicMaterial({ 
       color: 0xffff80,
@@ -261,16 +283,16 @@ const ExoSubmoonVisualization = () => {
     });
     const star = new THREE.Mesh(starGeometry, starMaterial);
     scene.add(star);
-    
+
     // Add Point Light to simulate star's light
     const light = new THREE.PointLight(0xffffff, 1.5, 1000);
     light.position.set(0, 0, 0);
     light.castShadow = true;
     scene.add(light);
-    
+
     // Create Planet
     const calculatedPlanetRadius = calculateRadius(planetMass, true);
-    const planetVisualRadius = calculatedPlanetRadius;
+    const planetVisualRadius = calculatedPlanetRadius * 0.4; // Reduce planet size by 60%
     const planetGeometry = new THREE.SphereGeometry(planetVisualRadius, 64, 64);
     
     // Create planet texture
@@ -402,12 +424,14 @@ const ExoSubmoonVisualization = () => {
       const hillSphereMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
         transparent: true,
-        opacity: 0.05,
+        opacity: 0.15,  // Increased opacity
         wireframe: true
       });
-      const hillSphere = new THREE.Mesh(hillSphereGeometry, hillSphereMaterial);
-      hillSphere.position.copy(planet.position);
-      scene.add(hillSphere);
+      
+      // Add text label for clarity
+      const hillSphereLabel = createTextLabel("Hill Sphere", hillRadiusPlanet + 2, 0, 0, "0x3498db");
+      hillSphereLabel.position.copy(planet.position);
+      scene.add(hillSphereLabel);
       
       // Roche limit for planet
       const rocheLimitGeometry = new THREE.SphereGeometry(rocheLimitMoon, 32, 32);
@@ -702,22 +726,22 @@ const ExoSubmoonVisualization = () => {
     
     // Calculate orbital periods using Kepler's laws
     // For periods: T² ∝ a³/M where a is semimajor axis and M is central mass
-    const keplerConstant = 0.02; // Arbitrary constant for visualization
-    
+    const keplerConstant = 0.005; // Reduced constant for slower visualization
+
     // Calculate period for planet around star (star is much more massive)
     const planetPeriod = keplerConstant * Math.sqrt(Math.pow(planetRadius, 3));
-    
+
     // Calculate period for moon around planet
     const moonPeriod = keplerConstant * Math.sqrt(Math.pow(moonRadius * hillRadiusMoon, 3) / planetMass);
-    
+
     // Calculate period for submoon around moon
     const submoonPeriod = keplerConstant * Math.sqrt(Math.pow(submoonRadius * hillRadiusSubmoon, 3) / moonMass);
-    
+
     // Convert periods to angular velocities
-    const planetSpeed = (2 * Math.PI) / (planetPeriod * 100);
-    const moonSpeed = (2 * Math.PI) / (moonPeriod * 100);
-    const submoonSpeed = (2 * Math.PI) / (submoonPeriod * 100);
-    
+    const planetSpeed = (2 * Math.PI) / (planetPeriod * 400); // Slower planet
+    const moonSpeed = (2 * Math.PI) / (moonPeriod * 300);  // Slower moon
+    const submoonSpeed = (2 * Math.PI) / (submoonPeriod * 200); // Slower submoon    
+
     // Animation loop
     const animate = () => {
       if (controlsRef.current) controlsRef.current.update();
