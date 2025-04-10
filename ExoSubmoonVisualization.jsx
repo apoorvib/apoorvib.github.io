@@ -819,6 +819,18 @@ const ExoSubmoonVisualization = () => {
           }
         });
       }
+      renderer.render(scene, camera);
+      animationRef.current = requestAnimationFrame(animate);
+
+      let isCurrentlyPlaying = isPlaying;
+
+      // Set up a MutationObserver to watch for changes to the play/pause button
+      const playPauseButton = document.querySelector('.play-pause-btn'); // Adjust selector as needed
+      if (playPauseButton) {
+        playPauseButton.addEventListener('click', () => {
+          isCurrentlyPlaying = !isCurrentlyPlaying;
+        });
+      }
       
       // Update camera position based on view mode
       if (viewMode === 'topDown') {
