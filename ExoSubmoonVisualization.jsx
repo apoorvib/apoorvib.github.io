@@ -811,12 +811,12 @@ const ExoSubmoonVisualization = () => {
       // Update camera position based on view mode
       if (viewMode === 'topDown') {
         // Top-down view
-        camera.position.set(0, 100, 0);
+        camera.position.set(0, 150, 0);  // Increased height for better overview
         camera.lookAt(0, 0, 0);
         controls.enabled = false;
       } else if (viewMode === 'planet') {
         // Follow planet view
-        const offset = new THREE.Vector3(20, 15, 20);
+        const offset = new THREE.Vector3(40, 25, 40);  // Increased distance
         camera.position.set(
           planet.position.x + offset.x,
           offset.y,
@@ -826,7 +826,7 @@ const ExoSubmoonVisualization = () => {
         controls.enabled = false;
       } else if (viewMode === 'moon') {
         // Follow moon view
-        const offset = new THREE.Vector3(5, 3, 5);
+        const offset = new THREE.Vector3(10, 6, 10);  // Increased distance
         camera.position.set(
           moon.position.x + offset.x,
           moon.position.y + offset.y,
@@ -836,11 +836,11 @@ const ExoSubmoonVisualization = () => {
         controls.enabled = false;
       } else if (viewMode === 'educational') {
         // Educational view that keeps system in perspective
-        const radius = 80;
+        const radius = 120;  // Increased radius
         const angle = planetAngle * 0.1;
         camera.position.set(
           radius * Math.cos(angle),
-          40,
+          60,  // Higher viewpoint
           radius * Math.sin(angle)
         );
         camera.lookAt(0, 0, 0);
@@ -849,7 +849,10 @@ const ExoSubmoonVisualization = () => {
         // Standard (free) view
         controls.enabled = true;
       }
-      
+
+      // Force camera update to ensure the changes take effect immediately
+      camera.updateProjectionMatrix();
+      renderer.render(scene, camera);  // Additional render call to refresh view
       renderer.render(scene, camera);
       animationRef.current = requestAnimationFrame(animate);
     };
