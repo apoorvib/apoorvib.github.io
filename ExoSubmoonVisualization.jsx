@@ -9,7 +9,7 @@ const ExoSubmoonVisualization = () => {
   const cameraRef = useRef(null);
   const controlsRef = useRef(null);
   const animationRef = useRef(null);
-  const starFieldRef = useRef(null);
+  const objectsRef = useRef({});
   
   // Simulation state
   const [isPlaying, setIsPlaying] = useState(true);
@@ -19,13 +19,13 @@ const ExoSubmoonVisualization = () => {
   const [viewMode, setViewMode] = useState('standard'); // standard, topDown, planet, moon, educational
   const [presetMode, setPresetMode] = useState('optimal'); // optimal, unstable, custom
   
-  // System parameters
+  // System parameters - adjusted for better visual scale
   const [planetMass, setPlanetMass] = useState(28); // Jupiter masses
   const [moonMass, setMoonMass] = useState(0.5); // Jupiter masses
   const [submoonMass, setSubmoonMass] = useState(0.05); // Jupiter masses
-  const [planetRadius, setPlanetRadius] = useState(60); // Increased distance from star (AU)
-  const [moonRadius, setMoonRadius] = useState(3); // In Hill radii
-  const [submoonRadius, setSubmoonRadius] = useState(0.5); // In Hill radii
+  const [planetRadius, setPlanetRadius] = useState(60); // Distance from star (AU)
+  const [moonRadius, setMoonRadius] = useState(0.4); // In Hill radii
+  const [submoonRadius, setSubmoonRadius] = useState(0.45); // In Hill radii
   
   // Derived planetary values
   const [planetToMoonRatio, setPlanetToMoonRatio] = useState(0);
@@ -60,8 +60,8 @@ const ExoSubmoonVisualization = () => {
       setMoonMass(0.2);
       setSubmoonMass(0.15);
       setPlanetRadius(45); // Increased planet-star distance
-      setMoonRadius(0.5); // At the edge of stability
-      setSubmoonRadius(0.5); // At the edge of stability
+      setMoonRadius(0.6); // Beyond optimal stability
+      setSubmoonRadius(0.8); // Beyond optimal stability
     }
   }, [presetMode]);
   
@@ -75,7 +75,7 @@ const ExoSubmoonVisualization = () => {
     
     // Create scene, camera, and renderer
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 2000);
+    const camera = new THREE.PerspectiveCamera(65, width / height, 0.1, 10000);
     
     const renderer = new THREE.WebGLRenderer({ 
       antialias: true, 
@@ -94,9 +94,9 @@ const ExoSubmoonVisualization = () => {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.enableZoom = true;
-    controls.enablePan = false;
-    controls.minDistance = 30;
-    controls.maxDistance = 200;
+    controls.enablePan = true;
+    controls.minDistance = 100;
+    controls.maxDistance = 1000;
     
     sceneRef.current = scene;
     cameraRef.current = camera;
@@ -111,12 +111,8 @@ const ExoSubmoonVisualization = () => {
     scene.add(ambientLight);
     
     // Set initial camera position - much farther out to see everything
-    camera.position.set(300, 200, 300);
+    camera.position.set(500, 300, 500);
     camera.lookAt(0, 0, 0);
-
-    // Update camera limits
-    controls.minDistance = 100; // Increased minimum distance
-    controls.maxDistance = 800; // Increased maximum distance
     
     // Add window resize handler
     const handleResize = () => {
@@ -165,7 +161,7 @@ const ExoSubmoonVisualization = () => {
     const starGeometry = new THREE.BufferGeometry();
     const starMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 1,
+      size: 2,
       transparent: true,
       opacity: 0.8,
       vertexColors: true
@@ -177,7 +173,7 @@ const ExoSubmoonVisualization = () => {
     
     for (let i = 0; i < count; i++) {
       // Random position in sphere
-      const radius = 1000;
+      const radius = 5000;
       const theta = 2 * Math.PI * Math.random();
       const phi = Math.acos(2 * Math.random() - 1);
       
@@ -201,7 +197,6 @@ const ExoSubmoonVisualization = () => {
     
     const starField = new THREE.Points(starGeometry, starMaterial);
     scene.add(starField);
-    starFieldRef.current = starField;
   };
   
   // Update celestial bodies and orbits
@@ -217,22 +212,26 @@ const ExoSubmoonVisualization = () => {
     });
     
     // Create Solar System objects
-    createCelestialBodies();
+    const objects = createCelestialBodies();
+    objectsRef.current = objects;
     
     // Calculate stability metrics
     calculateStabilityMetrics();
     
-  }, [planetMass, moonMass, submoonMass, planetRadius, moonRadius, submoonRadius, showOrbits, showStabilityZones]);
+    // Start animation
+    startAnimation();
+    
+  }, [planetMass, moonMass, submoonMass, planetRadius, moonRadius, submoonRadius, showOrbits, showStabilityZones, isPlaying, speedMultiplier, viewMode]);
   
   // Helper to create text labels
-  const createTextLabel = (text, x, y, z, color) => {
+  const createTextLabel = (text, x, y, z, color = 0xffffff) => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
     canvas.width = 256;
     canvas.height = 64;
     
     context.font = "Bold 24px Arial";
-    context.fillStyle = "rgba(255, 255, 255, 0.8)";
+    context.fillStyle = `rgba(255, 255, 255, 0.8)`;
     context.fillText(text, 10, 40);
     
     const texture = new THREE.CanvasTexture(canvas);
@@ -241,45 +240,44 @@ const ExoSubmoonVisualization = () => {
     const material = new THREE.SpriteMaterial({ map: texture });
     const sprite = new THREE.Sprite(material);
     sprite.position.set(x, y, z);
-    sprite.scale.set(10, 2.5, 1);
+    sprite.scale.set(50, 12.5, 1);
     
     return sprite;
   };
 
   // Create celestial bodies function
   const createCelestialBodies = () => {
-    if (!sceneRef.current) return;
+    if (!sceneRef.current) return {};
     
     const scene = sceneRef.current;
     
     // Scale factors for visualization (astronomical objects have vastly different scales)
-    // Using logarithmic scaling to make things visible
-    const visualScale = 2; // General scale factor
+    // Using enhanced scaling for better visibility
+    const starSize = 15;  // Size of the star
+    const planetScaleFactor = 1.5;  // Scaled up to be more visible
+    const distanceScaleFactor = 40; // Scale up distances between bodies
     
-    // Calculate realistic mass-to-radius relationships
-    // For gas giants: R ∝ M^0.55 for M > 0.1 Jupiter masses
-    // For rocky bodies: R ∝ M^0.3 for M < 0.1 Jupiter masses
+    // Calculate realistic mass-to-radius relationships with enhanced scale
     const calculateRadius = (mass, isGasGiant = false) => {
       if (isGasGiant || mass > 0.1) {
-        return Math.pow(mass, 0.55) * visualScale;
+        return Math.pow(mass, 0.55) * planetScaleFactor;
       } else {
-        return Math.pow(mass, 0.3) * visualScale * 0.7;
+        return Math.pow(mass, 0.3) * planetScaleFactor * 0.8;
       }
     };
     
-    // Calculate Hill radius
+    // Calculate Hill radius (boundary of gravitational influence)
     const calculateHillRadius = (primaryMass, secondaryMass, orbitRadius) => {
       return orbitRadius * Math.pow(secondaryMass / (3 * primaryMass), 1/3);
     };
     
-    // Calculate Roche limit
+    // Calculate Roche limit (tidal destruction boundary)
     const calculateRocheLimit = (primaryRadius, primaryDensity, secondaryDensity) => {
       return primaryRadius * 2.44 * Math.pow(primaryDensity / secondaryDensity, 1/3);
     };
     
     // Create Star (central body)
-    const starRadius = 30; // Increased star size
-    const starGeometry = new THREE.SphereGeometry(starRadius, 64, 64);
+    const starGeometry = new THREE.SphereGeometry(starSize, 64, 64);
     const starMaterial = new THREE.MeshBasicMaterial({ 
       color: 0xffff80,
       emissive: 0xffff00,
@@ -289,14 +287,13 @@ const ExoSubmoonVisualization = () => {
     scene.add(star);
 
     // Add Point Light to simulate star's light
-    const light = new THREE.PointLight(0xffffff, 1.5, 1000);
+    const light = new THREE.PointLight(0xffffff, 1.5, 5000);
     light.position.set(0, 0, 0);
     light.castShadow = true;
     scene.add(light);
 
     // Create Planet
-    const calculatedPlanetRadius = calculateRadius(planetMass, true);
-    const planetVisualRadius = calculatedPlanetRadius * 0.0005; // Reduce planet size
+    const planetVisualRadius = calculateRadius(planetMass, true);
     const planetGeometry = new THREE.SphereGeometry(planetVisualRadius, 64, 64);
     
     // Create planet texture
@@ -313,16 +310,14 @@ const ExoSubmoonVisualization = () => {
     planet.receiveShadow = true;
     scene.add(planet);
     
-    // Calculate true planet position in orbit - significantly increase distance
+    // Calculate planet position in orbit - significantly increased distance
+    const planetOrbitDistance = planetRadius * distanceScaleFactor;
     const planetOrbitAngle = 0; // Initial angle
-    const scaleFactor = 15; // MUCH larger distance
-    const actualPlanetOrbitRadius = planetRadius * scaleFactor;
-    planet.position.x = actualPlanetOrbitRadius * Math.cos(planetOrbitAngle);
-    planet.position.z = actualPlanetOrbitRadius * Math.sin(planetOrbitAngle);
+    planet.position.x = planetOrbitDistance * Math.cos(planetOrbitAngle);
+    planet.position.z = planetOrbitDistance * Math.sin(planetOrbitAngle);
         
     // Create Moon
-    const calculatedMoonRadius = calculateRadius(moonMass, moonMass > 0.1);
-    const moonVisualRadius = calculatedMoonRadius;
+    const moonVisualRadius = calculateRadius(moonMass, moonMass > 0.1);
     const moonGeometry = new THREE.SphereGeometry(moonVisualRadius, 32, 32);
     
     // Create moon texture - rocky for smaller moons, gas for larger
@@ -339,7 +334,8 @@ const ExoSubmoonVisualization = () => {
     scene.add(moon);
     
     // Calculate Hill radius of planet (for moon's orbit)
-    const hillRadiusPlanet = calculateHillRadius(1000, planetMass, planetRadius); // Star mass approximated
+    const starMass = 1000; // Approximate star mass in Jupiter masses
+    const hillRadiusPlanet = calculateHillRadius(starMass, planetMass, planetOrbitDistance);
     setHillRadiusMoon(hillRadiusPlanet);
     
     // Calculate Roche limit for moon around planet
@@ -348,25 +344,14 @@ const ExoSubmoonVisualization = () => {
     const rocheLimitMoon = calculateRocheLimit(planetVisualRadius, planetDensity, moonDensity);
     setRocheLimit(rocheLimitMoon);
     
-    // Place moon in its orbit
-    const moonOrbitRadius = moonRadius * hillRadiusPlanet * 10; // 10x larger distance
-    // Ensure moon is outside of planet's visual radius plus some buffer
-    if (moonOrbitRadius < planetVisualRadius * 2) {
-      console.warn("Moon orbit adjusted to prevent collision with planet");
-      const adjustedMoonOrbitRadius = planetVisualRadius * 2;
-      moon.position.x = planet.position.x + adjustedMoonOrbitRadius * Math.cos(moonOrbitAngle);
-      moon.position.z = planet.position.z + adjustedMoonOrbitRadius * Math.sin(moonOrbitAngle);
-    } else {
-      moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonOrbitAngle);
-      moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonOrbitAngle);
-    }
+    // Place moon in its orbit - respecting Hill radius constraint
+    const moonOrbitDistance = moonRadius * hillRadiusPlanet;
     const moonOrbitAngle = 0; // Initial angle
-    moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonOrbitAngle);
-    moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonOrbitAngle);
+    moon.position.x = planet.position.x + moonOrbitDistance * Math.cos(moonOrbitAngle);
+    moon.position.z = planet.position.z + moonOrbitDistance * Math.sin(moonOrbitAngle);
     
     // Create Submoon
-    const calculatedSubmoonRadius = calculateRadius(submoonMass, false);
-    const submoonVisualRadius = calculatedSubmoonRadius;
+    const submoonVisualRadius = calculateRadius(submoonMass, false);
     const submoonGeometry = new THREE.SphereGeometry(submoonVisualRadius, 24, 24);
     
     // Create submoon texture (likely rocky for all realistic submoons)
@@ -383,21 +368,19 @@ const ExoSubmoonVisualization = () => {
     scene.add(submoon);
     
     // Calculate Hill radius of moon (for submoon's orbit)
-    const hillRadiusMoonValue = calculateHillRadius(planetMass, moonMass, moonOrbitRadius);
+    const hillRadiusMoonValue = calculateHillRadius(planetMass, moonMass, moonOrbitDistance);
     setHillRadiusSubmoon(hillRadiusMoonValue);
     
     // Place submoon in its orbit
-    const submoonOrbitRadius = submoonRadius * hillRadiusMoonValue * 10;// 10x larger distance
+    const submoonOrbitDistance = submoonRadius * hillRadiusMoonValue;
     const submoonOrbitAngle = 0; // Initial angle
-    submoon.position.x = moon.position.x + submoonOrbitRadius * Math.cos(submoonOrbitAngle);
-    submoon.position.z = moon.position.z + submoonOrbitRadius * Math.sin(submoonOrbitAngle);
+    submoon.position.x = moon.position.x + submoonOrbitDistance * Math.cos(submoonOrbitAngle);
+    submoon.position.z = moon.position.z + submoonOrbitDistance * Math.sin(submoonOrbitAngle);
     
     // Create Orbits as rings
     if (showOrbits) {
       // Planet's orbit around star
-      scaleFactor = 15
-      const actualPlanetOrbitRadius = planetRadius * scaleFactor; // Match the same radius used above
-      const planetOrbitGeometry = new THREE.RingGeometry(actualPlanetOrbitRadius - 0.1, actualPlanetOrbitRadius + 0.1, 128);
+      const planetOrbitGeometry = new THREE.RingGeometry(planetOrbitDistance - 0.5, planetOrbitDistance + 0.5, 128);
       const planetOrbitMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
         side: THREE.DoubleSide,
@@ -409,12 +392,12 @@ const ExoSubmoonVisualization = () => {
       scene.add(planetOrbit);
       
       // Moon's orbit around planet
-      const moonOrbitGeometry = new THREE.RingGeometry(moonOrbitRadius - 0.05, moonOrbitRadius + 0.05, 128);
+      const moonOrbitGeometry = new THREE.RingGeometry(moonOrbitDistance - 0.2, moonOrbitDistance + 0.2, 128);
       const moonOrbitMaterial = new THREE.MeshBasicMaterial({
         color: 0xecf0f1,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.5
       });
       const moonOrbit = new THREE.Mesh(moonOrbitGeometry, moonOrbitMaterial);
       moonOrbit.rotation.x = Math.PI / 2;
@@ -422,12 +405,12 @@ const ExoSubmoonVisualization = () => {
       scene.add(moonOrbit);
       
       // Submoon's orbit around moon
-      const submoonOrbitGeometry = new THREE.RingGeometry(submoonOrbitRadius - 0.02, submoonOrbitRadius + 0.02, 64);
+      const submoonOrbitGeometry = new THREE.RingGeometry(submoonOrbitDistance - 0.05, submoonOrbitDistance + 0.05, 64);
       const submoonOrbitMaterial = new THREE.MeshBasicMaterial({
         color: 0xe74c3c,
         side: THREE.DoubleSide,
         transparent: true,
-        opacity: 0.3
+        opacity: 0.5
       });
       const submoonOrbit = new THREE.Mesh(submoonOrbitGeometry, submoonOrbitMaterial);
       submoonOrbit.rotation.x = Math.PI / 2;
@@ -437,18 +420,20 @@ const ExoSubmoonVisualization = () => {
     
     // Add stability zones visualizations if enabled
     if (showStabilityZones) {
-      // Hill sphere boundary for moon
+      // Hill sphere boundary for planet (for moon's orbit)
       const hillSphereGeometry = new THREE.SphereGeometry(hillRadiusPlanet, 32, 32);
       const hillSphereMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
         transparent: true,
-        opacity: 0.30,  // Increased opacity
+        opacity: 0.1,
         wireframe: true
       });
+      const hillSphere = new THREE.Mesh(hillSphereGeometry, hillSphereMaterial);
+      hillSphere.position.copy(planet.position);
+      scene.add(hillSphere);
       
       // Add text label for clarity
-      const hillSphereLabel = createTextLabel("Hill Sphere", hillRadiusPlanet + 2, 0, 0, "0x3498db");
-      hillSphereLabel.position.copy(planet.position);
+      const hillSphereLabel = createTextLabel("Hill Sphere", planet.position.x, planet.position.y + hillRadiusPlanet + 10, planet.position.z);
       scene.add(hillSphereLabel);
       
       // Roche limit for planet
@@ -479,17 +464,25 @@ const ExoSubmoonVisualization = () => {
       optimalOrbit.position.copy(planet.position);
       scene.add(optimalOrbit);
       
+      // Add text label for optimal zone
+      const optimalZoneLabel = createTextLabel("Optimal Zone", planet.position.x, planet.position.y + 5, planet.position.z + optimalOrbitMaxRadius);
+      scene.add(optimalZoneLabel);
+      
       // Hill sphere boundary for submoon
       const hillSphereSubmoonGeometry = new THREE.SphereGeometry(hillRadiusMoonValue, 24, 24);
       const hillSphereSubmoonMaterial = new THREE.MeshBasicMaterial({
         color: 0xe74c3c,
         transparent: true,
-        opacity: 0.05,
+        opacity: 0.1,
         wireframe: true
       });
       const hillSphereSubmoon = new THREE.Mesh(hillSphereSubmoonGeometry, hillSphereSubmoonMaterial);
       hillSphereSubmoon.position.copy(moon.position);
       scene.add(hillSphereSubmoon);
+      
+      // Add text label for submoon Hill sphere
+      const submoonHillLabel = createTextLabel("Submoon Hill Sphere", moon.position.x, moon.position.y + hillRadiusMoonValue + 2, moon.position.z);
+      scene.add(submoonHillLabel);
       
       // Optimal submoon orbital zone (from research: 0.4-0.6 Hill radius)
       const optimalSubmoonMinRadius = 0.4 * hillRadiusMoonValue;
@@ -506,10 +499,23 @@ const ExoSubmoonVisualization = () => {
       optimalSubmoonOrbit.rotation.x = Math.PI / 2;
       optimalSubmoonOrbit.position.copy(moon.position);
       scene.add(optimalSubmoonOrbit);
+      
+      // Add text label for optimal submoon zone
+      const optimalSubmoonLabel = createTextLabel("Optimal Submoon Zone", moon.position.x, moon.position.y + 2, moon.position.z + optimalSubmoonMaxRadius);
+      scene.add(optimalSubmoonLabel);
     }
     
-    // Start animation
-    startAnimation(star, planet, moon, submoon);
+    return {
+      star,
+      planet,
+      moon,
+      submoon,
+      planetOrbitDistance,
+      moonOrbitDistance,
+      submoonOrbitDistance,
+      hillRadiusPlanet,
+      hillRadiusMoonValue
+    };
   };
   
   // Create texture for gas giant planets
@@ -654,9 +660,9 @@ const ExoSubmoonVisualization = () => {
     const isStable = moonToSubmoonMassRatio > 5 && planetToMoonMassRatio < 60 && 
                     submoonRadius >= 0.3 && submoonRadius <= 0.7;
                     
-    const isMarginal = moonToSubmoonMassRatio > 3 && planetToMoonMassRatio < 80 &&
-                      submoonRadius >= 0.2 && submoonRadius <= 0.8;
-    
+                    const isMarginal = moonToSubmoonMassRatio > 3 && planetToMoonMassRatio < 80 &&
+                    submoonRadius >= 0.2 && submoonRadius <= 0.8;
+  
     // Calculate a stability score (0-100)
     let stabilityScore = 0;
     
@@ -729,13 +735,16 @@ const ExoSubmoonVisualization = () => {
   };
   
   // Animation function
-  const startAnimation = (star, planet, moon, submoon) => {
+  const startAnimation = () => {
     if (!cameraRef.current || !rendererRef.current || !sceneRef.current || !controlsRef.current) return;
     
     const camera = cameraRef.current;
     const renderer = rendererRef.current;
     const scene = sceneRef.current;
     const controls = controlsRef.current;
+    const objects = objectsRef.current;
+    
+    if (!objects.planet || !objects.moon || !objects.submoon) return;
     
     // Variables for animation
     let planetAngle = 0;
@@ -744,21 +753,17 @@ const ExoSubmoonVisualization = () => {
     
     // Calculate orbital periods using Kepler's laws
     // For periods: T² ∝ a³/M where a is semimajor axis and M is central mass
-    const keplerConstant = 0.005; // Reduced constant for slower visualization
+    const keplerConstant = 0.001; // Reduced constant for slower visualization
 
-    // Calculate period for planet around star (star is much more massive)
-    const planetPeriod = keplerConstant * Math.sqrt(Math.pow(planetRadius, 3));
-
-    // Calculate period for moon around planet
-    const moonPeriod = keplerConstant * Math.sqrt(Math.pow(moonRadius * hillRadiusMoon, 3) / planetMass);
-
-    // Calculate period for submoon around moon
-    const submoonPeriod = keplerConstant * Math.sqrt(Math.pow(submoonRadius * hillRadiusSubmoon, 3) / moonMass);
+    // Calculate periods for more realistic orbital movement
+    const planetPeriod = keplerConstant * Math.sqrt(Math.pow(objects.planetOrbitDistance, 3));
+    const moonPeriod = keplerConstant * Math.sqrt(Math.pow(objects.moonOrbitDistance, 3) / planetMass);
+    const submoonPeriod = keplerConstant * Math.sqrt(Math.pow(objects.submoonOrbitDistance, 3) / moonMass);
 
     // Convert periods to angular velocities
-    const planetSpeed = (2 * Math.PI) / (planetPeriod * 400); // Slower planet
-    const moonSpeed = (2 * Math.PI) / (moonPeriod * 300);  // Slower moon
-    const submoonSpeed = (2 * Math.PI) / (submoonPeriod * 200); // Slower submoon    
+    const planetSpeed = (2 * Math.PI) / (planetPeriod * 200); // Slower planet
+    const moonSpeed = (2 * Math.PI) / (moonPeriod * 100);  // Slower moon
+    const submoonSpeed = (2 * Math.PI) / (submoonPeriod * 50); // Slower submoon    
 
     // Animation loop
     const animate = () => {
@@ -771,46 +776,44 @@ const ExoSubmoonVisualization = () => {
         submoonAngle += submoonSpeed * speedMultiplier;
         
         // Update planet position
-        planet.position.x = planetRadius * Math.cos(planetAngle);
-        planet.position.z = planetRadius * Math.sin(planetAngle);
+        objects.planet.position.x = objects.planetOrbitDistance * Math.cos(planetAngle);
+        objects.planet.position.z = objects.planetOrbitDistance * Math.sin(planetAngle);
         
         // Add slight wobble to planet rotation to simulate axis tilt
-        planet.rotation.x = Math.sin(planetAngle * 0.5) * 0.1;
-        planet.rotation.y += 0.003 * speedMultiplier;
+        objects.planet.rotation.x = Math.sin(planetAngle * 0.5) * 0.1;
+        objects.planet.rotation.y += 0.001 * speedMultiplier;
         
         // Update moon position relative to planet
-        const moonOrbitRadius = moonRadius * hillRadiusMoon;
-        moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonAngle);
-        moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonAngle);
-        moon.rotation.y += 0.005 * speedMultiplier;
+        objects.moon.position.x = objects.planet.position.x + objects.moonOrbitDistance * Math.cos(moonAngle);
+        objects.moon.position.z = objects.planet.position.z + objects.moonOrbitDistance * Math.sin(moonAngle);
+        objects.moon.rotation.y += 0.002 * speedMultiplier;
         
         // Update submoon position relative to moon
-        const submoonOrbitRadius = submoonRadius * hillRadiusSubmoon;
-        submoon.position.x = moon.position.x + submoonOrbitRadius * Math.cos(submoonAngle);
-        submoon.position.z = moon.position.z + submoonOrbitRadius * Math.sin(submoonAngle);
-        submoon.rotation.y += 0.007 * speedMultiplier;
+        objects.submoon.position.x = objects.moon.position.x + objects.submoonOrbitDistance * Math.cos(submoonAngle);
+        objects.submoon.position.z = objects.moon.position.z + objects.submoonOrbitDistance * Math.sin(submoonAngle);
+        objects.submoon.rotation.y += 0.003 * speedMultiplier;
         
-        // Update orbital visualizations
+        // Update orbital visualizations by iterating through all scene objects
         scene.children.forEach(child => {
           // Update moon's orbit position
           if (child.geometry && child.geometry.type === 'RingGeometry' && 
               child.material && child.material.color.getHexString() === 'ecf0f1') {
-            child.position.copy(planet.position);
+            child.position.copy(objects.planet.position);
           }
           
           // Update submoon's orbit position
           if (child.geometry && child.geometry.type === 'RingGeometry' && 
               child.material && child.material.color.getHexString() === 'e74c3c') {
-            child.position.copy(moon.position);
+            child.position.copy(objects.moon.position);
           }
           
-          // Update Hill sphere and stability zone visualizations
+          // Update Hill sphere visualizations
           if (child.geometry && child.geometry.type === 'SphereGeometry' && 
               child.material && child.material.wireframe) {
             if (child.material.color.getHexString() === '3498db') {
-              child.position.copy(planet.position);
+              child.position.copy(objects.planet.position);
             } else if (child.material.color.getHexString() === 'e74c3c') {
-              child.position.copy(moon.position);
+              child.position.copy(objects.moon.position);
             }
           }
           
@@ -818,59 +821,62 @@ const ExoSubmoonVisualization = () => {
           if (child.geometry && child.geometry.type === 'RingGeometry' && 
               child.material && child.material.color.getHexString() === '2ecc71') {
             if (child.scale.x > 2) { // Planet's optimal zone
-              child.position.copy(planet.position);
+              child.position.copy(objects.planet.position);
             } else { // Moon's optimal zone
-              child.position.copy(moon.position);
+              child.position.copy(objects.moon.position);
             }
           }
-        });
-      }
-      renderer.render(scene, camera);
-      animationRef.current = requestAnimationFrame(animate);
 
-      let isCurrentlyPlaying = isPlaying;
-
-      // Set up a MutationObserver to watch for changes to the play/pause button
-      const playPauseButton = document.querySelector('.play-pause-btn'); // Adjust selector as needed
-      if (playPauseButton) {
-        playPauseButton.addEventListener('click', () => {
-          isCurrentlyPlaying = !isCurrentlyPlaying;
+          // Update text labels
+          if (child.type === 'Sprite') {
+            // Planet-related labels follow planet
+            if (child.position.distanceTo(objects.planet.position) < objects.hillRadiusPlanet * 2) {
+              const offset = child.position.clone().sub(objects.planet.position);
+              child.position.copy(objects.planet.position).add(offset);
+            }
+            
+            // Moon-related labels follow moon
+            if (child.position.distanceTo(objects.moon.position) < objects.hillRadiusMoonValue * 2) {
+              const offset = child.position.clone().sub(objects.moon.position);
+              child.position.copy(objects.moon.position).add(offset);
+            }
+          }
         });
       }
       
       // Update camera position based on view mode
       if (viewMode === 'topDown') {
         // Top-down view
-        camera.position.set(0, 150, 0);  // Increased height for better overview
+        camera.position.set(0, 500, 0);
         camera.lookAt(0, 0, 0);
         controls.enabled = false;
       } else if (viewMode === 'planet') {
         // Follow planet view
-        const offset = new THREE.Vector3(40, 25, 40);  // Increased distance
+        const offset = new THREE.Vector3(80, 50, 80);
         camera.position.set(
-          planet.position.x + offset.x,
+          objects.planet.position.x + offset.x,
           offset.y,
-          planet.position.z + offset.z
+          objects.planet.position.z + offset.z
         );
-        camera.lookAt(planet.position);
+        camera.lookAt(objects.planet.position);
         controls.enabled = false;
       } else if (viewMode === 'moon') {
         // Follow moon view
-        const offset = new THREE.Vector3(10, 6, 10);  // Increased distance
+        const offset = new THREE.Vector3(20, 10, 20);
         camera.position.set(
-          moon.position.x + offset.x,
-          moon.position.y + offset.y,
-          moon.position.z + offset.z
+          objects.moon.position.x + offset.x,
+          objects.moon.position.y + offset.y,
+          objects.moon.position.z + offset.z
         );
-        camera.lookAt(moon.position);
+        camera.lookAt(objects.moon.position);
         controls.enabled = false;
       } else if (viewMode === 'educational') {
         // Educational view that keeps system in perspective
-        const radius = 120;  // Increased radius
+        const radius = 600;
         const angle = planetAngle * 0.1;
         camera.position.set(
           radius * Math.cos(angle),
-          60,  // Higher viewpoint
+          200,
           radius * Math.sin(angle)
         );
         camera.lookAt(0, 0, 0);
@@ -880,9 +886,9 @@ const ExoSubmoonVisualization = () => {
         controls.enabled = true;
       }
 
-      // Force camera update to ensure the changes take effect immediately
+      // Force camera update
       camera.updateProjectionMatrix();
-      renderer.render(scene, camera);  // Additional render call to refresh view
+      
       renderer.render(scene, camera);
       animationRef.current = requestAnimationFrame(animate);
     };
@@ -1035,7 +1041,7 @@ const ExoSubmoonVisualization = () => {
               <input
                 type="range"
                 min="10"
-                max="30"
+                max="100"
                 value={planetRadius}
                 onChange={(e) => setPlanetRadius(Number(e.target.value))}
                 className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
@@ -1044,8 +1050,8 @@ const ExoSubmoonVisualization = () => {
             
             <div className="space-y-1">
               <label className="text-gray-300 text-sm flex justify-between">
-                <span>Moon Orbital Position: {moonRadius} Hill radii</span>
-                <span className="text-blue-400">Hill radius: boundary of gravitational influence</span>
+                <span>Moon Orbital Position: {moonRadius.toFixed(2)} Hill radii</span>
+                <span className="text-blue-400">Max stable: 0.5</span>
               </label>
               <input
                 type="range"
@@ -1060,7 +1066,7 @@ const ExoSubmoonVisualization = () => {
             
             <div className="space-y-1">
               <label className="text-gray-300 text-sm flex justify-between">
-                <span>Submoon Orbital Position: {submoonRadius} Hill radii</span>
+                <span>Submoon Orbital Position: {submoonRadius.toFixed(2)} Hill radii</span>
                 <span className={`${
                   submoonRadius >= 0.4 && submoonRadius <= 0.6 ? 'text-green-400' : 
                   submoonRadius >= 0.3 && submoonRadius <= 0.7 ? 'text-yellow-400' : 'text-red-400'
@@ -1081,7 +1087,7 @@ const ExoSubmoonVisualization = () => {
             
             <div className="mt-3 p-2 bg-gray-700 rounded">
               <p className="text-xs text-gray-300">
-                <span className="text-blue-400 font-bold">Research Finding:</span> Submoons are most stable at 0.4-0.6 Hill radii from their parent moon. Current: {submoonRadius.toFixed(1)}
+                <span className="text-blue-400 font-bold">Research Finding:</span> Submoons are most stable at 0.4-0.6 Hill radii from their parent moon. Current: {submoonRadius.toFixed(2)}
               </p>
             </div>
           </div>
@@ -1095,14 +1101,14 @@ const ExoSubmoonVisualization = () => {
                 onClick={() => setIsPlaying(!isPlaying)}
                 className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex-1 flex items-center justify-center"
               >
-                {isPlaying ? <><i className="fas fa-pause mr-2"></i> Pause</> : <><i className="fas fa-play mr-2"></i> Play</>}
+                {isPlaying ? "Pause" : "Play"}
               </button>
               
               <button 
                 onClick={() => setShowOrbits(!showOrbits)}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 flex-1 flex items-center justify-center"
               >
-                {showOrbits ? <><i className="fas fa-eye-slash mr-2"></i> Hide Orbits</> : <><i className="fas fa-eye mr-2"></i> Show Orbits</>}
+                {showOrbits ? "Hide Orbits" : "Show Orbits"}
               </button>
             </div>
             
@@ -1111,7 +1117,7 @@ const ExoSubmoonVisualization = () => {
                 onClick={() => setShowStabilityZones(!showStabilityZones)}
                 className={`px-4 py-2 ${showStabilityZones ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-600 hover:bg-gray-700'} text-white rounded-lg flex-1 flex items-center justify-center`}
               >
-                {showStabilityZones ? <><i className="fas fa-chart-area mr-2"></i> Hide Stability Zones</> : <><i className="fas fa-chart-area mr-2"></i> Show Stability Zones</>}
+                {showStabilityZones ? "Hide Stability Zones" : "Show Stability Zones"}
               </button>
             </div>
             

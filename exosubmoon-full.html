@@ -104,7 +104,7 @@
             const cameraRef = React.useRef(null);
             const controlsRef = React.useRef(null);
             const animationRef = React.useRef(null);
-            const starFieldRef = React.useRef(null);
+            const objectsRef = React.useRef({});
             
             // State management
             const [isPlaying, setIsPlaying] = React.useState(true);
@@ -115,13 +115,13 @@
             const [presetMode, setPresetMode] = React.useState('optimal');
             const [isPanelExpanded, setIsPanelExpanded] = React.useState(false);
             
-            // System parameters
+            // System parameters with improved defaults
             const [planetMass, setPlanetMass] = React.useState(25);
             const [moonMass, setMoonMass] = React.useState(0.5);
             const [submoonMass, setSubmoonMass] = React.useState(0.08);
             const [planetRadius, setPlanetRadius] = React.useState(20);
-            const [moonRadius, setMoonRadius] = React.useState(3.2);
-            const [submoonRadius, setSubmoonRadius] = React.useState(0.5);
+            const [moonRadius, setMoonRadius] = React.useState(0.4); // As fraction of Hill radius
+            const [submoonRadius, setSubmoonRadius] = React.useState(0.45); // As fraction of Hill radius
             
             // Derived values
             const [planetToMoonRatio, setPlanetToMoonRatio] = React.useState(50);
@@ -148,25 +148,47 @@
                     setMoonMass(0.5);
                     setSubmoonMass(0.08);
                     setPlanetRadius(20);
-                    setMoonRadius(3.2);
-                    setSubmoonRadius(0.5);
+                    setMoonRadius(0.4);
+                    setSubmoonRadius(0.45);
                 } else if (presetMode === 'unstable') {
                     // Unstable configuration: high planet/moon ratio, low moon/submoon ratio
                     setPlanetMass(50);
                     setMoonMass(0.2);
                     setSubmoonMass(0.15);
                     setPlanetRadius(15);
-                    setMoonRadius(4.5);
-                    setSubmoonRadius(1.2);
+                    setMoonRadius(0.6); // Beyond optimal zone
+                    setSubmoonRadius(0.8); // Beyond optimal zone
                 }
             }, [presetMode]);
+            
+            // Helper function to create text labels
+            const createTextLabel = (text, x, y, z, color = 0xffffff) => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.width = 256;
+                canvas.height = 64;
+                
+                context.font = "Bold 20px Arial";
+                context.fillStyle = `rgba(255, 255, 255, 0.8)`;
+                context.fillText(text, 10, 40);
+                
+                const texture = new THREE.CanvasTexture(canvas);
+                texture.needsUpdate = true;
+                
+                const material = new THREE.SpriteMaterial({ map: texture });
+                const sprite = new THREE.Sprite(material);
+                sprite.position.set(x, y, z);
+                sprite.scale.set(20, 5, 1);
+                
+                return sprite;
+            };
             
             // Create starfield background
             const createStarField = (scene, count) => {
                 const starGeometry = new THREE.BufferGeometry();
                 const starMaterial = new THREE.PointsMaterial({
                     color: 0xffffff,
-                    size: 1,
+                    size: 1.5,
                     transparent: true,
                     opacity: 0.8,
                     vertexColors: true
@@ -206,7 +228,7 @@
             };
             
             // Create texture for gas giant planets
-            const createGasGiantTexture = () => {
+            const createGasGiantTexture = (seed = 1) => {
                 const canvas = document.createElement('canvas');
                 canvas.width = 512;
                 canvas.height = 256;
@@ -215,11 +237,19 @@
                 // Create gradient background
                 const grd = ctx.createLinearGradient(0, 0, 0, canvas.height);
                 
-                // Jupiter-like
+                // Jupiter-like colors
                 grd.addColorStop(0, '#b07f35');
                 grd.addColorStop(0.3, '#c8a458');
                 grd.addColorStop(0.7, '#e5cea2');
                 grd.addColorStop(1, '#b98b45');
+                
+                if (seed === 2) {
+                    // Saturn-like colors
+                    grd.addColorStop(0, '#e3dccb');
+                    grd.addColorStop(0.4, '#cdbaa8');
+                    grd.addColorStop(0.7, '#d0be97');
+                    grd.addColorStop(1, '#c9b78c');
+                }
                 
                 ctx.fillStyle = grd;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -256,14 +286,20 @@
             };
             
             // Create texture for rocky body
-            const createRockyTexture = () => {
+            const createRockyTexture = (seed = 1) => {
                 const canvas = document.createElement('canvas');
                 canvas.width = 512;
                 canvas.height = 256;
                 const ctx = canvas.getContext('2d');
                 
-                // Create base color (Moon-like gray)
-                const baseColor = {r: 180, g: 180, b: 180};
+                // Create base color
+                let baseColor = {r: 180, g: 180, b: 180}; // Moon-like gray
+                
+                if (seed === 2) {
+                    baseColor = {r: 200, g: 140, b: 100}; // Mars-like red
+                } else if (seed === 3) {
+                    baseColor = {r: 160, g: 140, b: 120}; // Mercury-like brown
+                }
                 
                 ctx.fillStyle = `rgb(${baseColor.r}, ${baseColor.g}, ${baseColor.b})`;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -320,16 +356,19 @@
                 const moonToSubmoonMassRatio = moonMass / submoonMass;
                 setMoonToSubmoonRatio(moonToSubmoonMassRatio);
                 
-                // Calculate orbital ratios
-                const moonOrbitRatio = moonRadius / 0.5; // Compare to optimal 0.5 Hill radius
-                const submoonOrbitRatio = submoonRadius / 0.5; // Compare to optimal 0.5 Hill radius
+                // Calculate orbital ratios relative to optimal values
+                const moonOrbitRatio = moonRadius / 0.5; // Normalized to optimal value of 0.5 Hill radius
                 
-                // Stability thresholds from research
-                const isStable = moonToSubmoonMassRatio > 5 && planetToMoonMassRatio < 60 && 
-                                submoonRadius >= 0.3 && submoonRadius <= 0.7;
-                                
-                const isMarginal = moonToSubmoonMassRatio > 3 && planetToMoonMassRatio < 80 &&
-                                submoonRadius >= 0.2 && submoonRadius <= 0.8;
+                // Stability thresholds based on research
+                const isStable = moonToSubmoonMassRatio > 5 && 
+                               planetToMoonMassRatio < 60 && 
+                               moonRadius >= 0.3 && moonRadius <= 0.5 &&
+                               submoonRadius >= 0.4 && submoonRadius <= 0.6;
+                
+                const isMarginal = moonToSubmoonMassRatio > 3 && 
+                                 planetToMoonMassRatio < 80 &&
+                                 moonRadius >= 0.2 && moonRadius <= 0.6 &&
+                                 submoonRadius >= 0.3 && submoonRadius <= 0.7;
                 
                 // Calculate a stability score (0-100)
                 let stabilityScore = 0;
@@ -404,7 +443,7 @@
             
             // Create celestial bodies and set up the scene
             const createCelestialBodies = () => {
-                if (!sceneRef.current) return;
+                if (!sceneRef.current) return {};
                 
                 const scene = sceneRef.current;
                 
@@ -420,30 +459,17 @@
                 // Create star field
                 createStarField(scene, 2000);
                 
-                // Create Star (central body)
-                const starRadius = 5;
-                const starGeometry = new THREE.SphereGeometry(starRadius, 64, 64);
-                const starMaterial = new THREE.MeshBasicMaterial({ 
-                    color: 0xffff80
-                });
-                const star = new THREE.Mesh(starGeometry, starMaterial);
-                scene.add(star);
-                
-                // Add Point Light to simulate star's light
-                const light = new THREE.PointLight(0xffffff, 1.5, 1000);
-                light.position.set(0, 0, 0);
-                light.castShadow = true;
-                scene.add(light);
-                
-                // Scale factors for visualization
-                const visualScale = 2; // General scale factor
+                // Scale factors for better visualization
+                const starScale = 5; // Size of star
+                const planetScaleFactor = 2; // Enhanced scale for planet visibility 
+                const distanceScaleFactor = 10; // Increased separation between objects
                 
                 // Calculate realistic mass-to-radius relationships
                 const calculateRadius = (mass, isGasGiant = false) => {
                     if (isGasGiant || mass > 0.1) {
-                        return Math.pow(mass, 0.55) * visualScale;
+                        return Math.pow(mass, 0.55) * planetScaleFactor;
                     } else {
-                        return Math.pow(mass, 0.3) * visualScale * 0.7;
+                        return Math.pow(mass, 0.3) * planetScaleFactor * 0.7;
                     }
                 };
                 
@@ -457,13 +483,28 @@
                     return primaryRadius * 2.44 * Math.pow(primaryDensity / secondaryDensity, 1/3);
                 };
                 
+                // Create Star (Sun)
+                const starRadius = starScale;
+                const starGeometry = new THREE.SphereGeometry(starRadius, 32, 32);
+                const starMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0xffffaa,
+                    emissive: 0xffffaa,
+                    emissiveIntensity: 1
+                });
+                const star = new THREE.Mesh(starGeometry, starMaterial);
+                scene.add(star);
+                
+                // Add point light from the star
+                const starLight = new THREE.PointLight(0xffffee, 1.5, 1000);
+                starLight.position.set(0, 0, 0);
+                scene.add(starLight);
+                
                 // Create Planet
-                const calculatedPlanetRadius = calculateRadius(planetMass, true);
-                const planetVisualRadius = calculatedPlanetRadius;
+                const planetVisualRadius = calculateRadius(planetMass, true);
                 const planetGeometry = new THREE.SphereGeometry(planetVisualRadius, 64, 64);
                 
                 // Create planet texture
-                const planetTexture = createGasGiantTexture();
+                const planetTexture = createGasGiantTexture(1);
                 
                 const planetMaterial = new THREE.MeshPhongMaterial({ 
                     map: planetTexture,
@@ -476,18 +517,18 @@
                 planet.receiveShadow = true;
                 scene.add(planet);
                 
-                // Calculate true planet position in orbit
+                // Calculate planet position - increased distance for better visualization
+                const planetOrbitDistance = planetRadius * distanceScaleFactor;
                 const planetOrbitAngle = 0; // Initial angle
-                planet.position.x = planetRadius * Math.cos(planetOrbitAngle);
-                planet.position.z = planetRadius * Math.sin(planetOrbitAngle);
+                planet.position.x = planetOrbitDistance * Math.cos(planetOrbitAngle);
+                planet.position.z = planetOrbitDistance * Math.sin(planetOrbitAngle);
                 
                 // Create Moon
-                const calculatedMoonRadius = calculateRadius(moonMass, moonMass > 0.1);
-                const moonVisualRadius = calculatedMoonRadius;
+                const moonVisualRadius = calculateRadius(moonMass, moonMass > 0.1);
                 const moonGeometry = new THREE.SphereGeometry(moonVisualRadius, 32, 32);
                 
-                // Create moon texture
-                const moonTexture = moonMass > 0.1 ? createGasGiantTexture() : createRockyTexture();
+                // Create moon texture - rocky or gas giant based on mass
+                const moonTexture = moonMass > 0.1 ? createGasGiantTexture(2) : createRockyTexture(1);
                 
                 const moonMaterial = new THREE.MeshPhongMaterial({ 
                     map: moonTexture,
@@ -500,7 +541,8 @@
                 scene.add(moon);
                 
                 // Calculate Hill radius of planet (for moon's orbit)
-                const hillRadiusPlanet = calculateHillRadius(1000, planetMass, planetRadius); // Star mass approximated
+                const starMass = 1000; // Approximate mass in Jupiter masses
+                const hillRadiusPlanet = calculateHillRadius(starMass, planetMass, planetOrbitDistance);
                 setHillRadiusMoon(hillRadiusPlanet);
                 
                 // Calculate Roche limit for moon around planet
@@ -509,19 +551,18 @@
                 const rocheLimitMoon = calculateRocheLimit(planetVisualRadius, planetDensity, moonDensity);
                 setRocheLimit(rocheLimitMoon);
                 
-                // Place moon in its orbit
-                const moonOrbitRadius = moonRadius * hillRadiusPlanet;
+                // Moon's orbit should respect the Hill radius
+                const moonOrbitDistance = moonRadius * hillRadiusPlanet;
                 const moonOrbitAngle = 0; // Initial angle
-                moon.position.x = planet.position.x + moonOrbitRadius * Math.cos(moonOrbitAngle);
-                moon.position.z = planet.position.z + moonOrbitRadius * Math.sin(moonOrbitAngle);
+                moon.position.x = planet.position.x + moonOrbitDistance * Math.cos(moonOrbitAngle);
+                moon.position.z = planet.position.z + moonOrbitDistance * Math.sin(moonOrbitAngle);
                 
                 // Create Submoon
-                const calculatedSubmoonRadius = calculateRadius(submoonMass, false);
-                const submoonVisualRadius = calculatedSubmoonRadius;
+                const submoonVisualRadius = calculateRadius(submoonMass, false);
                 const submoonGeometry = new THREE.SphereGeometry(submoonVisualRadius, 24, 24);
                 
-                // Create submoon texture (likely rocky for all realistic submoons)
-                const submoonTexture = createRockyTexture();
+                // Create submoon texture (rocky for all realistic submoons)
+                const submoonTexture = createRockyTexture(3);
                 
                 const submoonMaterial = new THREE.MeshPhongMaterial({ 
                     map: submoonTexture,
@@ -534,19 +575,19 @@
                 scene.add(submoon);
                 
                 // Calculate Hill radius of moon (for submoon's orbit)
-                const hillRadiusMoonValue = calculateHillRadius(planetMass, moonMass, moonOrbitRadius);
+                const hillRadiusMoonValue = calculateHillRadius(planetMass, moonMass, moonOrbitDistance);
                 setHillRadiusSubmoon(hillRadiusMoonValue);
                 
                 // Place submoon in its orbit
-                const submoonOrbitRadius = submoonRadius * hillRadiusMoonValue;
+                const submoonOrbitDistance = submoonRadius * hillRadiusMoonValue;
                 const submoonOrbitAngle = 0; // Initial angle
-                submoon.position.x = moon.position.x + submoonOrbitRadius * Math.cos(submoonOrbitAngle);
-                submoon.position.z = moon.position.z + submoonOrbitRadius * Math.sin(submoonOrbitAngle);
+                submoon.position.x = moon.position.x + submoonOrbitDistance * Math.cos(submoonOrbitAngle);
+                submoon.position.z = moon.position.z + submoonOrbitDistance * Math.sin(submoonOrbitAngle);
                 
                 // Create Orbits as rings
                 if (showOrbits) {
                     // Planet's orbit around star
-                    const planetOrbitGeometry = new THREE.RingGeometry(planetRadius - 0.1, planetRadius + 0.1, 128);
+                    const planetOrbitGeometry = new THREE.RingGeometry(planetOrbitDistance - 0.1, planetOrbitDistance + 0.1, 128);
                     const planetOrbitMaterial = new THREE.MeshBasicMaterial({
                         color: 0x3498db,
                         side: THREE.DoubleSide,
@@ -558,7 +599,7 @@
                     scene.add(planetOrbit);
                     
                     // Moon's orbit around planet
-                    const moonOrbitGeometry = new THREE.RingGeometry(moonOrbitRadius - 0.05, moonOrbitRadius + 0.05, 128);
+                    const moonOrbitGeometry = new THREE.RingGeometry(moonOrbitDistance - 0.05, moonOrbitDistance + 0.05, 128);
                     const moonOrbitMaterial = new THREE.MeshBasicMaterial({
                         color: 0xecf0f1,
                         side: THREE.DoubleSide,
@@ -571,7 +612,7 @@
                     scene.add(moonOrbit);
                     
                     // Submoon's orbit around moon
-                    const submoonOrbitGeometry = new THREE.RingGeometry(submoonOrbitRadius - 0.02, submoonOrbitRadius + 0.02, 64);
+                    const submoonOrbitGeometry = new THREE.RingGeometry(submoonOrbitDistance - 0.02, submoonOrbitDistance + 0.02, 64);
                     const submoonOrbitMaterial = new THREE.MeshBasicMaterial({
                         color: 0xe74c3c,
                         side: THREE.DoubleSide,
@@ -586,17 +627,21 @@
                 
                 // Add stability zones visualizations if enabled
                 if (showStabilityZones) {
-                    // Hill sphere boundary for moon
+                    // Hill sphere boundary for planet
                     const hillSphereGeometry = new THREE.SphereGeometry(hillRadiusPlanet, 32, 32);
                     const hillSphereMaterial = new THREE.MeshBasicMaterial({
                         color: 0x3498db,
                         transparent: true,
-                        opacity: 0.05,
+                        opacity: 0.1,
                         wireframe: true
                     });
                     const hillSphere = new THREE.Mesh(hillSphereGeometry, hillSphereMaterial);
                     hillSphere.position.copy(planet.position);
                     scene.add(hillSphere);
+                    
+                    // Add text label for clarity
+                    const hillSphereLabel = createTextLabel("Hill Sphere", planet.position.x, planet.position.y + hillRadiusPlanet + 5, planet.position.z);
+                    scene.add(hillSphereLabel);
                     
                     // Roche limit for planet
                     const rocheLimitGeometry = new THREE.SphereGeometry(rocheLimitMoon, 32, 32);
@@ -626,17 +671,31 @@
                     optimalOrbit.position.copy(planet.position);
                     scene.add(optimalOrbit);
                     
+                    // Add text label for the optimal zone
+                    const optimalZoneLabel = createTextLabel("Optimal Moon Zone", 
+                        planet.position.x, 
+                        planet.position.y + 2, 
+                        planet.position.z + optimalOrbitMaxRadius);
+                    scene.add(optimalZoneLabel);
+                    
                     // Hill sphere boundary for submoon
                     const hillSphereSubmoonGeometry = new THREE.SphereGeometry(hillRadiusMoonValue, 24, 24);
                     const hillSphereSubmoonMaterial = new THREE.MeshBasicMaterial({
                         color: 0xe74c3c,
                         transparent: true,
-                        opacity: 0.05,
+                        opacity: 0.1,
                         wireframe: true
                     });
                     const hillSphereSubmoon = new THREE.Mesh(hillSphereSubmoonGeometry, hillSphereSubmoonMaterial);
                     hillSphereSubmoon.position.copy(moon.position);
                     scene.add(hillSphereSubmoon);
+                    
+                    // Add text label for the moon's Hill sphere
+                    const moonHillLabel = createTextLabel("Moon Hill Sphere", 
+                        moon.position.x, 
+                        moon.position.y + hillRadiusMoonValue + 1, 
+                        moon.position.z);
+                    scene.add(moonHillLabel);
                     
                     // Optimal submoon orbital zone (from research: 0.4-0.6 Hill radius)
                     const optimalSubmoonMinRadius = 0.4 * hillRadiusMoonValue;
@@ -653,18 +712,25 @@
                     optimalSubmoonOrbit.rotation.x = Math.PI / 2;
                     optimalSubmoonOrbit.position.copy(moon.position);
                     scene.add(optimalSubmoonOrbit);
+                    
+                    // Add text label for optimal submoon zone
+                    const optimalSubmoonLabel = createTextLabel("Optimal Submoon Zone", 
+                        moon.position.x, 
+                        moon.position.y + 1, 
+                        moon.position.z + optimalSubmoonMaxRadius);
+                    scene.add(optimalSubmoonLabel);
                 }
                 
                 return {
-                    star, 
+                    star,
                     planet,
                     moon,
                     submoon,
-                    planetPosition: planet.position.clone(),
-                    moonPosition: moon.position.clone(),
-                    submoonPosition: submoon.position.clone(),
-                    moonOrbitRadius,
-                    submoonOrbitRadius
+                    planetOrbitDistance,
+                    moonOrbitDistance,
+                    submoonOrbitDistance,
+                    hillRadiusPlanet,
+                    hillRadiusMoonValue
                 };
             };
             
@@ -684,21 +750,17 @@
                 
                 // Calculate orbital periods using Kepler's laws
                 // For periods: T² ∝ a³/M where a is semimajor axis and M is central mass
-                const keplerConstant = 0.02; // Arbitrary constant for visualization
+                const keplerConstant = 0.005; // Adjusted constant for visualization
                 
-                // Calculate period for planet around star (star is much more massive)
-                const planetPeriod = keplerConstant * Math.sqrt(Math.pow(planetRadius, 3));
-                
-                // Calculate period for moon around planet
-                const moonPeriod = keplerConstant * Math.sqrt(Math.pow(objects.moonOrbitRadius, 3) / planetMass);
-                
-                // Calculate period for submoon around moon
-                const submoonPeriod = keplerConstant * Math.sqrt(Math.pow(objects.submoonOrbitRadius, 3) / moonMass);
+                // Calculate periods with more realistic relative speeds
+                const planetPeriod = keplerConstant * Math.sqrt(Math.pow(objects.planetOrbitDistance, 3));
+                const moonPeriod = keplerConstant * Math.sqrt(Math.pow(objects.moonOrbitDistance, 3) / planetMass);
+                const submoonPeriod = keplerConstant * Math.sqrt(Math.pow(objects.submoonOrbitDistance, 3) / moonMass);
                 
                 // Convert periods to angular velocities
                 const planetSpeed = (2 * Math.PI) / (planetPeriod * 100);
-                const moonSpeed = (2 * Math.PI) / (moonPeriod * 100);
-                const submoonSpeed = (2 * Math.PI) / (submoonPeriod * 100);
+                const moonSpeed = (2 * Math.PI) / (moonPeriod * 60);
+                const submoonSpeed = (2 * Math.PI) / (submoonPeriod * 40);
                 
                 // Animation loop
                 const animate = () => {
@@ -711,21 +773,21 @@
                         submoonAngle += submoonSpeed * speedMultiplier;
                         
                         // Update planet position
-                        objects.planet.position.x = planetRadius * Math.cos(planetAngle);
-                        objects.planet.position.z = planetRadius * Math.sin(planetAngle);
+                        objects.planet.position.x = objects.planetOrbitDistance * Math.cos(planetAngle);
+                        objects.planet.position.z = objects.planetOrbitDistance * Math.sin(planetAngle);
                         
                         // Add slight wobble to planet rotation to simulate axis tilt
                         objects.planet.rotation.x = Math.sin(planetAngle * 0.5) * 0.1;
                         objects.planet.rotation.y += 0.003 * speedMultiplier;
                         
                         // Update moon position relative to planet
-                        objects.moon.position.x = objects.planet.position.x + objects.moonOrbitRadius * Math.cos(moonAngle);
-                        objects.moon.position.z = objects.planet.position.z + objects.moonOrbitRadius * Math.sin(moonAngle);
+                        objects.moon.position.x = objects.planet.position.x + objects.moonOrbitDistance * Math.cos(moonAngle);
+                        objects.moon.position.z = objects.planet.position.z + objects.moonOrbitDistance * Math.sin(moonAngle);
                         objects.moon.rotation.y += 0.005 * speedMultiplier;
                         
                         // Update submoon position relative to moon
-                        objects.submoon.position.x = objects.moon.position.x + objects.submoonOrbitRadius * Math.cos(submoonAngle);
-                        objects.submoon.position.z = objects.moon.position.z + objects.submoonOrbitRadius * Math.sin(submoonAngle);
+                        objects.submoon.position.x = objects.moon.position.x + objects.submoonOrbitDistance * Math.cos(submoonAngle);
+                        objects.submoon.position.z = objects.moon.position.z + objects.submoonOrbitDistance * Math.sin(submoonAngle);
                         objects.submoon.rotation.y += 0.007 * speedMultiplier;
                         
                         // Update orbital visualizations
@@ -759,6 +821,18 @@
                                     child.position.copy(objects.planet.position);
                                 } else { // Moon's optimal zone
                                     child.position.copy(objects.moon.position);
+                                }
+                            }
+                            
+                            // Update text labels
+                            if (child.type === 'Sprite') {
+                                // Match labels to their celestial bodies
+                                if (child.position.distanceTo(objects.planet.position) < objects.hillRadiusPlanet * 2) {
+                                    const offset = child.position.clone().sub(objects.planet.position);
+                                    child.position.copy(objects.planet.position).add(offset);
+                                } else if (child.position.distanceTo(objects.moon.position) < objects.hillRadiusMoonValue * 2) {
+                                    const offset = child.position.clone().sub(objects.moon.position);
+                                    child.position.copy(objects.moon.position).add(offset);
                                 }
                             }
                         });
@@ -806,6 +880,9 @@
                         controls.enabled = true;
                     }
                     
+                    // Force camera update
+                    camera.updateProjectionMatrix();
+                    
                     renderer.render(scene, camera);
                     animationRef.current = requestAnimationFrame(animate);
                 };
@@ -846,7 +923,7 @@
                 controls.enableDamping = true;
                 controls.dampingFactor = 0.05;
                 controls.enableZoom = true;
-                controls.enablePan = false;
+                controls.enablePan = true;
                 controls.minDistance = 30;
                 controls.maxDistance = 200;
                 
@@ -874,6 +951,16 @@
                 
                 window.addEventListener('resize', handleResize);
                 
+                // Initial creation of celestial bodies
+                const objects = createCelestialBodies();
+                objectsRef.current = objects;
+                
+                // Calculate initial stability metrics
+                calculateStabilityMetrics();
+                
+                // Start animation
+                startAnimation(objects);
+                
                 // Cleanup function
                 return () => {
                     window.removeEventListener('resize', handleResize);
@@ -886,6 +973,18 @@
                         containerRef.current.removeChild(rendererRef.current.domElement);
                         rendererRef.current.dispose();
                     }
+                    
+                    // Dispose of Three.js resources
+                    scene.traverse(object => {
+                        if (object.geometry) object.geometry.dispose();
+                        if (object.material) {
+                            if (Array.isArray(object.material)) {
+                                object.material.forEach(material => material.dispose());
+                            } else {
+                                object.material.dispose();
+                            }
+                        }
+                    });
                 };
             }, []);
             
@@ -893,10 +992,9 @@
             React.useEffect(() => {
                 if (!sceneRef.current) return;
                 
-                const scene = sceneRef.current;
-                
                 // Create Solar System objects
                 const objects = createCelestialBodies();
+                objectsRef.current = objects;
                 
                 // Calculate stability metrics
                 calculateStabilityMetrics();
@@ -904,7 +1002,7 @@
                 // Start animation
                 startAnimation(objects);
                 
-            }, [planetMass, moonMass, submoonMass, planetRadius, moonRadius, submoonRadius, showOrbits, showStabilityZones]);
+            }, [planetMass, moonMass, submoonMass, planetRadius, moonRadius, submoonRadius, showOrbits, showStabilityZones, viewMode]);
             
             // Add tooltip functionality
             const showTooltip = (text, event) => {
@@ -1062,7 +1160,7 @@
                                 </div>
                                 
                                 <div className="space-y-1">
-                                    <label className="text-gray-300 text-sm">Moon Orbit: {moonRadius} Hill radii</label>
+                                    <label className="text-gray-300 text-sm">Moon Orbit: {moonRadius.toFixed(2)} Hill radii</label>
                                     <input
                                         type="range"
                                         min="0.1"
@@ -1078,7 +1176,7 @@
                                 
                                 <div className="space-y-1">
                                     <label className="text-gray-300 text-sm flex justify-between">
-                                        <span>Submoon Orbit: {submoonRadius} Hill radii</span>
+                                        <span>Submoon Orbit: {submoonRadius.toFixed(2)} Hill radii</span>
                                         <span className={`${
                                             submoonRadius >= 0.4 && submoonRadius <= 0.6 ? 'text-green-400' : 
                                             submoonRadius >= 0.3 && submoonRadius <= 0.7 ? 'text-yellow-400' : 'text-red-400'
@@ -1175,26 +1273,26 @@
                                             onClick={() => setPresetMode('optimal')}
                                             className={`px-2 py-1 rounded-lg text-xs ${presetMode === 'optimal' ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300'}`}
                                         >
-                                            Optimal
-                                        </button>
-                                        <button 
-                                            onClick={() => setPresetMode('unstable')}
-                                            className={`px-2 py-1 rounded-lg text-xs ${presetMode === 'unstable' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-                                        >
-                                            Unstable
-                                        </button>
-                                        <button 
-                                            onClick={() => setPresetMode('custom')}
-                                            className={`px-2 py-1 rounded-lg text-xs ${presetMode === 'custom' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
-                                        >
-                                            Custom
-                                        </button>
-                                    </div>
+                                        Optimal
+                                    </button>
+                                    <button 
+                                        onClick={() => setPresetMode('unstable')}
+                                        className={`px-2 py-1 rounded-lg text-xs ${presetMode === 'unstable' ? 'bg-red-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+                                    >
+                                        Unstable
+                                    </button>
+                                    <button 
+                                        onClick={() => setPresetMode('custom')}
+                                        className={`px-2 py-1 rounded-lg text-xs ${presetMode === 'custom' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+                                    >
+                                        Custom
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             );
         };
 
