@@ -110,9 +110,13 @@ const ExoSubmoonVisualization = () => {
     const ambientLight = new THREE.AmbientLight(0x101010, 0.8);
     scene.add(ambientLight);
     
-    // Set initial camera position
-    camera.position.set(60, 40, 60);
+    // Set initial camera position - much farther out to see everything
+    camera.position.set(300, 200, 300);
     camera.lookAt(0, 0, 0);
+
+    // Update camera limits
+    controls.minDistance = 100; // Increased minimum distance
+    controls.maxDistance = 800; // Increased maximum distance
     
     // Add window resize handler
     const handleResize = () => {
@@ -292,7 +296,7 @@ const ExoSubmoonVisualization = () => {
 
     // Create Planet
     const calculatedPlanetRadius = calculateRadius(planetMass, true);
-    const planetVisualRadius = calculatedPlanetRadius * 0.005; // Reduce planet size
+    const planetVisualRadius = calculatedPlanetRadius * 0.0005; // Reduce planet size
     const planetGeometry = new THREE.SphereGeometry(planetVisualRadius, 64, 64);
     
     // Create planet texture
@@ -311,10 +315,11 @@ const ExoSubmoonVisualization = () => {
     
     // Calculate true planet position in orbit - significantly increase distance
     const planetOrbitAngle = 0; // Initial angle
-    const actualPlanetOrbitRadius = planetRadius * 20; // Triple the orbital distance
+    const scaleFactor = 15; // MUCH larger distance
+    const actualPlanetOrbitRadius = planetRadius * scaleFactor;
     planet.position.x = actualPlanetOrbitRadius * Math.cos(planetOrbitAngle);
     planet.position.z = actualPlanetOrbitRadius * Math.sin(planetOrbitAngle);
-    
+        
     // Create Moon
     const calculatedMoonRadius = calculateRadius(moonMass, moonMass > 0.1);
     const moonVisualRadius = calculatedMoonRadius;
@@ -390,7 +395,8 @@ const ExoSubmoonVisualization = () => {
     // Create Orbits as rings
     if (showOrbits) {
       // Planet's orbit around star
-      const actualPlanetOrbitRadius = planetRadius * 20; // Match the same radius used above
+      scaleFactor = 15
+      const actualPlanetOrbitRadius = planetRadius * scaleFactor; // Match the same radius used above
       const planetOrbitGeometry = new THREE.RingGeometry(actualPlanetOrbitRadius - 0.1, actualPlanetOrbitRadius + 0.1, 128);
       const planetOrbitMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
@@ -436,7 +442,7 @@ const ExoSubmoonVisualization = () => {
       const hillSphereMaterial = new THREE.MeshBasicMaterial({
         color: 0x3498db,
         transparent: true,
-        opacity: 0.15,  // Increased opacity
+        opacity: 0.30,  // Increased opacity
         wireframe: true
       });
       
